@@ -26,3 +26,9 @@ This repository serves as a unified monorepo for math and Lean-related projects.
 2. **Adding a Verso presentation**: Add the Lean file in `Verso/` and hook it into `Verso.Main` (or add a separate `[[lean_exe]]` in the manifest if it warrants a distinct standalone site).
 3. **Modifying Math Code**: All pure math or shared utilities belong in `Rotartsilib/`. Do not pollute `Executables/` with library code.
 4. **Docs**: To render the mathlib-style docs for `Rotartsilib`, use `make docs`.
+
+## Ergonomics and Editor Configuration
+When configuring or debugging tools for this repository, you must maintain the clean separation of source and outputs:
+- Do not let LaTeX or Typst LSPs dump their outputs into the `tex/` or `typst/` folders.
+- VSCode is already configured via `.vscode/settings.json` to place LaTeX Workshop and Tinymist outputs precisely into `outputs/tex/` and `outputs/typst/`.
+- If modifying these settings or adding configuration for other editors (like Helix/Neovim), ensure the isolated `outputs/` folder continues to be utilized.

@@ -1,0 +1,44 @@
+{
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-cd",
+                "-pdfxe",
+                "-shell-escape",
+                "-interaction=nonstopmode",
+                "-synctex=1",
+                "-file-line-error",
+                "-output-directory=%WORKSPACE_FOLDER%/outputs/%RELATIVE_DIR%",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "make tex",
+            "command": "make",
+            "args": [
+                "tex"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk (xe)",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "make tex",
+            "tools": [
+                "make tex"
+            ]
+        }
+    ],
+    "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/outputs/%RELATIVE_DIR%",
+    
+    "tinymist.exportPdf": "onSave",
+    "tinymist.outputPath": "$root/outputs/$dir/$name",
+    "tinymist.rootPath": "-"
+}
