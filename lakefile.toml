@@ -1,6 +1,6 @@
 name = "rotartsilib"
 version = "0.1.0"
-defaultTargets = ["rotartsilib", "app1", "app2", "verso_site"]
+defaultTargets = ["app1", "app2", "build_blog", "build_book"]
 
 [[require]]
 name = "mathlib"
@@ -19,9 +19,6 @@ rev = "main"
 [[lean_lib]]
 name = "Rotartsilib"
 
-[[lean_exe]]
-name = "rotartsilib"
-root = "Main"
 
 [[lean_exe]]
 name = "app1"
@@ -31,6 +28,13 @@ root = "Executables.App1.Main"
 name = "app2"
 root = "Executables.App2.Main"
 
+[[lean_lib]]
+name = "VersoContent"
+
 [[lean_exe]]
-name = "verso_site"
-root = "Verso.Main"
+name = "build_blog"
+root = "VersoContent.BlogMain"
+
+[[lean_exe]]
+name = "build_book"
+root = "VersoContent.BookMain"

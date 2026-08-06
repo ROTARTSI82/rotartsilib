@@ -1,14 +1,23 @@
 # Makefile for Rotartsilib Monorepo
 
-.PHONY: all lean docs tex typst clean
+.PHONY: all lean docs tex typst clean verso
 
-all: lean docs tex typst
+all: lean docs tex typst verso
 
 lean:
 	lake build
 
 docs:
+	lake exe mk_all
 	lake build Rotartsilib:docs
+
+verso: lean
+	lake exe build_blog
+	lake exe build_book
+	@mkdir -p outputs/verso/blog
+	@mkdir -p outputs/verso/book
+	@cp -r _site/* outputs/verso/blog/ || true
+	@cp -r _out/html-multi/* outputs/verso/book/ || true
 
 TEX_FILES := $(shell find tex -type f -name '*.tex' -exec grep -l '\\begin{document}' {} +)
 TEX_PDFS := $(patsubst tex/%.tex, outputs/tex/%.pdf, $(TEX_FILES))
@@ -30,4 +39,4 @@ typst: $(TYPST_PDFS)
 
 clean:
 	lake clean
-	rm -rf outputs/
+	rm -rf outputs/ _site/ _out/
