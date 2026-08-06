@@ -1,0 +1,36 @@
+name = "rotartsilib"
+version = "0.1.0"
+defaultTargets = ["rotartsilib", "app1", "app2", "verso_site"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+
+[[require]]
+name = "doc-gen4"
+git = "https://github.com/leanprover/doc-gen4"
+rev = "main"
+
+[[require]]
+name = "verso"
+git = "https://github.com/leanprover/verso.git"
+rev = "main"
+
+[[lean_lib]]
+name = "Rotartsilib"
+
+[[lean_exe]]
+name = "rotartsilib"
+root = "Main"
+
+[[lean_exe]]
+name = "app1"
+root = "Executables.App1.Main"
+
+[[lean_exe]]
+name = "app2"
+root = "Executables.App2.Main"
+
+[[lean_exe]]
+name = "verso_site"
+root = "Verso.Main"
