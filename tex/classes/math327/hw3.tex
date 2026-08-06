@@ -1,0 +1,136 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{theorem}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\begin{document}
+\title{MATH 327: Assignment 3}
+\author{Grant Yang}
+\maketitle
+
+% https://sites.math.washington.edu//~conroy/m327-general/homework/assignment03.pdf
+
+\begin{theorem}1
+    Let $(a_n)$ be a convergent sequence of real numbers. \\
+    Let $A = \{a_n \mid n\in \mathbb N\}$ and suppose $A$ is finite. \\
+    Then $\lim a_n \in A$ and $(a_n)$ is eventually constant.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ be a convergent sequence of real numbers, and let $A$ be defined as above. \\
+    Define a set $B = \{\,|a - \lim a_n| : a \in A\}$, and since $A$ is finite and nonempty $B$ is also finite and nonempty. \\
+    Because $B$ is a nonempty finite set, it has a minimum $b \in B$. \\
+    Since all elements of $B$ are the result of taking an absolute value, $b \ge 0$. \\
+    We wish to show that in fact $b = 0$. \\
+    Assume for the sake of contradiction that $b > 0$. \\
+    Because $b$ is the minimum, we can expand the definitions of $A$ and $B$ and see that for all $n \in \mathbb N$, $|a_n - \lim a_n | \ge b$. \\
+    However, this directly contradicts the definition of the limit: we have a direct counterexample with $\varepsilon = b$ of a real number $\varepsilon > 0$ where we cannot get any $n \in \mathbb N$ such that $|a_n - \lim a_n | < \varepsilon$, much less a $N$ such that it works for $n > N$. \\
+    Thus, our assumption was false and $b = 0$. \\
+
+    Now consider the set $B'=B \setminus \{0\}$, which is another finite set. \\
+    If $B'$ is empty, then $B = \{0\}$ and for all $n$ we have $|a_n - \lim a_n| = 0$, so $(a_n)$ is a constant sequence with $\lim a_n \in A = \{\lim a_n\}$ and we are done. \\
+    Otherwise, $B'$ is a nonempty finite set, so it has a minimum $\varepsilon \in B'$. \\Since $\varepsilon$ is the result of taking an absolute value and $0\not\in B'$, we have $\varepsilon > 0$. \\
+    Thus, by the definition of $B$ and $B'$, for all $n \in \mathbb N$, either we have $|a_n - \lim a_n | = 0$ or $|a_n - \lim a_n | \ge \varepsilon$. \\
+    By the definition of a limit, let $N\in \mathbb N$ be such that $\forall n > N, |a_n - \lim a_n | < \varepsilon$. \\
+    Let $n \in \mathbb N$ be such that $n > N$, and note that we have both that $|a_n - \lim a_n| < \varepsilon$ and that either $|a_n - \lim a_n | = 0$ or $|a_n - \lim a_n| \ge \varepsilon$. \\
+    From this, we can deduce that $|a_n - \lim a_n| = 0$ and so for all such $n>N$, we have shown $a_n = \lim a_n$.\\ 
+    Thus, $\lim a_n \in A$ and $(a_n)$ is eventually constant.
+\end{proof}
+
+\newpage{}
+\begin{theorem}2
+    Let $a_n = \frac{\sin n}{n}$. \\
+    Then $\lim a_n = 0$.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ be defined as above. For any $n \in \mathbb N$, we can compute \[|a_n - 0| = \left|\frac{\sin n}{n}\right| = \left|\sin n\right|\left|\frac{1}{n}\right| = \frac{|\sin n|}{n}.\]
+    Let $\varepsilon > 0$ be any positive real. \\
+    By the Archimedean property, let $N \in \mathbb N$ be such that $N\varepsilon > 1$, or $\frac{1}{N} < \varepsilon$. \\
+    Let $n \in \mathbb N$ be such that $n > N$, so that we have $\frac{1}{n} < \frac{1}{N}$. \\
+    Thus, $\frac{1}{n} < \varepsilon$ by the transitive property. \\
+    By the properties of $\sin$, we know $|\sin n|\le 1$. \\
+    This implies that $|\sin n|\cdot\frac{1}{n} \le \frac{1}{n}$, so by the transitive property $\frac{|\sin n|}{n} < \varepsilon$. \\
+    We have shown that $|a_n - 0| < \varepsilon$ for arbitrary $\varepsilon$ and $n > N$, so $\lim a_n = 0$.
+\end{proof}
+
+\begin{theorem}{3}
+    Let $(a_n)$ be a bounded sequence where $\forall n \in \mathbb N, |a_n| \le B$. \\
+    Let $(c_n)$ be a sequence with $\lim c_n = 0$. \\
+    Then the sequence $(d_n)$ defined by $d_n = a_n c_n$ converges to $0$.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$, $B$, $(c_n)$, and $(d_n)$ all be as defined above. \\
+    First, note that $B \ge 0$ since it is the result of taking an absolute value. \\
+    If $B = 0$, we get $\forall n, |a_n| \le 0$, implying that $\forall n, a_n = 0$. \\
+    Because $a_n = 0$ is a constant sequence, $d_n = a_n c_n = 0$ is also constant. \\
+    Then, we are done as $\lim d_n = \lim a_n = 0$. \\
+    Consider the remaining case that $B>0$. \\
+    Let $\varepsilon > 0$ be any positive real number. \\
+    By the definition of the limit of $(c_n)$, let $N \in \mathbb N$ be such that $|c_n - 0| < \frac{\varepsilon}{B}$ for all $n > N$, and let $n > N$ be any such natural. \\
+    We can compute
+    \[|d_n - 0| = |a_n c_n - 0| = |a_n||c_n|.\]
+    Since $|a_n| \le B$ by the definition of $B$, we know $|a_n||c_n| \le B |c_n|$. \\
+    Since we have $B>0$, we have $B |c_n| < B \frac{\varepsilon}{B} = \varepsilon$ from the limit of $(c_n)$ above. \\
+    By the transitive property, we have that $|d_n - 0| = |a_n||c_n| \le B|c_n| < \varepsilon$. \\
+    Thus, we have shown that $\lim d_n = 0$.
+\end{proof}
+\newpage{}
+\begin{theorem}{4}
+    Let $(a_n)$ be a sequence. \\
+    $(a_n)$ converges to $0$ if and only if $\lim |a_n| = 0$.
+\end{theorem}
+\begin{proof}
+First, let $(a_n)$ be a sequence such that $\lim a_n = 0$. \\
+We wish to show that $\lim |a_n| = 0$. \\
+Let $\varepsilon > 0$ be any positive real number. \\
+By the definition of the limit of $(a_n)$, let $N\in\mathbb N$ be a natural such that $\forall n>N, |a_n - 0|<\varepsilon$. \\
+Then we have $|a_n| < \varepsilon$ for all $n > N$. \\
+Since the absolute value is idempotent ($|x| =||x||$ for all $x$), we have $||a_n|| < \varepsilon$ for all $n > N$, or that $\forall n>N, ||a_n| - 0| < \varepsilon$. \\
+Thus, $\lim |a_n| = 0$.  \\
+
+Now consider the other implication: \\
+Let $(a_n)$ be a sequence such that $\lim |a_n| = 0$. \\
+Let $\varepsilon > 0$ be any positive real number. \\
+By the definition of the limit of $(|a_n|)$, let $N \in \mathbb N$ be a natural such that $||a_n| - 0| < \varepsilon$ for all $n > N$. \\
+Again because the absolute value is idempotent $||a_n|| < \varepsilon$ implies that $|a_n| < \varepsilon$ for $n > N$, and thus $\forall n>N, |a_n - 0| <\varepsilon$. \\
+Thus, $\lim a_n = 0$.
+\end{proof}
+
+\begin{theorem}5
+    Let $(a_n)$ be a convergent sequence and suppose $\lim a_n < b$. \\
+    Then $\exists N \in \mathbb N$ such that $a_n < b$ for all $n > N$.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ and $b$ be as defined above. \\
+    Since $\lim a_n < b$, we have $b - \lim a_n > 0$. \\
+    By the definition of the limit of $(a_n)$, let $N \in \mathbb N$ be such that for all $n > N$, $|a_n - \lim a_n| < b - \lim a_n$. Let $n > N$ be any such natural number. \\
+    First consider the case that $a_n - \lim a_n \ge 0$. \\
+    Then we can unfold the definition of the absolute value to see that $a_n - \lim a_n < b - \lim a_n$, implying that $a_n < b$ as desired. \\
+    Finally, consider the case that $a_n - \lim a_n < 0$. \\
+    Then we have $a_n < \lim a_n < b$ by the transitive property, as desired. \\
+    Thus, we have shown that $a_n < b$ for all $n > N$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{6 (Squeeze Theorem)}
+    Let $(a_n)$, $(b_n)$, and $(c_n)$ be sequences such that $a_n \le b_n \le c_n$ for all $n \in \mathbb N$. \\
+    Suppose $\lim a_n = \lim c_n = L$. \\
+    Then $\lim b_n = L$. 
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$, $(b_n)$, and $(c_n)$ be as defined above with $L = \lim a_n = \lim c_n$. \\
+    Let $\varepsilon > 0$ be any real number. \\
+    By the limit of $(a_n)$, let $A \in \mathbb N$ be such that $|a_n - L| < \varepsilon$ for all $n > A$. \\
+    Similarly, let $C \in \mathbb N$ be such that $|c_n - L | < \varepsilon$ for all $n > C$. \\
+    Let $B = \max \{A,C\}$ and let $n \in \mathbb N$ be any number $n > B$.  \\
+    Since $n > B \ge A$ and $n > B \ge C$, we have $|c_n - L| < \varepsilon$ and $|a_n - L| < \varepsilon$, or $a_n, c_n \in (L-\varepsilon, L+\varepsilon)$. \\
+    Since $a_n \le b_n \le c_n$, we get $[a_n, c_n] \subseteq (L-\varepsilon, L+\varepsilon)$ and $b_n \in [a_n, c_n]$. \\
+    Thus, $b_n \in (L - \varepsilon, L + \varepsilon)$, so $|b_n -L| < \varepsilon$. 
+    We have shown that $\lim b_n = L$.
+\end{proof}
+\end{document}

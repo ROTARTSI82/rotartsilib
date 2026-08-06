@@ -1,0 +1,344 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, amsthm, epsfig}
+\usepackage{listings}
+\usepackage{fontspec}
+\setmonofont{DejaVu Sans Mono}
+\usepackage{tikz}
+\usepackage[shortlabels]{enumitem}
+\usetikzlibrary{math,decorations.pathreplacing, shapes.geometric}
+\usepackage{quiver}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage{subcaption}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[fixed]{fontawesome5}
+\usepackage{pifont}
+\usepackage{bbding}
+
+\theoremstyle{definition}
+\usepackage{enumitem}
+\newenvironment{Proof}{\noindent {\sc Proof.}}{$\Box$ \vspace{2 ex}}
+\newenvironment{Solution}{\noindent {\sc Solution.}}{$\Box$ \vspace{2 ex}}
+
+
+\usepackage{color}
+\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
+\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
+\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
+\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
+
+\def\lstlanguagefiles{../lstlean.tex}
+\usepackage{fontspec}
+% switch to a monospace font supporting more Unicode characters
+\setmonofont{FreeMono}
+\usepackage{minted}
+\newmintinline[lean]{lean4}{bgcolor=white}
+\newminted[leancode]{lean4}{fontsize=\footnotesize,breaklines}
+\usemintedstyle{tango}  % a nice, colorful theme
+
+\oddsidemargin-1mm
+\evensidemargin-0mm
+\textwidth6.5in
+\topmargin-15mm
+\textheight8.75in
+\footskip27pt
+
+\usepackage[table]{xcolor}
+\definecolor{truecolor}{RGB}{198,239,206} % Light green
+\definecolor{falsecolor}{RGB}{255,199,206} % Light red
+\newcommand{\true}{\cellcolor{truecolor}T}
+\newcommand{\false}{\cellcolor{falsecolor}F}
+\newcommand{\dom}{\mathrm{dom}}
+\begin{document}
+
+% homework problems are from the following textbook:
+% Larry J. Gerstein, Introduction to Mathematical Structures and Proofs, Undergraduate Texts in Mathematics (https://link.springer.com/book/10.1007/978-1-4614-4265-3)
+
+% Read Section 4.1--4.3 (Gerstein's book).
+    % §4.1) 2, 4, 9, 10, 16, 21, 22
+    % §4.2) 1, 2, 4, 6, 8
+    % §4.3) 2, 4, 7, 10, 12, 14, 15
+    
+% NOTE: We are using the definition that
+% A function $f : A \to B$ is a relation $f \subseteq A \times B$ such that $\forall (x \in A), \exists! (y \in B), (x, y) \in f$.
+% Thus, two functions are equal if their graphs are equal as sets.
+\noindent \textit{\textbf{Math 300, Winter 2026}} \hspace{1.3cm} \textit{\textbf{HOMEWORK 5}} \hspace{1.3cm} 
+\textit{\textbf{Grant Yang}
+} 
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.1, Problem 2)}\\
+% Let $L$ and $M$ be lines in the $xy$-plane. Prove that $L \approx M$. (Suggestion: First show that every line is equipotent to $\mathbb{R}$.)
+We can define a line $K$ to be the image of some function $f_K : \mathbb R \to \mathbb R \times \mathbb R$ given by $f(t) = (x_0+t\cdot x_K,y_0 +t\cdot y_K)$ for some $x_0,y_0,x_K, y_K \in \mathbb R$ with either $x_K \ne 0$ or $y_K \ne 0$. We can show that $f_K$ is a bijection $f_K : \mathbb R \to K$. We have that $K = f_K(\mathbb R)$ by definition, so we have surjectivity. To show injectivity, let $t_1,t_2 \in \mathbb R$ be elements such that $f(t_1) = f(t_2)$.  From the definition of $f$, we have that $(x_0 +t_1\cdot x_K, y_0+t_1\cdot y_K) = (x_0 + t_2\cdot x_K, y_0 + t_2\cdot y_K)$. Consider the case that $x_K \ne 0$: then we have that $x_0 +t_1\cdot x_K = x_0+t_2\cdot x_K$ and so $t_1 = t_2$, as desired. If instead we have $y_K \ne 0$, we have that $y_0 + t_1 \cdot y_K = y_0 + t_2 \cdot y_K$, and again $t_1 = t_2$ as desired. Thus, $f_K$ is injective and a bijection $\mathbb R \to K$.
+
+Let $L$ and $M$ be lines in the $xy$-plane. Consider the bijections $f_L : \mathbb R \to L$ and $f_M : \mathbb R \to M$. We have a bijection $f_L \circ f_M^{-1} : M \to L$ since the inverse of a bijection is a bijection and the composition of bijections is also a bijection. Thus, $L \approx M$ for all lines $L$ and $M$.
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.1, Problem 4)}\\
+% Prove the following statements.
+% \begin{enumerate}
+%     \item[(a)] $A \times B \approx B \times A$
+%     \item[(b)] If $A \approx C$ and $B \approx D$ then $A \times B \approx C \times D$.
+%     \item[(c)] $(A \times B) \times C \approx A \times (B \times C)$
+%     \item[(d)] If $w$ is any element then $\{w\} \times A \approx A$.
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item $A \times B \approx B \times A$. Let $f : A \times B \to B \times A$ be given by $(a,b) \mapsto (b,a)$. We have surjectivity: for all $(b,a) \in B \times A$, we have $(a,b) \in A \times B$ and $f((a,b)) = (b,a)$. We also have injectivity: Let $(a_1,b_1),(a_2,b_2)\in A\times B$ be such that $f((a_1,b_1))=f((a_2,b_2))$. This implies that $(b_1,a_1)=(b_2,a_2)$, which implies that $a_1 = a_2$ and $b_1=b_2$, and thus $(a_1,b_1)=(a_2,b_2)$. Thus, $f$ is surjective as well as injective, a bijection. $A \times B \approx B \times A$.
+\item $A \approx C \land B \approx D \implies A \times B \approx C \times D$. By our hypothesis, let $f : A \to C$ and $g : B \to D$ be bijections. Define $h : A \times B \to C \times D$ by $(a,b) \mapsto (f(a), g(b))$. We have that $h$ is surjective: let $(c,d)\in C \times D$ be any element. By the surjectivity of $f$ and $g$, we have $a \in A$ such that $c=f(a)$ and $b \in B$ such that $d = g(b)$. Then, $(a,b) \in A \times B$, and by the definition of $h$ we have $h((a,b))=(f(a),g(b))=(c,d)$. We also have that $h$ is injective: Let $(a_1,b_1), (a_2,b_2) \in A \times B$ be any elements with $h((a_1,b_1))=h((a_2,b_2))$. Then by the definition of $h$, we get $(f(a_1),g(b_1))=(f(a_2),g(b_2))$ and thus $f(a_1) = f(a_2)$ and $g(b_1) = g(b_2)$. By the injectivity of $f$ and $g$, we get $a_1 = a_2$ and $b_1 = b_2$, and thus $(a_1,b_1)=(a_2,b_2)$. Thus, $h$ is a bijection and $A \times B \approx C \times D$.
+\item $(A \times B) \times C \approx A \times (B\times C)$. Let $f : (A \times B) \times C \to A \times (B \times C)$ be given by $((a,b),c) \mapsto (a,(b,c))$. Clearly, $f$ is surjective: for all $(a,(b,c)) \in A\times (B\times C)$, we have $((a,b),c) \in (A\times B)\times C$ such that $f(((a,b),c)) = (a,(b,c))$. We can also prove injectivity: let $((a_1,b_1),c_1),((a_2,b_2),c_2) \in (A\times B)\times C$ be elements such that $f(((a_1,b_1),c_1)) = f(((a_2,b_2),c_2))$. This means that $(a_1,(b_1,c_1))=(a_2,(b_2,c_2))$, so $a_1=a_2$, $b_1=b_2$, and $c_1=c_2$. Thus, $((a_1,b_1),c_1) =((a_2,b_2),c_2)$ and $f$ is injective, so it is a bijection for $(A \times B)\times C \approx A \times (B\times C)$.
+\item $\forall w, \{w\}\times A \approx A$. Let $f : \{w\}\times A \to A$ be given by $(w, a) \mapsto a$ (this is $\pi_2$, the second projection map). We see that $f$ is surjective: for all $a \in A$, we have $(w, a) \in \{w\}\times A$ such that $f((w,a))=a$. $f$ is also injective: Let $(w_1, a_1), (w_2,a_2) \in \{w\} \times A$ be elements such that $f((w_1,a_1))=f((w_2,a_2))$. The equality implies that $a_1 = a_2$, and since we have a singleton for $w_1,w_2 \in \{w\}$, we have $w_1 =w_2 = w$. Thus, $(w_1, a_1) = (w_2,a_2)$. Finally, $f$ is bijective, and $\{w\}\times A \approx A$.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.1, Problem 9)}\\
+% If $A$, $B$, and $C$ are finite sets, write a formula for the number of elements in $A \cup B \cup C$. Your formula may use addition, subtraction, and intersection, but not \textit{union}. (Suggestion: A double application of 4.16 will do the job. Alternatively, draw a Venn diagram and think about it.)
+Let $A$, $B$, and $C$ be finite sets. Then \[|A \cup B \cup C| = |A| + |B|+|C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C|.\] Elements in two sets are double counted in $|A|+|B|+|C|$, so we subtract off $-|A \cap B| - |A \cap C| - |B \cap C|$. However, then elements in all three will not be counted at all, so we need to add them. I love the principle of inclusion/exclusion!
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.1, Problem 10)}\\
+% A study of 115 breakfast eaters shows that 85 also eat lunch, 58 use dental floss regularly, and 27 subscribe to a morning newspaper. Among those who also eat lunch, 52 floss regularly and 15 get the morning paper, and 10 lunch eaters both floss and get the paper. Four flossers neither eat lunch nor get the paper.
+% \begin{enumerate}
+%     \item[(a)] How many of those in the study neither eat lunch, nor floss regularly, nor get the morning paper?
+%     \item[(b)] How many of those who use dental floss regularly also get the morning paper?
+%     \item[(c)] How many of those who get the morning paper neither use dental floss regularly nor eat lunch?
+% \end{enumerate}
+Let $B$ = breakfast eaters (our universal set), $L$ = lunch eaters, $F$ = flossers, and $S$ = subscribers. $\#B = 115$ (with $B \supseteq L \cup F\cup S$), $\#L = 85$, $\#F = 58$, and $\#S = 27$. We have $\#(L \cap F) = 52$, $\#(L \cap S) = 15$, and $\#(L \cap F \cap S) = 10$. $\#(F \cap L^C \cap S^C)=4$.
+\begin{enumerate}[(a)]
+\item Neither eat lunch, floss, nor get the paper: $\#(L^C \cap F^C \cap S^C)=\#\left([L\cup F \cup S]^C\right) = 115 - \# (L \cup F\cup S)$. By the principle of inclusion/exclusion, we have \[\#(L \cup F \cup S) = \# L + \# F + \# S - \# (L \cap S) - \# (L \cap F)-\#(F \cap  S) + \# (L \cap F \cap S).\]
+We are only missing $\#(F\cap S)$, but from the fact that $F = ([L\cup S] \cap F) \cup (L^C \cap S^C \cap F)$ and the fact that those two sets are disjoint, we can apply PIE on $[L \cup S]\cap F$ to get \[\# F = \#(F \cap S) + \#(F \cap L) - \# (F\cap L\cap S) + \#(F\cap L^C \cap S^C).\]
+We can plug in to get $58=\#(F \cap S) +52 - 10 + 4$, so $\#(F\cap S) = 12$, and so $\#(L \cup F \cup S) = 85+58+27-15-52-12+10=101$, and finally $\#(L^C\cap F^C\cap S^C)=115-101=14$.
+\item Floss and subscribe to the paper: We calculated $\#(F\cap S)=12$ in part (a) already.
+\item Subscribers who neither floss nor eat lunch: $\#(S \cap L^C \cap F^C) = \#S -\#(S\cap [L\cup F])$. By PIE, we have that \[\#(S\cap [L \cup F]) = \# (S\cap L)+\# (S\cap F) -\#(S\cap L\cap F).\]
+Plugging these in, we get $\#(S\cap [L \cup F])=15+12-10=17$, and so $\#(S\cap L^C\cap F^C)=27-17=10$.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.1, Problem 16)}\\
+% Define a \textbf{codeword} of length three to be a three-digit string of 0s and 1s. For instance, 011 and 101 are codewords.
+% \begin{enumerate}
+%     \item[(a)] Show that there are eight codewords of length three.
+%     \item[(b)] Define the \textbf{distance} between two codewords to be the number of digits in which they differ. For instance, the distance between 011 and 101 is 2. Show that there does not exist a set of five different codewords of length three, each of which has distance of at least 2 from each of the others. (Do \textit{not} attempt to list all the five-element sets of codewords and eliminate them one by one. Instead, proceed by contradiction: suppose there \textit{is} such a set, use the pigeonhole principle to show that at least three of these five codewords have the same first digit, and then go on to consider the second and third digits of these three codewords to deduce a contradiction.)
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item There are eight binary codewords of length three. We can simply enumerate: 000, 001, 011, 010, 110, 111, 101, 100.
+\item There does not exist any set of five different binary codewords of length three, each of which has Hamming distance of at least 2 from the others. Assume FTSOC that such a set $A$ with $\# A =5$ did exist. Consider the function $f : A \to \mathbb Z_2^2$, which maps each codeword to its 2-bit prefix, i.e. $z_1 z_2 z_3 \mapsto z_1 z_2$. There are 4 such 2-bit prefixes, so $\# \mathbb Z_2^2 = 4$, and by the pigeonhole principle, $f$ is not injective. Thus, there exist some $s_1, s_2 \in A$ where $f(s_1) = f(s_2)$ but $s_1 \ne s_2$, so the two codewords share the first two bits but differ at the last bit, meaning the Hamming distance $d(s_1, s_2)=1$. This is a contradiction with our assertion that all codewords in $A$ have Hamming distance at least 2, so no such $A$ exists.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.1, Problem 21)}\\
+% Let $A^B$ denote the set of all functions from $B$ to $A$.
+% \begin{enumerate}
+%     \item[(a)] Suppose $\#A = m$ and $\#B = n$. Then use the counting principles of this section to show that
+%     \[ \#(A^B) = m^n \]
+%     \item[(b)] Assuming that $\#A = m$ and $\#B = n$, determine the number of injections from $B$ to $A$. Here you will need to use the fact (to be proved in Chapter 5) that if $n \le m$, the number of $n$-element subsets of an $m$-element set is
+%     \[ \frac{m!}{n!(m - n)!} \]
+%     \item[(c)] (Challenging) Without any restrictions on the sets $A, B, C$, show that
+%     \[ (A \times B)^C \approx A^C \times B^C \]
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item Let $\# A = m$ and $\# B = n$. We can apply 4.22 (Product Rule) to count $\#\left(A^B\right)$, the number of functions $B \to A$. A function is defined by $n$ consecutive choices (for each $b \in B$) of $m$ possibilities (picking an $a \in A$) for each choice, regardless of the choices that have been made. Then there are exactly $m_1 m_2 \cdots m_n = m^n$ possibilities for the sequence of $n$ choices, so $\#\left(A^B\right) = m^n$.
+\item Let $\# A = m$ and $\# B = n$. Consider the number of injections $B\to A$. Note that if $m < n$, by the pigeonhole principle there are no injections, so we only need to consider $m \ge n$. Here, we can use 4.22 (Product Rule). Our first choice is to make a choice of the $n$-element subset into which we will send $B$, and there are $m_1 = \frac{m!}{n!(m-n)!}$ options. Then, we make $n$ choices of where to put each $b \in B$ within that $n$-element subset, where for the $k$th choice we have $n-(k-1)$ options, one for each remaining available spot. So, we have $m_1 m_2 \cdots m_{n+1} = \frac{m!}{n!(m-n)!} \cdot n(n-1)\cdots = \frac{m!}{n!(m-n)!} \cdot n! = \frac{m!}{(m-n)!}$ injections.
+\item $(A\times B)^C \approx A^C \times B^C$. Define $\varphi : (A\times B)^C \to A^C \times B^C$ as $\varphi(f) = (\pi_1 \circ f, \pi_2 \circ f)$ where $\pi_1 : A \times B \to A$ is given by $(a,b)\mapsto a$ and $\pi_2 : A \times B \to B$ is given by $(a,b)\mapsto b$. We show that $\varphi$ is surjective: let $(f_A,f_B) \in A^C \times B^C$ be any pair of functions. Then $f : C\to A \times B$ given by $f(x)=(f_A(x),f_B(x))$ satisfies $\pi_1 \circ f = f_A$ and $\pi_2 \circ f = f_B$, so $\varphi(f)=(f_A,f_B)$. To show injectivity, let $f,g:C \to A \times B$ be functions with $\varphi(f) = \varphi(g)$. From this equality, we know that $(\pi_1\circ f, \pi_2 \circ f) = (\pi_1 \circ g,\pi_2 \circ g)$. Let $c \in C$ be any input, and from the definition of $A \times B$ we know that we have $(a_f,b_f) = f(c)$ and $(a_g,b_g)=g(c)$. From $(\pi_1 \circ f)(c)= (\pi_1 \circ g)(c)$, we get that $a_f = a_g$, and similarly $(\pi_2 \circ f)(c) = (\pi_2 \circ g)(c)$ implies that $b_f = b_g$. Thus, $f(c)=g(c)$, and we have shown this for all $c$, so $f = g$. Finally, $\varphi$ is injective and thus a bijection for $(A \times B)^C \approx A^C \times B^C$.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.1, Problem 22)}\\
+% \begin{enumerate}
+%     \item[(a)] Suppose $\sim$ is an equivalence relation on an infinite set $S$, and suppose the relation partitions the set into a finite number of equivalence classes. Deduce that some equivalence class must contain an infinite number of elements.
+%     \item[(b)] Suppose $\sim$ is an equivalence relation on an infinite set $S$, with no further conditions. Must some equivalence class be infinite?
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item Let $\sim$ be an equivalence relation on the infinite $S$ that induces a finite partition $S = \bigcup_{i \in I} U_i$. Then at least some $U_i$ will be infinite; assume FTSOC that for all $i \in I$, we have finite $U_i$ such that $\# U_i = m_i$ for some $m_i \in \mathbb N$. By the finiteness of $I$, there is a bijection $\phi : I \to \mathbb N_n$, so we can consider $\mathbb N_n$ to be our index set instead. Thus, we can apply corollary 4.15 on the finite union of finite disjoint sets:
+\[
+    \# S = \# \left(\bigcup_{i=1}^n U_i\right) = \sum_{i=1}^n m_i.
+\]
+This implies that as a finite sum of integers, $\# S \in \mathbb N$ and that $S$ is finite, a contradiction. Thus, not all of the $U_i$ are finite.
+
+\item If we drop the condition of $S = \bigcup_{i\in I} U_i$ being a finite partition, then we no longer have that some equivalence classes must be infinite. Picking $\sim$ to be the equality equivalence relation induces the partition with $I=S$ and $U_i = \{ i\}$, which obviously only has finite equivalence classes (in fact, $\forall i, \# U_i = 1$).
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.2, Problem 1)}\\
+% \begin{enumerate}
+%     \item[(a)] Supplement Lemma 4.25 by showing that the ``empty function''
+%     \[ \emptyset: \emptyset \to A \]
+%     is surjective if and only if $A = \emptyset$.
+%     \item[(b)] Show that for any set $A$, the empty function is the \textit{only} function from $\emptyset$ to $A$.
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item The empty function $\varnothing : \varnothing \to A$ is surjective if and only if $A = \varnothing$. Consider the direction $A =\varnothing \implies \text{surjective}$. Surjectivity is trivial here, as surjectivity is just $\forall (a \in A), \exists(x\in \varnothing), \varnothing(x)=a$, but since $A=\varnothing$ the $\forall$ quantifier is vacuously satisfied. Now consider the other direction, and assume FTSOC that $A \ne \varnothing$. That means that we have some $a \in A$, and surjectivity implies that there exists a $x \in \varnothing$ such that $\varnothing(x) = a$. However, this is a contradiction, as there does not exist any element $x$ of $\varnothing$, so $A=\varnothing$.
+\item For any set $A$, $A^\varnothing = \{\varnothing\}$. We have that $\varnothing : \varnothing \to A$ is a function: it is true that $\forall (x \in \varnothing), \exists!(y \in A),\varnothing(x)=y$ since the $\forall$ quantifier is vacuously satisfied as there is nothing in the empty set. Thus, $\{\varnothing\} \subseteq A^\varnothing$. Now, we show that $f \in A^\varnothing \implies f =\varnothing$ (i.e. $A^\varnothing \subseteq \{\varnothing\}$) to show equality. By the definition of a function, we must have that $f \subseteq \varnothing \times A$, but since $\varnothing \times A = \varnothing$, we have that $f \subseteq \varnothing$ and thus $f = \varnothing$. Thus, we have shown that $\varnothing : \varnothing \to A$ is the only such function from $\varnothing$ to $A$.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.2, Problem 2)}\\
+% Someone deduces that the following statement is a consequence of the Schr\"{o}der--Bernstein theorem: ``If there is an injection $f: A \to B$ and an injection $g: B \to A$, then each of these injections is a bijection.'' Either \textit{show} that this is a consequence of the theorem or give a counterexample to the statement.
+It is false that the existence of injections $f : A \to B$ and $g : B \to A$ implies that both are bijections. Consider open intervals of the real line $A = (0,2)$ and $B = (3, 5)$. We could have $f(x)=x+3$ and $g(x)=\frac{x-3}{2}$. Clearly, both are injective, but $g(B)=(0,1) \ne A$, and $g$ is not surjective and is not a bijection. 
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.2, Problem 4)}\\
+% In Example 4.29 we deduced the equipotence $[0, 1] \approx (0, 1)$ by invoking the Schr\"{o}der--Bernstein theorem, but we didn't actually construct a bijection $[0, 1] \to (0, 1)$.
+% \begin{enumerate}
+%     \item[(a)] Verify that the function $h$ given by the following scheme is such a bijection:
+%     \begin{align*}
+%         0 &\stackrel{h}{\longmapsto} \frac{1}{2} \\
+%         \frac{1}{n} &\longmapsto \frac{1}{n+2} \quad \text{for each integer } n \ge 1 \\
+%         x &\longmapsto x \quad \text{otherwise}
+%     \end{align*}
+%     \item[(b)] The function $h$ in part (a) acts on $[0, 1]$ in a way that resembles the strategy of the hotel manager at the start of the chapter. How?
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item The function following function is a bijection $h : [0,1] \to (0, 1)$: \[ h(x) = \begin{cases}\frac{1}{2} & x = 0 \\ \frac{1}{n+2} & x = \frac{1}{n} \text{ for some } n \in \mathbb Z_{\ge 1} \\
+x & \text{otherwise}\end{cases}\] 
+First we show surjectivity: let $y \in (0, 1)$ be any element, and first consider the case that $y = \frac{1}{n}$ for some $n \in \mathbb Z_{> 1}$. If $y=1/2$, then $h(0)=y$, and otherwise, we have $n>2$ so $\frac{1}{n-2} \in [0,1]$ and $h\left(\frac{1}{n-2}\right) = y$. If $y$ cannot be written in the form $1/n$, then $h(y) = y$ by the third case. Thus, $h$ is surjective. To show injectivity, let $x,y \in [0,1]$ be elements such that $h(x) = h(y)$. If $h(x)=h(y)=1/2$, then we must have come from the first case (as the second and third cases never reach $1/2$), so $x=y=0$ as desired. If $h(x)$ and $h(y)$ can be written in the form $1/k$ for some $k \in \mathbb Z_{> 2}$, then we must have come from the second case, and we can verify that $\frac{1}{n+2} = \frac{1}{m+2} \implies n = m$ and thus $y = \frac{1}{n} = \frac{1}{m} = x$ as desired. In the only remaining case, we have $h(x)=x$, so our equation just becomes $x=y$ as desired.
+\item The strategy of $h$ is similar to the setup of Hilbert's hotel: we need to fit $0$ and $1$ into the already full rooms of $(0, 1)$, so we tell every guest in room $1/n$ to move down to room $1/(n+2)$, creating two empty spaces at $1/2$ and $1/3$ for $0$ and $1$ respectively to move in. Since there are infinite rooms, every guest from $1/n$ can move into $1/(n+2)$ since that guest will be moving into $1/(n+4)$ and so on.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.2, Problem 6)}\\
+% Show that if $\#A \le \#B$ then $\#P(A) \le \#P(B)$.
+If $\# A \le \# B$, then $\#\mathcal P(A) \le \# \mathcal P(B)$. Let $f : A \to B$ be an injection. Then define $\phi : \mathcal P(A) \to \mathcal P(B)$ to be the function given by $U \mapsto \{f(x) \mid x \in U\}$, and we shall show that $\phi$ is also an injection. Let $U,W \in \mathcal P(A)$ be subsets such that $\phi(U) =\phi(W)$. Consider any $u \in U$. By the definition of $\phi(U)$, we have $f(u)\in \phi(U)$, and since $\phi(U)=\phi(W)$, we also have that $f(u) \in \phi(W)$ and so $f(u)=f(w)$ for some $w \in W$ by the definition of $\phi(W)$. By the injectivity of $f$, we get that $u = w$ and so $u \in W$. Thus, $U \subseteq W$. We can apply symmetric logic for the other direction: for all $w \in W$, we have $f(w) \in \phi(W)$, so $f(w) \in \phi(U)$ and $f(w) = f(u)$ for some $u \in U$ by the definition of $\phi (U)$. Thus, $w = u$ for some $u \in U$, and $w \in U$, so $W \subseteq U$. Thus, $U=W$ as desired, and $\phi$ is injective. Finally, we have that $\#\mathcal P(A) \le \#\mathcal P(B)$.
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.2, Problem 8)}\\
+% \begin{enumerate}
+%     \item[(a)] Use Cantor's theorem to deduce that $n < 2^n$ for every nonnegative integer $n$.
+%     \item[(b)] Prove that $n < 2^n$ for every nonnegative integer $n$, using mathematical induction instead of Cantor's theorem.
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item Let $A$ be a finite set with $\#A = n$. Then we can show that $\#\mathcal P(A) = 2^n$. We can put $\mathcal P(A)$ in bijection with the set of all functions $f:A \to 2$, denoted $2^A$. By the definition of subset, a specific subset is the same data as a function deciding $1$ or $2$ on every element of $A$. Specifically, the mapping $U \mapsto (a \mapsto 1 \text{ if } a \in U \text{ otherwise } 2)$ is a bijection $\mathcal P(A) \to 2^A$. From the counting principle of 4.22, we can count $\#2^A = \#\mathcal P(A)= 2^{\# A}$.
+
+By Cantor's theorem, we know that $\# A < \# \mathcal P(A)$, and since we have shown $\# A = n$ and $\#\mathcal P(A) = 2^n$, we know that there exists an injection $\mathbb N_n \to \mathbb N_{2^n}$ but there exists no bijection. By the pigeonhole principle, this means that $n \le 2^n$, as otherwise an injection is impossible. However, by the fact that there is no bijection, we know that $n \ne 2^n$, since otherwise the identity map $\mathbb N_n \to \mathbb N_{2^n}$ would be a bijection and thus contradict Cantor's theorem. Thus, $n < 2^n$.
+\item We show that $n < 2^n$ for all nonnegative integers $n$ using induction. For the base case, consider $n = 0$: then we have $0 < 2^0 = 1$, which is trivially true. Now for $n>0$, we wish to show $n < 2^n$, which we can rewrite as $(n-1)+1 < 2^{n-1} + 2^{n-1}$. From the inductive hypothesis, we know that $(n-1)< 2^{n-1}$, so all that is left to show is that $1 \le 2^{n-1}$. However, because $n>0$, we know that $2^{n-1}$ is at least $1$, so this inequality is also true.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.3, Problem 2)}\\
+% Imagine a hotel with infinitely many rooms. One stormy night a countably infinite crowd of weary travellers arrives, seeking shelter. They are also seeking privacy: no two of them will share a room. Upon arriving at the hotel, they learn that the rooms are full. Can the hotel manager accommodate this mass of would-be guests? Explain in detail.
+A full infinite hotel can fully accommodate a countably infinite crowd such that no two of them share the same room. Every infinite set has a countably infinite subset by theorem 4.36, so we need only consider this countably infinite subset of rooms. Because this set of rooms is countable, we can number each room with a natural number $\mathbb N$ (where $0 \not \in \mathbb N$) and tell each guest in room $n$ to move into room $2n$. Then, since the crowd is countably infinite, we can assign each guest a natural number $m$ and tell them to move into room $2m-1$. With this, we have constructed an injection $2 \times \mathbb N \to \mathbb N$ (in fact, it is also a bijection), and we can accommodate all the guests.
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.3, Problem 4)}\\
+% Answer \textit{true} or \textit{false}, and justify: If $A$ is countable and $B$ is a finite subset of $A$, then $A - B$ is countable.
+Let $A$ be countable and let $B \subseteq A$ be a finite subset. Then it is \textit{true} that $A\setminus B$ is countable. By the definition of set difference, we have $A\setminus B \subseteq A$, and by theorem 4.36, every subset of a countable set is countable. 
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.3, Problem 7)}\\
+% \begin{enumerate}
+%     \item[(a)] Show that the set $\mathbb{N} \times \mathbb{N}$ can be expressed as the union of a countably infinite family of countably infinite sets.
+%     \item[(b)] Use part (a) to prove that a union of countably many pairwise disjoint countably infinite sets is countably infinite.
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item $\mathbb N \times \mathbb N$ can be expressed as the union of a countably infinite family of countably infinite sets: \[ \mathbb N \times \mathbb N = \bigcup_{n \in \mathbb N} \{(n, z)\mid z \in \mathbb N\}.\]
+Each set in the union is pairwise disjoint with every other set, and each set is equipotent to $\mathbb N$.
+\item This statement as-is seems actually false because of the empty set, but we can amend it to be ``the union of a \textit{nonempty} countable family of pairwise disjoint countably infinite sets is countably infinite''. Let $\{U_i\}_{i \in I}$ be a nonempty countable family of pairwise disjoint countably infinite sets. Then $U = \bigcup_{i \in I} U_i$ is countably infinite. By the setup, we have a bijection $\phi_i : \mathbb N \to U_i$ for all $i \in I$, and also a bijection $\psi : \mathbb N_n \to I$ for some $n \in \mathbb Z_{> 0}\cup \{\top\}$ (where we define $\mathbb N_\top = \mathbb N$). By the fact that the $U_i$s are all disjoint and the definition of the union, we have a bijection $\Psi : \mathbb N_n \times \mathbb N \to U$ given by $(k, m) \mapsto \phi_{\psi(k)}(m)$. Since $\mathbb N_n \times \mathbb N \subseteq \mathbb N \times \mathbb N$, the inclusion map $\mathbb N_n \times \mathbb N \xhookrightarrow{} \mathbb N \times \mathbb N$ is an injection, so $\# U \le \# (\mathbb N \times \mathbb N)$, and since $\#(\mathbb N \times \mathbb N) = \# \mathbb N$, we get $\# U \le \# \mathbb N$. By the nonempty condition on the $U_i$s, we know that $1 \in \mathbb N_n$, so the function $n\mapsto (1,n)$ is an injection $\mathbb N \to \mathbb N_n \times \mathbb N$, and $\# \mathbb N \le \# U$. We have both that $\# \mathbb N \le \#U$ and $\# U \le \# \mathbb N$, so by the Schr\"oder-Bernstein theorem we have $\# U = \# \mathbb N$, and $U$ is countably infinite.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.3, Problem 10)}\\
+% Suppose a pairwise disjoint family of intervals on the real line is given. Assume that none of the intervals is just a single point. (For instance, the degenerate interval $[5, 5] = \{5\}$ does not belong to the given family.) A partial picture:
+% \[ \cdots \text{---}[ \textbf{------} ]\text{---}( \textbf{------} ]\text{---}( \textbf{------} )\text{---}[ \textbf{------} ]\text{---} \cdots \]
+% Outline a proof of the fact that this family of intervals is a countable family.
+Let $U=\{U_i\}_{i\in I}$ be a family of disjoint intervals on the real line with nonzero length. This is a countable family. 
+
+Consider the countable family $A=\{A_n\}_{n \in \mathbb N}$ where \[A_n = \left\{ \mu(U_i) > \frac{1}{n} \;\middle\vert\; U_i \in U \right\}\] is the set of intervals with length greater than $1/n$. With $A$ we cover all interval lengths in $(0,\infty)$ and thus all intervals in $U$, and in fact $U = \bigcup_{n\in \mathbb N} A_i$, which is a countable union, so to show $U$ is a countable family we only need to show that each $A_n$ is countable. However, each $A_n$ only contains disjoint intervals that are longer than some $\varepsilon = 1/n$, so consider the countable set $\varepsilon\mathbb Z = \{0,\varepsilon,-\varepsilon,2\varepsilon,-2\varepsilon,\dots\}$. Because the intervals in $A_n$ are all longer than $\varepsilon$, they all must contain at least one element from $\varepsilon \mathbb Z$. Thus, we can build a function $ f:A_n \to \varepsilon \mathbb Z$ sending each interval to an element of $\varepsilon \mathbb Z$ contained within it. By the fact that all the intervals are disjoint, $f$ is injective, and we have that each $A_n$ is countable and thus $U$ is countable as the countable union of countable sets.
+
+Cleaner method courtesy of Agastya Ravuri (but it's effectively doing the same thing): Define a function $f : I \to \mathbb Q$ using the axiom of choice to choose a rational number from each interval $U_i$ (valid because $U_i \cap \mathbb Q \ne \varnothing$ for every interval as the rationals are dense in the reals). This function is an injection by the fact that $\{U_i\}$ is a disjoint family, so we have injected the family into the rationals, a countable set. Thus, $U$ is also countable.
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.3, Problem 12)}\\
+% (For readers who have had calculus) If you try to mark all the points on the real line that correspond to rational numbers, and thereby draw a ``picture'' of $\mathbb{Q}$, you will find yourself marking so many points that they will seem to fill up most of the line. (For instance if you were to mark all the points corresponding to rationals with denominator 1,000,000, the line would appear virtually completely marked.) The purpose of this exercise is to show that this impression is dramatically false.
+    
+% Since $\mathbb{Q}$ is countable, its members can be listed:
+% \[ \mathbb{Q} = \{q_1, q_2, q_3, \dots\} \]
+% \begin{enumerate}
+%     \item[(a)] Surround $q_1$ by an interval $I_1$ of length $1/2$. (The precise location of $I_1$ is not important.) Then surround $q_2$ by an interval $I_2$ of length $1/2^2 = 1/4$. Continue in this manner, covering each $q_n$ by an interval $I_n$ of length $1/2^n$. (Some of the intervals will overlap, and that is acceptable.) What is the ``total'' of the lengths of all these intervals, and what does this tell you about the size of $\mathbb{Q}$ as a geometric object?
+%     \item[(b)] Now let $\epsilon$ denote a small positive number (the smaller the better), and again cover the rationals by intervals; but this time cover each $q_n$ by an interval of length $\epsilon / 2^n$. Again find the ``total'' of the lengths of all these intervals. \textit{Now} what do you conclude about the size of $\mathbb{Q}$ as a geometric object?
+%     \item[(c)] Why have there been quotation marks around the word ``total'' in this exercise?
+% \end{enumerate}
+\begin{enumerate}[(a)]
+\item Let $\mathbb Q = \{ q_1,q_2,q_3, \dots\}$ be an enumeration of the rationals ($\mathbb Q$ is countable). Consider the superset of $\mathbb Q$ given by the (countable) union of all intervals $I_n$ around each $q_n$, where the length of each $I_n$ is given by $1/2^n$. Because this is a superset, we have that the ``total'' lengths of the intervals (Lebesgue measure) is less than or equal to $\sum_{n=1}^\infty 1/2^n = 1$, and this tells us that $\mathbb Q$ is in some sense smaller than the interval $(0, 1)$.
+\item We can repeat what we did in part (a) except that we set the interval length of $I_n$ to be $\varepsilon / 2^n$, where $\varepsilon >0$ is a real number. Then, we get that ``total'' lengths of the intervals is less than or equal to $\sum_{n=1}^\infty \varepsilon/2^n = \varepsilon$, so we get that $\mathbb Q$ is in this sense smaller than any interval $(0,\varepsilon)$ for all real $\varepsilon >0$. Lebesgue measure of 0.
+\item In both part (a) and (b), a lot of our intervals may overlap, so when we take the union some intervals may be contributing the same bit multiple times. Thus, in our ``totals,'' we can be massively overcounting these parts. What we have is an upper bound on the Lebesgue measure of our set, and it is not really the ``total'' length of anything.
+\end{enumerate}
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.3, Problem 14)}\\
+% Prove that in the $xy$-plane there is a circle centered at the origin that passes through no points whose coordinates are both rational numbers.
+This circle passes through no points where both coordinates are rational:
+\[x^2 +y^2 =\sqrt{2} \]
+Assume FTSOC that $x$ and $y$ are both rational. Let $x = \frac{a}{b}$ for $a,b\in \mathbb Z$ with $b\ne 0$, and let $y=\frac{c}{d}$ for $c,d\in \mathbb Z$ with $d\ne 0$. We have $\frac{a^2}{b^2} +\frac{c^2}{d^2} = \sqrt{2}$, and thus $\sqrt{2} = \frac{c^2 b^2 + a^2 d^2}{b^2 d^2}$. This is a contradiction with the irrationality of $\sqrt{2}$, as $b^2 d^2 \ne 0$ and $b^2 d^2 \in \mathbb Z$ and $c^2 b^2 + a^2 d^2 \in \mathbb Z$. Thus, our assumption was false and either $x$ or $y$ is irrational.
+\end{Solution}
+
+\vspace{0.5cm}
+
+\begin{Solution}
+{\bf (\S4.3, Problem 15)}\\
+% Prove that there is a line in the $xy$-plane that passes through no points whose coordinates are both rational. (Suggestion: Let $P$ be a point with at least one irrational coordinate. Consider the lines through $P$.)
+The line $y=\sqrt{2}$ always has irrational $y$.
+
+Really silly thing I did at first: The line given by $y = e^2x+e$ passes through no points where both coordinates are rational. Assume FTSOC that $x$ and $y$ are both rational. Then our equation becomes \[\frac{a}{b} = e^2  \frac{c}{d}+e\] for some $a,b,c,d\in \mathbb Z$. However, if this were true, this would mean that $e$ is algebraic, a contradiction with the fact that it is a transcendental number. Thus, our line passes through no points where both coordinates are rational.
+\end{Solution}
+
+
+% stubs, please ignore
+% Proof outline: by the fact that $A \setminus B \subseteq A$, we have the injective inclusion map $\iota : A \setminus B \xhookrightarrow{} A$. By the fact that $A$ is countable, we have a bijection $f : A \to \mathbb N_n$, where $n \in \mathbb Z_{\ge 0} \cup \{\top\}$ (defining $\mathbb N_\top = \mathbb N$). Thus, $f \circ \iota : A \setminus B \to \mathbb N_n$ is an injection, and thus a bijection with its image. If the image itself is $\mathbb N_n$, we are done and $A\setminus B$ is countable. Otherwise, the image is a strict subset of $\mathbb N_n$, and for integer $n$ we can apply the theorem to show that $\#(A\setminus B)=m$ for $m < n$. For $n=\top$ I actually have no idea how to prove this.
+
+\end{document}

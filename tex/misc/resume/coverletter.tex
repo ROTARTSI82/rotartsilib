@@ -1,0 +1,73 @@
+\documentclass[letterpaper,12pt]{article}
+
+\usepackage{charter}        % Professional Charter font
+\usepackage[utf8]{inputenc} % UTF-8 encoding for international characters
+\usepackage[T1]{fontenc}    % Better font encoding
+\usepackage{microtype}      % Improved typography and spacing
+\usepackage{xcolor}         % Color support
+\usepackage{ifthen}         % Conditional statements
+\usepackage{hyperref}
+
+\usepackage[
+	a4paper,    % Paper size
+	top=1in,    % Top margin
+	bottom=1in, % Bottom margin
+	left=1in,   % Left margin
+	right=1in,  % Right margin
+	%showframe  % Uncomment to show frames around the margins for debugging
+]{geometry}
+
+%\setlength{\parindent}{1pt}     % No paragraph indentation 
+\setlength{\parskip}{0.8em}     % Vertical space between paragraphs
+\linespread{1.1}                % Slightly increased line spacing
+
+\usepackage{wallpaper}      % Background images
+\usepackage{graphicx}       % Required for including images
+\usepackage{fancyhdr}       % Required for customizing headers and footers
+\usepackage{array}          % Advanced table column types
+\usepackage{booktabs}       % Professional table formatting
+\usepackage{lastpage}       % Reference to last page number
+
+\begin{document}
+\pagenumbering{gobble}
+\begin{minipage}[c]{1\textwidth}
+    \raggedleft
+    \begin{tabular}{r}
+        \today
+    \end{tabular}
+\end{minipage}
+
+\noindent Dear Professor Mamishev,
+
+% Optional subject line - uncomment if needed
+%\vspace{0.5em}
+%\textbf{Re: \letterSubject}
+%\vspace{0.5em}
+
+% Main letter content goes here
+I am writing to express my interest in your winter and summer positions in signal \& image processing and in PCB and circuit design at the Sensors, Energy, and Automation Laboratory (SEAL).
+
+I am currently an undergraduate Engineering Undeclared student planning to go into Electrical and Computer Engineering, and I am planning to graduate 2029. Additionally, I plan on focusing on the computing and hardware side of ECE, meaning these positions at SEAL are of particular interest to me.
+
+I have always enjoyed both peeling back and building up layers of abstraction to build something useful, particularly with an eye towards a nice way of understanding the theory. As hobby projects, I have built complex software including a multithreaded C++ chess engine and a compiler for a custom PASCAL dialect that targets MIPS32 assembly. I also am familiar with the basics of circuits and breadboarding, having built a functional 4-bit breadboard computer out of 74LSXX integrated circuit chips. Some relevant coursework I have taken include information theory (probability distributions, entropy, source and channel coding) and AP Physics C Electromagnetism (Maxwell's equations, etc).
+
+With this position, I hope to get my feet wet and learn how to contribute and collaborate meaningfully and participate in research. If accepted, I expect to remain with the SEAL group for at least the next two quarters (Winter and Spring 2026), and my long-term goal with SEAL would be to author a research paper of some kind. I am still very much in the process of exploring what I want to do career-wise, and I am eager to explore undergraduate research as an avenue to get involved and learn. In all honesty, I have been bored out of my mind with my classes here and am desperately looking for something worthwhile to do.
+
+I am reachable by mail at \href{mailto:granty29@uw.edu}{granty29@uw.edu}, or by phone at (408) 568-4549. Thank you for your time and consideration, and I look forward to hearing from you soon.
+
+%----------------------------------------------------------------------------------------
+% LETTER CLOSING
+%----------------------------------------------------------------------------------------
+
+\vspace{1.5em}
+\noindent Sincerely,
+
+\noindent Grant Yang \\
+Electrical and Computer Engineering \\
+UW College of Engineering \\
+
+
+
+
+
+\end{document}

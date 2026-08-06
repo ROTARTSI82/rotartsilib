@@ -1,0 +1,183 @@
+\documentclass{beamer}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{braket}
+\usepackage{hyperref}
+\usetheme{Warsaw}
+\title{Information Theory of Quantum Computing}
+\author{Grant Yang, Rohan Ramkumar}
+\date{May 1, 2025}
+\usepackage{biblatex}
+\bibliography{bib.bib}
+
+\begin{document}
+\begin{frame}
+\maketitle
+\end{frame}
+\begin{frame}[allowframebreaks]{Fundamentals of Quantum Computing}
+\begin{enumerate}
+    \item In Quantum Mechanics, objects no longer have a single deterministic state like a classical object and are instead in a superposition.
+    \item For example, uncertainty in position and uncertainty in momentum are inversely proportional (Heisenberg Uncertainty).
+    \item So instead of using a point in phase space to describe an object, we use a \textbf{state vector $\ket{\psi}$,} which can be thought of as a linear combination of some basis states
+    \item However, for this presentation, we will be focusing on discrete states which attain discrete values, such as the states of an electron: spin up ($\ket{\uparrow_x}$) or spin down ($\ket{\downarrow_x}$).
+    \item Not only can we have states like $\ket{\uparrow_x}$ and $\ket{\downarrow_x}$ but also $\frac{1}{\sqrt{2}}\ket{\uparrow_x}+\frac{1}{\sqrt{2}}\ket{\downarrow_x},$ which might represent spin right ($\ket{\uparrow_{z}}$).
+    \item By the Born Rule (see later), this particle has a $0.5$ probability of being measured spin up and a $0.5$ probability of being measured spin down.
+
+    \item The Kronecker product $\otimes$ is used to glue two quantum states together.
+    \[
+    (a_1 \ket{\uparrow}+a_2\ket{\downarrow})\otimes(b_1 \ket{\uparrow}+b_2\ket{\downarrow}) =\]
+    \[a_1 b_1 \ket{\uparrow}\otimes\ket{\uparrow}+a_1 b_2 \ket{\uparrow}\otimes\ket{\downarrow} + a_2 b_1 \ket \downarrow \otimes \ket \uparrow + a_2 b_2 \ket \downarrow \otimes \ket \downarrow \]
+    This is also how we describe entangled pairs of particles: $\frac{1}{\sqrt 2}\ket{\uparrow}\otimes\ket \downarrow + \frac{1}{\sqrt 2} \ket \downarrow \otimes \ket \uparrow$.
+    \item For convenience, we will omit the Kronecker product symbol when writing it out, e.g.
+    \[\ket{0}\otimes\ket{0}\to\ket{00}.\] But, do not forget that the Kronecker product is still there.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{How Quantum is Different}
+\begin{enumerate}
+    \item Say you have a mixture of quantum states:
+    
+    50\% spin right $\ket{\uparrow_x}$, 50\% spin up $\ket{\uparrow_y}$.
+    \item Classically, this is 1 bit of information.
+    \item However, you cannot make a measurement without skewing the distribution away from 50-50! The least you can disturb it is with a 45-degree axis, yielding only $H(\cos^2\frac{\pi}{8})\approx0.6$ qubits. 
+    % (its $\frac{\pi}{8}$ because quaternions double cover $SO(3)$).
+
+    \item Because of entanglement, we can also do funny stuff like send 2 classical bits in 1 qubit given a shared entangled bit (superdense coding).
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{The Born Rule and Dirac-von Neumann Axioms}
+\begin{enumerate}
+\item $\ket{\psi} = c_1 \ket{a} + c_2 \ket{b} + \dots,\qquad c_1,c_2,\dots\in\mathbb{C}$
+\item $P(\psi\text{ is in state }a)= \left\lvert\braket{a|\psi}\right\rvert^2$
+\item $\braket{\psi|\psi} = 1, \quad \braket{a|b} = 0$. \qquad $\bra{\psi} = c_1^\ast \bra{a} + c_2^\ast \bra{b} + \dots$
+
+\item Any observable can be represented as an operator (matrix) $\hat A$. The expected value of $\hat A$ is denoted
+$\braket{\hat A} = \bra{\psi}\hat A\ket{\psi}$.
+
+\begin{enumerate}
+    \item Let $\ket{A_i}$ be a set of eigenvectors of $\hat A$. Assuming that the eigenvectors are non-degenerate, we can get an \textbf{orthonormal} basis that spans the space of quantum states (spectral theorem).
+    
+    \item If we express $\ket{\psi}$ in this basis and interpret the eigenvalues $a_i$ as the values for the observable, $\braket{\psi | \hat A |\psi}$ reduces to the usual formula for expected value! 
+\end{enumerate}
+\end{enumerate}
+
+        \begin{align*}
+        &\hat A = \sum_i a_i \ket{A_i}\bra{A_i}\\
+        &\ket{\psi} = \sum_i c_i \ket{A_i} \\
+        &\hat A \ket{\psi} = \sum_i a_i c_i \ket{A_i} &&\quad \hat A \ket{A_i} = a_i\ket{A_i}
+    \end{align*}
+        \[
+        \braket{\psi|\hat A| \psi} = \sum_i a_i c_i^\ast c_i = \sum_i a_i P_\psi(\ket{A_i})=\langle\hat A\rangle 
+        \]
+
+
+% \url{https://en.wikipedia.org/wiki/Dirac%E2%80%93von_Neumann_axioms}
+\end{frame}
+
+\begin{frame}{Mixture States and the Density Matrix}
+    \begin{enumerate}
+        \item The density matrix is a more generalized way to write a wavefunction that allows you to deal with mixture states.
+
+        \item $\rho = \ket{\psi}\bra{\psi}$, so the probability of measuring state $a$ is $\bra{a}\rho\ket{a}$. $\rho$ is an observable representing `how likely is $\psi$?' and $\braket{\hat A} = \mathrm{tr}(\hat A \rho)$.
+        \begin{align*}\mathrm{tr}(\hat A \rho) &= \mathrm{tr}\left[\left(\sum_i a_i \ket{A_i} \bra{A_i}\right)\left(\sum_{j,k} c_j c_k^\ast \ket{A_j}\bra{A_k}\right)\right] \\
+        &= \mathrm{tr}\left[\sum_{i,k}a_i c_i c_k^\ast \ket{A_i}\bra{A_k}\right]=\sum_ia_i|c_i|^2\ket{A_i}\bra{A_i}=\langle\hat A\rangle.
+        \end{align*}
+
+        \item If we want to represent a \emph{mixture state} instead, that is a distribution of possible states, we can just do $\rho = \sum_i p_i \ket{\psi_i}\bra{\psi_i}$. We can't use wavefunctions because those can only handle superpositions, not mixtures! Think about the expected value formulae.
+    \end{enumerate}
+
+    % https://ocw.mit.edu/courses/5-74-introductory-quantum-mechanics-ii-spring-2009/a1a6a947e655c9e9af9a9e5aa3b99cc9_MIT5_74s09_lec12.pdf
+\end{frame}
+
+\begin{frame}{Von Neumann Entropy I}
+    
+    \begin{enumerate}
+        \item \[S = -\mathrm{tr}(\rho \ln \rho)\]
+        \item A \textbf{projector} is an operator such that $\Pi^2 = \Pi$. For example, $\Pi= \ket{x}\bra{x}$. If we sum the projectors for each basis vector in an orthonormal basis, we get the identity. Projectors are important because they represent the process of measuring and collapsing a possibly mixed quantum state.
+        \item We can show that \[S = \min_{\{\Pi_{1,2,\dots}\}} \left[ -\sum_i\mathrm{tr} (\Pi_i\rho) \ln(  \mathrm{tr}\,(\Pi_i \rho)) \right]\]
+        \begin{itemize}
+            \item where the minimum is taken over all sets of projectors such that $\sum_i \Pi_i = I$ and for each projector $\mathrm{tr}(\Pi_i)\le1$.
+        \end{itemize} 
+        \item In other words, $S$ is the absolute minimum amount of uncertainty under the most efficient measurement we can make, which happens to be in the orthonormal eigenbasis.
+    \end{enumerate}
+    % https://arxiv.org/pdf/1106.1445
+\end{frame}
+\begin{frame}{Von Neumann Entropy II}
+Since $\rho$ is a hermitian matrix (i.e. $\rho^\dagger=\rho$),
+    \[\rho=\sum_i p_i\ket{\psi_i}\bra{\psi_i}=\sum_i\eta_j\ket{j}\bra{j},\]
+where $\ket{j}$ are orthonormal eigenvectors with eigenvalues $\eta_j.$ Furthermore, by Born's rule, the eigenbasis measurement is optimal for distinguishing states. Since the probability of measuring $\ket{j}$ is $\eta_j,$ it's natural to set 
+$S=-\sum_j\eta_j\log\eta_j.$ Also, note that, for some unitary $U$ and some real diagonal matrix $D$ and using the matrix logarithm,
+\begin{align*}-\mathrm{tr}(\rho\log\rho)&=-\mathrm{tr}(UDU^\dagger U\log D U^\dagger)\\&=-\mathrm{tr}(UD\log D U^\dagger)\\&=-\mathrm{tr}(D\log D)\\&=-\sum_j \eta_j\log \eta_j=S.\end{align*}
+\end{frame}
+\begin{frame}{Schumacher Compression}
+Recall Shannon's source coding theorem:
+\begin{theorem} (Source Coding Theorem)
+If we send $n$ symbols drawn i.i.d. from some R.V. $X$ with entropy $H(X),$ then we can compress our codewords so that we only need to send $nH(X)$ bits, which is lossless as $n\to \infty.$
+\end{theorem}
+We used Huffman coding to actually implement such a compression, which achieves this rate for large $n.$ We have a similar theorem from Benjamin Schumacher:
+\begin{theorem} (Schumacher Compression Theorem)
+    Given $n$ qubits drawn from some source $\rho$ denoted as $\rho^{\otimes n},$ with von Neumann entropy $S(\rho),$ then we can compress the source down to $nS(\rho)$ qubits, which is lossless as $n\to\infty.$
+\end{theorem}
+\end{frame}
+\begin{frame}{An Example I}
+Let's say that we want to send three qubits drawn from the distribution with $P(\psi=\ket{\uparrow_z})=P(\psi=\ket{\uparrow_x})=0.5,$ where
+\[\ket{\uparrow_z}=\ket{0},\ket{\uparrow_x}=\frac{1}{\sqrt{2}}\ket{0}+\frac{1}{\sqrt{2}}\ket{1}\] in the basis $\ket{0},\ket{1}.$ We can calculate the density matrix of $\rho$ to be
+\begin{align*}\rho=\begin{bmatrix}
+    \frac34&\frac14\\\frac14&\frac14
+\end{bmatrix}=&\lambda_{0'}\ket{0'}\bra{0'}+\lambda_{1'}\ket{1'}\bra{1'}\\=&\cos^2\frac{\pi}{8}\begin{bmatrix}
+    \cos\frac\pi 8\\\sin\frac\pi 8
+\end{bmatrix}\begin{bmatrix}
+    \cos\frac\pi 8&\sin\frac\pi 8
+\end{bmatrix}\\&+\sin^2\frac{\pi}{8}\begin{bmatrix}
+    \sin\frac\pi 8\\-\cos\frac\pi 8
+\end{bmatrix}\begin{bmatrix}
+    \sin\frac\pi 8&-\cos\frac\pi 8
+\end{bmatrix}.\end{align*}
+We see that $S=H_2(\cos^2\frac\pi 8)\approx 0.601,$ and $3S<2$, so we can compress our 3 qubits into 2 qubits without losing too much information.
+\end{frame}
+\begin{frame}{An Example II}
+The probability measuring $\ket{0'}$ is $\cos^2\frac\pi 8\approx0.854,$ and the probability of measuring $\ket{1'}$ is $\sin^2\frac\pi 8\approx0.146,$ so if we measure our three qubits in the $\ket{0'},\ket{1'}$ basis, we expect for them mostly to be $\ket{0'}.$ Specifically, the probability that our message is in the set spanned by $\{\ket{0'0'0'},\ket{1'0'0'},\ket{0'1'0'},\ket{0'0'1'}\}$ is $\cos^6\frac\pi 8+3\sin^2\frac\pi 8\cos^4\frac\pi 8\approx0.942.$ 
+
+This smaller set can be rotated to $\{\ket{000},\ket{010},\ket{100},\ket{110}\},$ and we can measure the third qubit to collapse (project) our state onto a smaller subspace. after discarding the third qubit, we have compressed our three qubits into two. The person receiving the two qubits can append $\ket{0}$ and apply the inverse of the encoding rotation to obtain their own density matrix $\rho'.$ We can calculate the \textbf{average fidelity} between $\rho'$ and $\rho$ to be around 0.923, which means that there is a 92.3\% chance that $\rho'$ and $\rho$ would be measured identically, so this is a pretty good compression.
+\end{frame}
+\begin{frame}{The General Process}
+
+
+\begin{enumerate}
+    \item But wait! 92.3\% is not good enough. We want lossless, not lossy!
+    \item Turns out that as $n\to\infty$ fidelity approaches 1. In general, Schumacher compression involves projecting $\rho$ into a ``typical subspace,'' the subspace spanned by the most likely eigenvectors.
+\end{enumerate}
+
+\end{frame}
+\begin{frame}[allowframebreaks]{Typical Subspaces}
+\begin{enumerate}
+    \item The law of large numbers dictates that as $n\to\infty$ and for i.i.d. $X_i,$
+    \begin{align*}-\log p(X^n)= -\log\prod p(X_i)&\to H(X_1,X_2,\dots,X_n) \\&= n H(X),\end{align*} where $X^n$ is a string of $n$ i.i.d. random variables $X_i.$ This is the \textbf{asymptotic equipartion property.}
+    
+    \item A typical subspace for some arbitrary $\delta$ is the space spanned by
+    \[T_\delta =\left\{\ket{x^n}:\left|-\frac{1}{n}\log p_{X^n}(x^n)-H(X)\right|<\delta\right\}\] where $H(X)=-\sum_{x}p_X(x)\log p_X(x)=S$ and $p_X$ is our eigenvalue decomposition for $\rho=\sum_{x}p_X(x)\ket{x}\bra{x}.$ % note that we have both P_{X^N} and P_X!
+
+    \framebreak
+    \item The probability that our sequence $\rho^{\otimes n}$ lies in this subspace is $\mathrm{tr}(\Pi\rho^{\otimes n})$, where $\Pi$ is the projector $\sum_{x^n\in T_\delta} \ket{x^n}\bra{x^n}$. 
+    
+    \item In the limit of infinitely long sequences, all sequences lie in the typical subspace:
+    \[\lim_{n\to\infty}\mathrm{tr}(\Pi \rho^{\otimes n})=1\]. 
+    
+    \item However, the dimension of the subspace is bounded by $2^{n(S\pm\delta)}$. This is often significantly smaller than our full space, which is of size $2^n.$ In short, the subspace is small but the probability that $\rho^{\otimes n}$ lies in it approaches 1 asymptotically.
+    \end{enumerate}
+\end{frame}
+\begin{frame}{So What?}
+    \begin{enumerate}
+        \item Quantum Computing can be a very very powerful tool in certain scenarios, e.g. Grover's Algorithm, Shor's Algorithm, HHL Algorithm, allowing us to solve some very specific problems faster than any classical computer could.
+        \item But, if we want to send qubits across distances, like from the output of these algorithms, it would probably be very expensive because we don't want to disturb our very delicate and complicated superposition state.
+        \item So, Schumacher compression provides a scheme that allows us to (for large $n$) transmit our qubits at a better rate without loss, which will save a lot of money.
+        \item We didn't mention this, but there are also error correction codes for qubits, which involves a ``syndrome'' measurement to check if the qubit is in the correct subspace. There are also theorems relating to channel theory and quantum information, but they are pretty complicated.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{References}
+    \nocite{preskill2022}
+    \nocite{arxiv2016}
+    \printbibliography
+\end{frame}
+\end{document}

@@ -1,0 +1,108 @@
+\documentclass[12pt]{amsart}
+\pagestyle{empty}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{fancyhdr} 
+\usepackage[T1]{fontenc}
+
+
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx,  epstopdf}
+\usepackage{subfig}
+\usepackage{color}
+\usepackage{bbm}
+\usepackage{subfloat}
+\usepackage[draft]{fixme}
+\usepackage{bm} 
+\usepackage{bbm} 
+\usepackage{epigraph}
+\usepackage{endnotes}
+\usepackage{ifpdf}
+\usepackage{array}
+
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathbb{C}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\ol}{\overline}
+\newcommand{\J}{\mathcal{J}}
+\newcommand{\X}{\mathcal{X}}
+\theoremstyle{definition}
+\newtheorem{prob}{Problem}
+\newtheorem{extraProb}{Extra Problem}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\ext}{ext}
+
+
+
+
+\begin{document}
+ \thispagestyle{empty}
+\begin{center} {\large \textbf{Math 380 -- Homework 8}} \smallskip \\ 
+Due on Thursday, June 4 \\ \ \\
+ \end{center}
+
+You are welcome to talk with other students in the class about problems but should write up solutions on your own. 
+Solutions can be handwritten or typed but need to be legible and submitted via Gradescope by the end of the day 
+on Thursday. You should justify all your answers in order to receive full credit.  
+\bigskip 
+
+\begin{flushleft}
+
+{\bf Good practice problems} (not to be turned in): \\
+
+CLO Section 4.5, Exercises 2, 3, 4, 7, 8, 9 \\
+CLO Section 4.6, Exercises 3, 4, 8\\
+\ \ \\
+\bigskip 
+
+
+
+
+\begin{prob} CLO \S4.5, Exercise 11  \smallskip  \\
+If $f \in \mathbb C[x_1,\dots,x_n]$ is irreducible, then $\mathbf V(f)$ is irreducible.
+\end{prob}
+
+Consider the ideal $I = \langle f \rangle \subseteq \mathbb C [x_1,\dots,x_n]$. We can show this ideal is prime. Let $g,h \in \mathbb C[x_1,\dots,x_n]$, and suppose that $g \cdot h \in I$. This means that $f$ divides $g \cdot h$, and because $\mathbb C[x_1,\dots,x_n]$ is a UFD and $f$ is irreducible, either $f \mid g$ or $f \mid h$. Thus, either $g \in I$ or $h \in I$, completing the proof that $I$ is prime.
+\\ \ \\
+Since every prime ideal is radical (see the problem below), $I = \sqrt{I} = \mathbf I(\mathbf V(I))$ by the Nullstellensatz as $\mathbb C$ is algebraically closed. Considering the variety $V = \mathbf V(I)$, we have that $\mathbf I(V)$ is prime, so $V=\mathbf V(f)$ must be irreducible as desired.
+
+\bigskip 
+
+\begin{prob}  CLO \S4.6, Exercise 1 \smallskip \\
+The intersection of any collection of prime ideals is radical.
+\end{prob}
+First, we can show that every prime ideal is radical. Let $P \subseteq k[x_1,\dots,x_n]$ be any prime ideal, and let $f \in k[x_1,\dots,x_n]$. We can show by induction that $f^n \in P \implies f \in P$ for all $n \in \mathbb Z_{\ge 1}$. The base case of $n=1$ is a tautology. For the inductive case, suppose that we had $f^{n+1} = f\cdot f^n \in P$. Since $P$ is a prime ideal, either $f \in P$ or $f^n \in P$. If $f^n \in P$, by the inductive hypothesis that $f^n \in P \implies f\in P$, we must have that $f \in P$. Thus, in either case, we have $f \in P$, and we are done. $P$ is a radical ideal.
+\\ \ \\
+Next, we can show that the intersection of any family of radical ideals is radical. Let $I_j$ be a family of radical ideals index by $j \in \mathcal J$, and let $I = \bigcap_{j \in \mathcal J} I_j$. Let $g \in k[x_1,\dots,x_n]$ be any polynomial. Clearly, $I$ is an ideal since \[g \in I \iff \forall j \in \mathcal J, g \in I_j\]
+and every $I_j$ is an ideal. Suppose that $g^n \in I$, or $\forall j \in \mathcal J, g^n \in I_j$. Since every $I_j$ is a radical ideal, $\forall j \in \mathcal J, g \in I_j$ so $g \in I$. Thus, $I$ is a radical ideal.
+
+\newpage{}
+\begin{prob}  CLO \S4.6, Exercise 10 \smallskip \\
+Let $f \in \mathbb C[x_1,\dots,x_n]$, and let $f = f_1^{a_1}\dots f_r^{a_r}$ be a decomposition of $f$ into distinct irreducible factors. Then $\mathbf V(f)=\mathbf V(f_1)\cup \dots \cup \mathbf V(f_r)$ is a decomposition of $\mathbf V(f)$ into irreducible varieties and $\mathbf I(\mathbf V(f)) = \langle f_1\dots f_r\rangle$.   
+\end{prob}
+\bigskip 
+First, note that $\langle f\rangle \subseteq \langle f_i\rangle$ for all $1 \le i \le r$ as every $f_i$ divides $f$. Thus, $\mathbf V(f) \supseteq \mathbf V(f_i)$ for every $i$, and so $\mathbf V(f) \supseteq \mathbf V(f_1)\cup \dots\cup \mathbf V(f_r)$. We can also show that every point in $\mathbf V(f)$ is contained in some $\mathbf V(f_i)$. Let $p \in \mathbf V(f)$, and note that $f(p)=f_1^{a_1}(p)\dots f_r^{a_r}(p) = 0$. Because $\mathbb C$ is an integral domain, we must have $f_i^{a_i}(p) = 0$ for some $i$, and in fact $f_i(p)=0$. Thus, $p \in \mathbf V(f_i)$ for some $i$. We now have that $\mathbf V(f) \subseteq \mathbf V(f_1)\cup \dots \cup \mathbf V(f_r)$, and $\mathbf V(f) = \mathbf V(f_1)\cup \dots \cup \mathbf V(f_r)$. Because every $f_i$ is an irreducible polynomial in $\mathbb C[x_1,\dots,x_n]$, by the previous problem we have that $\mathbf V(f_i)$ must be an irreducible variety. This is a decomposition of $\mathbf V(f)$ into irreducible varieties.
+\\ \ \\
+We are working over an algebraically closed field, so by the Nullstellensatz we have $\mathbf I(\mathbf V(f)) = \sqrt{\langle f\rangle}$. Let $f_\text{red} = f_1\dots f_r$, and note that $\langle f_\text{red}\rangle \subseteq \sqrt{\langle f\rangle}$ as $f_\text{red}^{\max\{a_1,\dots,a_r\}} \in \langle f\rangle$. We can also show that $\sqrt{\langle f \rangle}\subseteq \langle f_\text{red}\rangle$. Let $g\in \sqrt{\langle f \rangle}$, and let $n \in \mathbb Z_{\ge 1}$ be such that $g^n \in \langle f\rangle$. We can write 
+\[g^n = f_1^{a_1}\dots f_r^{a_r} \cdot h\]
+for some $h \in \mathbb C[x_1,\dots, x_n]$. Thus, every $f_i$ is an irreducible polynomial that divides $g^n$, and so each $f_i$ divides $g$. Because these are all distinct irreducible elements in a UFD, $f_\text{red} = f_1\dots f_r$ must also divide $g$, and $g \in \langle f_\text{red}\rangle$. Thus, $\sqrt{\langle f \rangle} \subseteq \langle f_\text{red}\rangle$, and $\mathbf I(\mathbf V(f)) = \langle f_1\dots f_r\rangle$.
+\end{flushleft}
+\end{document}

@@ -1,0 +1,136 @@
+\documentclass[12pt]{amsart}
+\pagestyle{empty}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{fancyhdr} 
+\usepackage[T1]{fontenc}
+
+
+\usepackage{listings,xcolor}
+
+\lstset{language=Mathematica}
+\lstset{basicstyle={\sffamily\footnotesize},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  breaklines=true,
+  captionpos={t},
+  frame={lines},
+  rulecolor=\color{black},
+  framerule=0.5pt,
+  columns=flexible,
+  tabsize=2
+}
+
+
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx,  epstopdf}
+\usepackage{subfig}
+\usepackage{color}
+\usepackage{bbm}
+\usepackage{subfloat}
+\usepackage[draft]{fixme}
+\usepackage{bm} 
+\usepackage{bbm} 
+\usepackage{epigraph}
+\usepackage{endnotes}
+\usepackage{ifpdf}
+\usepackage{array}
+
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathbb{C}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\ol}{\overline}
+\newcommand{\J}{\mathcal{J}}
+\newcommand{\X}{\mathcal{X}}
+\theoremstyle{definition}
+\newtheorem{prob}{Problem}
+\newtheorem{extraProb}{Extra Problem}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\ext}{ext}
+
+
+
+
+\begin{document}
+ \thispagestyle{empty}
+\begin{center} {\large \textbf{Math 380 -- Homework  6}} \smallskip \\ 
+Due on Thursday, May 21\ \\ \ \\
+ \end{center}
+
+You are welcome to talk with other students in the class about problems but should write up solutions on your own. 
+Solutions can be handwritten or typed but need to be legible and submitted via Gradescope by the end of the day 
+on Thursday. You should justify all your answers in order to receive full credit.  
+\bigskip 
+
+\begin{flushleft}
+
+{\bf Good practice problems} (not to be turned in): \\
+
+CLO Section 4.1, Exercises 1, 7 \\
+CLO Section 4.2, Exercises 1, 4, 5, 6, 7, 14, 15, 17 \\
+\ \ \\
+\bigskip 
+
+
+
+
+\begin{prob} CLO \S4.1, Exercise 2 \smallskip \\ 
+\begin{enumerate}
+\item[(a)] Consider $J = \langle x^2+y^2-1,y-1\rangle$. Then $\mathbf V(J) = \{ (0, 1) \}$, so clearly $x \in \mathbf I(\mathbf V(J))$. However, we can compute that $G=\langle y-1,x^2\rangle$ is a Gr\"obner basis for $J$ (under lexicographical $x > y$ order), so since $\overline{x}^G = x \neq 0$ we know $x \not\in J$. 
+
+\begin{lstlisting}[language=Mathematica]
+GroebnerBasis[{x^2 + y^2 - 1, y - 1}, {x, y}]
+\end{lstlisting}
+\item[(b)] And \emph{What is the smallest $m$ for which $f^m\in J$?} $m=2$: $x^2 \in J = \langle y-1,x^2\rangle$.
+\end{enumerate}
+\end{prob}
+
+\bigskip 
+
+
+\newpage{}
+\begin{prob}  CLO \S4.2, Exercise 16 \smallskip \\
+Let $I \subseteq k[x_1,\dots,x_n]$ be an ideal with a Gr\"obner basis $G = \{g_1,\dots,g_s\}$ such that for all $i$, $\text{LT}(g_i)$ is square free in that $\langle \text{LT}(g_i)\rangle = \sqrt{\langle\text{LT}(g_i\rangle}$.
+\begin{enumerate}
+    \item[(a)] If $f \in \sqrt{I}$, then $\mathrm{LT}(f)$ is divisible by $\text{LT}(g_i)$ for some $i$. Let $m \in \mathbb N_{>0}$ be such that $f^m \in I$. Since $G$ is a Gr\"obner basis, some $\mathrm{LT}(g_i)$ must divide $\text{LT}(f^m)$. Then since $\text{LT}(a\cdot b) = \text{LT}(a)\cdot \text{LT}(b)$ by our proof in some previous homework, $\text{LT}(f^m) = \text{LT}(f)^m$. Clearly since $\text{LT}(g_i)$ is square free and divides $\text{LT}(f)^m$, $\text{LT}(g_i)$ must also divide $\text{LT}(f)$ (more details below).
+    
+    We can drop the scalar factors and consider the monomial part of $\text{LM}(f) = x^\alpha$ and $\text{LM}(g_i) = x^\beta$, and since $\text{LT}(g_i)$ is square free we know $\beta_j \in \{0,1\}$ for all $j$. Since $\text{LT}(g_i)$ divides $\text{LT}(f)^m$, we know that for some $h \in k[x_1,\dots,x_n]$, we have $h\cdot x^{\beta} = x^{m \cdot \alpha}$. Here, since we are dealing with monomials, $h(x)$ must be a monomial too, and we can write $x^{\beta+\gamma} = x^{m \cdot \alpha}$ for some $\gamma \in \mathbb Z^n_{\ge 0}$. The fact that $\beta + \gamma = m\cdot \alpha$ means that $\beta_j\le m \cdot \alpha_j$ for all $j$, and this can only be true when $\alpha_j > 0$ for all $j$ where $\beta_j =1$. Thus, $\beta_j \le \alpha_j$, and so $x^\beta \mid x^\alpha$, and $\text{LT}(g_i)$ divides $\text{LT}(f)$.
+    
+    
+    \item[(b)] $I$ is radical. First, note that since $G \subseteq I\subseteq \sqrt I$, $\langle G \rangle \subseteq \sqrt I$ and $\langle \text{LT}(G)\rangle \subseteq \langle \text{LT}(\sqrt I)\rangle$. By part (a) above, for any $f \in \sqrt I$ we have that some $\text{LT}(g_i)$ divides $\text{LT}(f)$, so $\langle \text{LT}(\sqrt I)\rangle \subseteq \langle \text{LT}(G)\rangle $. Thus, $G$ is also a Gr\"obner basis for $\sqrt I$: dividing any $h \in \sqrt I$ by $G$ will necessarily give 0 remainder, so $\sqrt{I} \subseteq \langle G \rangle$, and in fact $\sqrt I = \langle G\rangle$. Finally, since $\langle G\rangle = I = \sqrt{I}$, by part (b) of Exercise 4 of \S4.2, $I$ is radical.
+    \item[(c)] And \emph{Given an example of a radical ideal $I$ for which there is \emph{not} a Gr\"obner basis with square-free leading terms. 
+(\emph{Hint}: One can take $I\subseteq k[x]$.)} 
+
+    Take $I = \langle(x-2)(x-3)\rangle \subseteq k[x]$. We can show that $I=\mathbf I(\{2,3\})$. Any polynomial $f \in \mathbf I(\{2,3\})$ must vanish on $2$ and $3$, so by the argument with the division algorithm it must be divisible both by $x-2$ and $x-3$. Then, $f$ must be divisible by $(x-2)(x-3)$ (polynomial rings are UFDs and $(x-2)$ and $(x-3)$ are relatively prime?). Thus, we have $\mathbf I(\{2,3\})\subseteq I$, and the opposite inclusion is obvious since $(x-2)(x-3)$ vanishes on $\{2,3\}$. Since any ideal of a variety is radical, $I$ is radical with $I = \sqrt I$. However, since $I = \langle x^2-5x+6\rangle$ and $\text{LT}(x^2-5x+6)=x^2$, every element $f \in I$ will have $\text{LT}(f)$ divisible by $x^2$, as $f = h\cdot (x^2-5x+6)$ for some $h \in k[x]$, and $\text{LT}(f) = \text{LT}(h)\cdot x^2$. Thus, there will be no Gr\"obner basis for $I$ with generators having square-free leading terms.
+\end{enumerate}
+\ \\ \ \\
+You may use the results of \S4.2, Exercise 4 without proof.
+\end{prob}
+
+\bigskip 
+
+
+\begin{prob}  By the end of Friday, May 22, finalize a choice for your final project by emailing me (vinzant@uw.edu) with a topic, reference, and list of your group members. \end{prob}
+
+
+\end{flushleft}
+\end{document}

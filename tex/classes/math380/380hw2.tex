@@ -1,0 +1,201 @@
+\documentclass[12pt]{amsart}
+\pagestyle{empty}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{fancyhdr} 
+\usepackage[T1]{fontenc}
+
+
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx,  epstopdf}
+\usepackage{subfig}
+\usepackage{color}
+\usepackage{bbm}
+\usepackage{subfloat}
+\usepackage[draft]{fixme}
+\usepackage{bm} 
+\usepackage{bbm} 
+\usepackage{epigraph}
+\usepackage{endnotes}
+\usepackage{ifpdf}
+\usepackage{array}
+
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathbb{C}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\ol}{\overline}
+\newcommand{\J}{\mathcal{J}}
+\newcommand{\X}{\mathcal{X}}
+\theoremstyle{definition}
+\newtheorem{prob}{Problem}
+\newtheorem{extraProb}{Extra Problem}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\ext}{ext}
+
+
+\usepackage{listings,xcolor}
+\lstset{language=Mathematica}
+\lstset{basicstyle={\sffamily\footnotesize},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  breaklines=true,
+  captionpos={t},
+  frame={lines},
+  rulecolor=\color{black},
+  framerule=0.5pt,
+  columns=flexible,
+  tabsize=2
+}
+
+\begin{document}
+ \thispagestyle{empty}
+\begin{center} {\large \textbf{Math 380 -- Homework  2}} \smallskip \\ 
+Due on Thursday, April 16\ \\ \ \\
+ \end{center}
+
+You are welcome to talk with other students in the class about problems but should write up solutions on your own. 
+Solutions can be handwritten or typed but need to be legible and submitted via Gradescope by the end of the day 
+on Thursday. You should justify all your answers in order to receive full credit.  
+\bigskip 
+
+\begin{flushleft}
+
+{\bf Good practice problems} (not to be turned in): \\
+
+CLO Section 1.4, Exercises 2, 3, 6, 8, 16\\
+
+CLO Section 1.5, Exercises 1, 11, 13, 14, 16\\
+CLO Section 2.1, Exercises 1, 3, 4\\
+\bigskip 
+
+
+
+
+\begin{prob} CLO \S1.4, Exercise 15 \smallskip \\
+\begin{enumerate}
+    \item[a.] For any subset $S \subseteq k^n$, the set $\mathbf I(S) = \{f \in k[x_1,\dots,x_n] \mid \forall a \in S, f(a) = 0 \}$ is an ideal. First, $0 \in \mathbf I(S)$ as the zero polynomial vanishes on all of $k^n$ and thus also vanishes on $S$. Let $f,g \in \mathbf I(S)$ be any polynomials, and consider $f+g$ evaluated at any point $s \in S$. Because $f$ and $g$ vanish on $S$, $(f+g)(s)=f(s)+g(s)=0+0=0$. Thus, $f+g \in \mathbf I(S)$. Now, let $f \in \mathbf I(S)$ and let $h\in k[x_1,\dots,x_n]$, then consider $h \cdot f$ evaluated at $s \in S$. Since $f$ vanishes on $S$, $(h \cdot f)(s) = h(s)\cdot f(s)=h(s)\cdot 0 = 0$, so $h\cdot f \in I$. Thus, the set $\mathbf I(S)$ is an ideal.
+    \item[b.] Let $X = \{(a,a) \in \mathbb R^2 \mid a \ne 1 \}$. We would like to determine the ideal $\mathbf I(X)$. First, note that $\mathbf I(X) = \mathbf I(V(y-x))$: we have $\mathbf I(X) \subseteq \mathbf I(V(y-x))$ since by Exercise 8 of \S 1.2, any polynomial $f$ that vanishes on $X$ also vanishes on $(1,1)$, so $f$ vanishes on the entire $y=x$ line. The other direction is true since $X \subseteq V(y-x)$, and so $\mathbf I(X) \supseteq \mathbf I(V(y-x))$. Any polynomial that vanishes on all of $V(y-x)$ must also vanish on a subset $X$. By Exercise 10 of \S 1.4, $\mathbf I(V(y-x)) = \langle y-x\rangle$, and so we have found $\mathbf I(X) = \langle y-x\rangle$. 
+    
+    Further proof of Exercise 10 for fun: the containment that $\langle y-x\rangle \subseteq \mathbf I(V(y-x))$ is trivial, since $y-x$ vanishes on the the line $y=x$. For the other containment, let $f \in \mathbf I(\mathbf V(y-x))$ be any polynomial that vanishes on $\mathbf V(y-x)$. Using the binomial theorem, we can write any monomial in $k[x,y]$ as \begin{align*}x^ny^m &= x^n(x+(y-x))^m
+    \\ &= x^n\left(x^m +(y-x)\sum_{i=1}^m \binom{m}{i}(y-x)^{i-1}x^{m-i}\right)
+    \\ &= x^{n+m} + (y-x)\cdot h(x).
+    \end{align*}
+    Because $f$ is a $\mathbb R$-linear combination of these monomials, we can write $f(x,y) = p(x)+(y-x)\cdot h(x)$ where $p(x), h(x) \in \mathbb R[x]$. Because $f$ vanishes everywhere on the $y=x$ line, we have that $\forall x \in \mathbb R, f(x,x)=p(x)+0=0$. Thus, $p(x)$ is a univariate polynomial with infinite roots, so it is the zero polynomial. Thus, $(y-x)$ divides $f$, and $f \in \langle y-x\rangle$.
+    %and choose any $a \in k$. Then, consider the univariate polynomial $p(y)=f(a,y)$. \textbf{TODO: Take care for case when $\deg p < 1$} We can divide $p(y)=q(y)\cdot (y-a)+r(y)$, and by the degree bound we have that $r(y) \in k$ is a constant polynomial. Thus, evaluating $p(a)=0=r(y)$, we see that $y-a$ divides $p(y)$.  Surely this implies that $y-x$ divides $f$, but I dont know how to do it.
+    \item[c.] Let $\mathbb Z^n$ be the set of all points in $\mathbb C^n$ with integer coordinates. Then $\mathbf I(\mathbb Z^n) = \langle 0 \rangle$. Consider any polynomial $f \in \mathbb C[x]$ that vanishes on all of $\mathbb Z^n$. By the result of Exercise 6 of \S 1.1, $f = 0$. The proof is the same as Proposition 5, inducting on $n$: for the $n=1$ case, $f$ is a univariate polynomial with infinite roots and so it is the zero polynomial. For $n > 1$, write \[f = \sum_{i=0}^{\deg f} g_i(x_1, \dots, x_{n-1}) x_n^i\] for $g_i \in k[x_1,\dots,x_{n-1}]$.
+    Let $a \in \mathbb Z^{n-1}$ be any lattice point, and consider the univariate polynomial $p(x_n)= f(a,x_n)= \sum_i g_i(a) x_n^i$. Then for all $x_n \in \mathbb Z$, $p(x_n) = 0$ so by the $n=1$ case we have $p = 0$. Thus, for all $0 \le i \le \deg f$ we have $g_i(a) = 0$. We have shown that all $g_i$ vanish at all points $a \in \mathbb Z^{n-1}$, so by the inductive hypothesis, $g_i = 0$. Thus, $f = 0$. 
+\end{enumerate}
+\end{prob}
+\bigskip 
+
+
+\begin{prob} CLO \S1.5, Exercise 12 and 15 \smallskip \\
+You may assume the results of Exercise 1, 13, and 14 of this section without proof. 
+
+\paragraph{Problem 12} Let \[f = c \prod_{i=1}^l(x-a_i)^{r_i} \in \mathbb C[x]\] be a nonconstant polynomial with $c \ne 0$ and $l \ge 1$. Define the reduced or square-free part of $f$ to be \[f_\text{red} = c \prod_{i=1}^l(x-a_i).\] \begin{enumerate}
+    \item[a.] $\mathbf V(f) = \{a_1,\dots,a_l\}$. The containment that $\{a_1, \dots, a_l\}\subseteq \mathbf V(f)$ follows from the definitions, as plugging in any $a_i$ will result in $0$. For the reverse containment, choose any $b \in k$ such that $b \not\in \{a_1,\dots,a_l\}$. Then $f(b) = c\prod (b-a_i)^{r_i}$, and each $b-a_i \ne 0$. However, then $f(b)$ is a product of only nonzero terms, so since $\mathbb C$ is an integral domain, $f(b)\ne 0$. Thus, $b \not\in \{a_1,\dots, a_l\} \implies f(b) \ne 0$, and the contrapositive is our desired containment.
+    \item[b.] $\mathbf I(\mathbf V(f)) = \langle f_\text{red}\rangle$. The containment that $\langle f_\text{red}\rangle \subseteq \mathbf I(\mathbf V(f))$ follows from the definitions since $f_\text{red}$ vanishes at every $a_i$ and thus vanishes at every point that $f$ vanishes on. To show the nontrivial containment that $\textbf I(\textbf V(f)) \subseteq \langle f_\text{red} \rangle$, let $g \in \mathbf I(\mathbf V(f))$ be any polynomial that vanishes on $\{a_1,\dots,a_l\}$. We can divide $g = q \cdot f_\text{red} + r$, and because $g$ and $f_\text{red}$ both vanish on all $a_i$, we have $r(a_i) = 0$ for all $1 \le i \le l$. By construction, $\deg r < \deg f_\text{red} = l$, but we have just shown that $r$ is a polynomial with at least $l$ roots! Thus, $r$ is the constant polynomial $0$, and $f_\text{red}$ divides $g$.
+
+    Is there a slicker way to do this using the fact that $\mathbb C[x]$ is a principal ideal domain?
+\end{enumerate}
+
+\paragraph{Problem 15} \begin{enumerate}
+    \item[a.] By part (c) of \S1.5 Problem 14, given $f = c \prod_{i=1}^l (x-a_i)^{r_i} \in \mathbb C[x]$, we have $\gcd(f,f')=\prod_{i=1}^l (x-a_i)^{r_i-1}$ where $f'$ is the formal derivative of $f$. 
+    Then, since we have that each $r_i \ge 1$,
+    \begin{align*}
+        \frac{f}{\gcd(f,f')} &= \frac{c\prod_{i=1}^l  (x-a_i)^{r_i}}{\prod_{i=1}^l (x-a_i)^{r_i-1}} \\
+        &= c\prod_{i=1}^l (x-a_i) = f_\text{red}.
+    \end{align*}
+    \item[b.] 
+    We can calculate the square-free form of $x^{11} - x^{10} + 2 x^8 - 4 x^7 + 3x^5 - 3x^4 + x^3 + 3x^2 -x - 1$ using Mathematica:
+    \begin{lstlisting}[language=Mathematica]
+        f[x_] := x^11 - x^10 + 2 x^8 - 4 x^7 + 3 x^5 - 3 x^4 + x^3 + 3 x^2 - x - 1
+        f[x]/PolynomialGCD[f[x], f'[x]] // Simplify
+    \end{lstlisting}
+    The answer being $x^5+x^2-x-1$.
+ \end{enumerate}
+\end{prob}
+\bigskip 
+
+\begin{prob} CLO \S2.1, Exercise 5 \smallskip \\
+
+\begin{enumerate}
+    \item[a.]  The total number of monomials $x^ay^b \in k[x,y]$ of degree less than or equal to $m$ is given by the triangle numbers, by Mathematica:
+    \[\sum_{i=0}^m (i+1) = \frac{(m+2)(m+1)}{2}.\]
+    Alternatively, since we need to count the number of pairs $a+b$ where $a+b\le m$, we can rephrase the problem as counting the ways to put $m$ indistinguishable balls into $3$ distinguishable bins: $a$, $b$, or not included. Using stars and bars, have $m$ elements plus $2$ dividers to be chosen, and we find again find \[\binom{m+2}{2} = \frac{(m+2)(m+1)}{2}.\]
+    \item[b.] Let $f,g\in k[t]$ be polynomials with degree at most $n$. Fix some $m \in \mathbb N$, and consider the set $S$ of formal ``monomials'' in $f(t)$ and $g(t)$: \[S=\{f(t)^ag(t)^b \mid a,b\in \mathbb Z_{\ge 0}, a+b\le m \}.\] 
+    Note that we consider $f^ag^b$ and $f^cg^d$ as distinct elements of $S$ even if $f^ag^b = f^cg^d$ as polynomials in $k[t]$. Denote $P(s)$ as the polynomial in $k[t]$ associated with $s$. For any element $s \in S$, we can see that \[\deg P(s) = \deg (f(t)^a g(t)^b) = a\deg(f) + b\deg(g)\le a n+b n \le nm.\] Thus, $P(S)$ is a subset of polynomials in $t$ with degree at most $nm$, which is a subspace $k[t]_{\deg \le nm}$ of $k[t]$ with $\dim(k[t]_{\deg \le nm}) =nm+1$. Since this is a subspace, we also have $\text{span}\,P(S) \subseteq k[t]_{\deg\le nm}$.
+
+    Note that the definition of $S$ puts it in bijection with pairs $(a,b)$ where $a+b\le m$, so by the counting of part (a) we have that $|S| = \frac{1}{2}(m+2)(m+1)$. Choose something like $m =2n+1$, and doing algebra one can see that \[|S| = (2n+3)(n+1)> 2n^2 + n +1=\dim(k[t]_{\deg\le nm}).\] 
+    Since $|S|$ exceeds the dimension of the space that $S$ inhabits, $S$ is linearly dependent (conflating polynomials with the formal monomials). In  fact, any sufficiently large $m$ works since $|S|$ is on the order of $m^2$ while dimension is on the order of $m$.
+    \item[c.] Let $C$ be a parametric curve $x=f(t)$, $y=g(t)$ defined by polynomials $f,g\in k[t]$. We can find a nonzero polynomial $F \in k[x,y]$ such that $C \subseteq \mathbf V(F)$. Let $F$ be given by 
+    $F = \sum_{i,j} c_{ij} x^i y^j$, and note that we wish for $F$ to have the property that $\forall t \in k, F(f(t),g(t))=0$. Expanding this out, we wish for
+    \[F(f(t),g(t)) = \sum_{i,j} c_{ij} f(t)^ig(t)^j=0.\]
+    However, by the result of part (b), this list of ``monomials'' $f(t)^i g(t)^j$ must be linearly dependent when we consider large enough total degrees of $F$, so we can find a nontrivial linear combination $c_{ij}$ that sums to zero, proving that our desired nonzero $F$ exists.
+    \item[d.] Fix $m \in \mathbb N$ and define a set of formal ``monomials'' for $f,g,h\in k[t,u]$
+    \[
+    S = \{f(t,u)^ag(t,u)^bh(t,u)^c \mid a+b+ c \le m\}.
+    \]
+    Let $n$ be the maximum total degree among $f,g,h$, and let $P(s)$ denote the polynomial in $k[t,u]$ associated with any $s \in S$. Then for any $s$,
+    \[
+    \deg P(s) = a\deg f+b\deg g + c\deg h \le (a+b+c)n\le mn.
+    \]
+    Thus, $S\subseteq k[t,u]_{\deg \le nm}$ and this is a subspace of $k[t,u]$. However, since this vector space consists of any monomial $t^au^b$ where $a+b\le nm$, by the counting of part (a) we have that \[\dim(k[t,u]_{\deg \le nm})= \frac{1}{2}(nm+1)(nm+2).\] 
+    Then, we can use stars and bars to count $|S|$ as the number of ways to put $m$ indistinguishable balls into $4$ distinguishable bins: $a$, $b$, $c$, or not included. Thus, \[|S| = \binom{m+3}{3} = \frac{1}{6}(m+3)(m+2)(m+1).\]
+    Since $|S|$ grows on the order of $m^3$ while $\dim(k[t,u]_{\deg\le nm})$ grows on the order of $m^2$, for large enough $m$ we will have that $|S|$ exceeds the dimension of the subspace, so $S$ must be linearly dependent. 
+
+    Consider any parametric surface $C$ given by $x = f(t,u)$, $y = g(t,u)$, and $z = h(t,u)$ for $f,g,h \in k[t,u]$. We wish to show there is a nonzero $F \in k[x,y,z]$ such that $C\subseteq \mathbf V(F)$. To do so, we can write $F(x,y,z) = \sum c_{ijk} x^iy^jz^k$ and show that for all $t,u\in k$, \[
+    F(f(t,u),g(t,u),h(t,u)) = \sum c_{ijk} f(t,u)^i g(t,u)^j h(t,u)^k = 0.
+    \]
+    However, by the result above, the formal monomials $f^i g^j h^k$ must be linearly dependent once we consider large enough degrees of $F$, so we can find a set of nontrivial coefficients $c_{ijk}$ to satisfy the above condition. Thus, $C \subseteq \mathbf V(F)$ for some $F \in k[x,y,z]$.
+\end{enumerate}
+
+\emph{Bonus:} Show (c) for rational functions. That is, that any curve in $k^2$ given parametrically by $x=p_1(t)/q_1(t)$ and $y = p_2(t)/q_2(t)$ where $p_1(t), p_2(t), q_1(t), q_2(t)\in k[t]$
+is contained in $V(F)$ for some nonzero $F\in k[x,y]$. 
+\begin{proof}
+    Fix $m \in \mathbb N$ and for $p_1,p_2,q_1,q_2 \in k[t]$ define a set of formal ``monomials''
+    \[S = \{ p_1(t)^a p_2(t)^bq_1(t)^{m-a}q_2(t)^{m-b}\mid a+b \le m\}.\]
+    This set can be counted in the same way as we did before, so $|S| = \frac{1}{2}(m+2)(m+1)$. Again denote $P(s)$ for the polynomial associated with $s$, and let $n$ be the maximal degree of $p_1,p_2,q_1,q_2$. For any $s \in S$, we see
+    \[
+    \deg P(s) = a\deg p_1 + b \deg p_2 + (m-a)\deg q_1+(m-b)\deg q_2 \le 2mn.
+    \]
+    Again, we have the same situation where $P(S) \subseteq k[t]_{\deg \le 2mn}$, but $|S| = \frac{1}{2}(m+2)(m+1)$ while $\dim(k[t]_{\deg\le 2mn}) = 2mn+1$. Since dimension scales on the order of $m$ while $|S|$ scales on the order of $m^2$, for large enough $m$ we get $|S| > \dim (k[t]_{\deg \le 2mn})$ and thus that $S$ is $k$-linearly dependent.
+
+    Let $C$ be any rational curve in $k^2$ given by $x=p_1(t)/q_1(t)$, $y=p_2(t)/q_2(t)$. By the linear dependence result above, find some $m$ that works to let \[F(x,y,z,w) = \sum_{i,j\in \mathcal T_F} c_{ij} x^i y^jz^{m-i}w^{m-j} \in k[x,y,z,w]\] be some nonzero polynomial such that $F(p_1(t),p_2(t),q_1(t),q_2(t))=0$ for all $t \in k$. Define a new nonzero polynomial $G \in k[x,y]$ simply by dropping the $z$ and $w$ variables from $F$, replacing them with $1$ wherever they appear. Consider that
+    \[
+    G\left(\frac{p_1(t)}{q_1(t)}, \frac{p_2(t)}{q_2(t)}\right) = \sum_{i,j\in \mathcal T_F} c_{ij} \frac{p_1(t)^i}{q_1(t)^i}\frac{p_2(t)^j}{q_2(t)^j}.
+    \]
+    We wish to show that $C \subseteq \mathbf V(G)$, i.e. that for all $t \in k$ where $q_1(t)\ne 0$ and $q_2(t)\ne 0$, the expression above evaluates to 0. For any $t \in k$, we can evaluate
+    \begin{align*}
+        q_1(t)^m q_2(t)^m G\left(\frac{p_1(t)}{q_1(t)},\frac{p_2(t)}{q_2(t)} \right) &= \sum_{i,j\in\mathcal T_F} c_{ij} p_1(t)^i p_2(t)^j q_1(t)^{m-i}q_2(t)^{m-j} \\
+        &= F(p_1(t),p_2(t),q_1(t),q_2(t))=0.
+    \end{align*}
+    The division step is valid since by the definition of $G$ and $F$ we know that for all terms, $i \le m$ and $j \le m$ since $i + j \le m$. In the case that $q_1(t) \ne 0$ and $q_2(t) \ne 0$, by the fact that fields are integral domains we know that $G\left(\frac{p_1(t)}{q_1(t)},\frac{p_2(t)}{q_2(t)}\right) = 0$. Thus, we have shown our desired result $C \subseteq \mathbf V(G)$ from the fact that $G$ is zero whenever both denominators of rational functions are nonzero!
+\end{proof}
+\end{prob}
+\bigskip 
+
+I love writing the same proof 3 times with slight differences.
+
+
+\end{flushleft}
+\end{document}

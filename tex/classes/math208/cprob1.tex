@@ -1,0 +1,79 @@
+\documentclass[12pt]{amsart}
+
+\input{../preamble.tex}
+
+\title{MATH 208 Conceptual Problems 1}
+\author{Grant Yang}
+\date{September 26, 2025}
+
+\begin{document}
+\maketitle
+\section{}
+There does not exist a linear system of 2 equations in 3 variables with exactly one solution. If such a system did exist, it would have to be consistent (otherwise it would have 0 solutions), so by the definition of a leading variable, the number of leading variables must be less than or equal to the number of equations. However, in order to have exactly one solution, the number of leading variables must equal the total number of variables. Thus, it is impossible to have exactly one solution in such a system, as in a consistent system we are always left with at least one free variable, leading to infinitely many solutions.
+
+\section{}
+$x_1+x_2-x_3=0$ is an example of such a linear equation. We can verify this by plugging in our test cases:
+\begin{align*}
+\begin{bmatrix}0 & 0 & 0 \end{bmatrix}^T&\;\longrightarrow\;0 + 0 - 0 = 0\;\checkmark \\
+\begin{bmatrix}1 & 0 & 1 \end{bmatrix}^T&\;\longrightarrow\;1+0-1=0\;\checkmark \\
+\begin{bmatrix}1 & -1 & 0 \end{bmatrix}^T&\;\longrightarrow\;1+(-1)-0=0\;\checkmark  \\
+\begin{bmatrix}0 & 3 & -3 \end{bmatrix}^T &\;\longrightarrow\; 0+3-(-3) \ne 0\;\checkmark
+\end{align*}
+
+A single linear equation with nonzero coefficients is automatically a consistent system in echelon form, and it has one leading variable and two free variables. Thus, the solution set is a plane, and since three independent (non-collinear) points define a unique plane, we were able to find a linear equation for the plane. The fourth point that must not be a solution does not lie on the plane, so our linear system has the desired properties.
+
+Bonus: Because we must always have two free parameters to form a plane containing the 3 desired solution points, we cannot add any leading variables (because doing so will necessarily remove one of the two free variables) when we add new equations for linear systems with 2 or 3 equations. Thus, although we can find linear systems with more equations that satisfy the desired properties, all equations must be essentially the same equation, being
+a scalar multiple of $x_1 + x_2 - x_3 = 0$.
+\newpage
+\section{}
+We can use reduced row echelon form to find a way to transform the initial matrix into the target matrix.
+$$
+\begin{bmatrix}
+    -1 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 2 \\
+    0 & 4 & -1 & 1
+\end{bmatrix}
+$$
+
+$$-4R_2 +R_3\to R_3$$
+
+$$
+\begin{bmatrix}
+    -1 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 2 \\
+    0 & 0 & -1 & -7
+\end{bmatrix}
+$$
+
+$$R_3 + R_1 \to R_1$$
+
+$$
+\begin{bmatrix}
+    -1 & 0 & 0 & -7 \\
+    0 & 1 & 0 & 2 \\
+    0 & 0 & -1 & -7
+\end{bmatrix}
+$$
+
+$$-R_1 \to R_1$$
+$$-R_3 \to R_3$$
+
+$$
+\begin{bmatrix}
+    1 & 0 & 0 & 7 \\
+    0 & 1 & 0 & 2 \\
+    0 & 0 & 1 & 7
+\end{bmatrix}
+$$
+
+$$2R_2 + R_3 \to R_3$$
+
+$$
+\begin{bmatrix}
+    1 & 0 & 0 & 7 \\
+    0 & 1 & 0 & 2 \\
+    0 & 2 & 1 & 11
+\end{bmatrix} \qquad \square
+$$
+
+\end{document}

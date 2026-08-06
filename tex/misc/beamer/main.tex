@@ -1,0 +1,196 @@
+\documentclass{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+
+\title[Your Short Title]{Relativity}
+\author{Grant Yang}
+\institute{}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}{Introduction}
+
+\begin{itemize}
+    \item Suppose two reference frames $A$ and $B$
+    \item $B$ is moving at $\vec{v}$ relative to $A$.
+    \item Because of symmetry (all reference frames are equal), $A$ is moving at $-\vec{v}$ relative to $B$.
+    \item Let Lorentz transform $L$ be a linear map taking events (4-vectors of 3 position + 1 time) from $A$ to $B$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Setup}
+\begin{itemize}
+\item In frame $A$, light is bounced between some stationary point $p$ and a stationary mirror $m$.
+\item Let the distance between this point and mirror be $d_a$ (from frame $A$'s POV).
+\item Let $\Delta t$ be the time between the light being sent out and the beam arriving back at $p$ from $A$'s POV.
+\item In frame $B$, there is a stationary point $q$. Let $\ell$ be the distance this point appears to travel in $\Delta t$ from $A$'s POV.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Diagram from Frame $A$'s POV}
+
+\begin{tikzpicture}
+\draw[gray, thin] (-5, 4) rectangle (-1, 0);
+\draw[gray, thin] (1,0) rectangle (5,4);
+\draw[black] (-5, 4) node[anchor=west,fill=white] {Frame A};
+\draw[black] (1, 4) node[anchor=west,fill=white] {Frame B};
+\draw[orange, ->] (3, 4.25) -- (3, 6);
+\draw[black] (3, 5) node[anchor=west] {$\vec{v}$};
+\filldraw[black] (-4, 2) circle (2pt) (-4, 1.9) node[anchor=north] {$p$};
+\filldraw[black] (-2, 2) circle (2pt) (-2, 1.9) node[anchor=north] {$m$};
+\draw[blue, ->] (-3.9, 2.1) -- (-2.1, 2.1);
+\draw[blue, ->] (-2.1, 1.9) -- (-3.9, 1.9);
+\draw[black] (-3,2.1) node[anchor=south] {$d_a$};
+
+\draw[orange, ->] (3,1) -- (3,2.9);
+\draw[black] (3,2) node[anchor=west] {$\ell$};
+\filldraw[black] (3,3) circle (2pt) node[anchor=west] {$q_{\Delta t}$};
+\filldraw[black] (3,1) circle (2pt) node[anchor=west] {$q_0$};
+\end{tikzpicture}
+
+\end{frame}
+
+
+\begin{frame}{Diagram from Frame $B$'s POV}
+
+\begin{tikzpicture}
+\draw[gray, thin] (-5, 4) rectangle (-1, 0);
+\draw[gray, thin] (1,0) rectangle (5,4);
+\draw[black] (-5, 4) node[anchor=west,fill=white] {Frame A};
+\draw[black] (1, 4) node[anchor=west,fill=white] {Frame B};
+\draw[orange, ->] (-3, -0.25) -- (-3, -2);
+\draw[black] (-3, -1) node[anchor=west] {$-\vec{v}$};
+\draw[black, <->] (-3.9, 2) -- (-2.1, 2);
+\draw[black] (-3,2) node[fill=white] {$d_a$};
+
+\draw[blue, ->] (-4, 3.25) -- (-2.1, 2.1);
+\draw[blue, ->] (-2, 2) -- (-3.9, 0.85);
+\draw[orange, ->] (-4, 3.25) -- (-4, 0.85);
+\draw[black] (-4,2) node[anchor=east] {$\ell'$};
+\draw[orange, ->] (-2, 2) -- (-2, 1);
+
+\draw[black] (-3, 2.75) node[fill=white] {$d_b$};
+
+\filldraw[black] (3,2) circle (2pt) node[anchor=west] {$q$};
+\filldraw[black] (-4, 3.25) circle (2pt) (-4, 3.25) node[anchor=south] {$p_0$};
+\filldraw[black] (-4, 0.75) circle (2pt) (-4, 0.75) node[anchor=north] {$p_{\Delta t'}$};
+\filldraw[black] (-2, 2) circle (2pt) (-1.9, 2) node[anchor=west,fill=white] {$m_{\Delta t' / 2}$};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Math}
+\begin{block}{}
+
+By the definition of $\Delta t$ in frame $A$, $2 d_a = c \Delta t$.
+\newline
+\newline
+Let $\Delta t'$ be that same time interval (between the light being sent out and it arriving back at $p$) as measured from frame $B$. However, since the light appears to have travelled a greater distance from $B$'s point of view, and since the speed of light is constant, $\Delta t' > \Delta t$. This is time dilation.
+\newline \newline
+In this calculation, we can reuse the length $d_a$ in the context of frame $B$ since it is perpendicular to relative velocity $\vec{v}$. In particular,
+$$
+2 d_b = c \Delta t'
+$$
+$$
+\left(\frac{1}{2} |\vec{v}| \Delta t'\right)^2 + d_a^2 = d_b^2
+$$
+
+\end{block}
+\end{frame}
+
+\begin{frame}{Math 2}
+\begin{block}
+
+$$
+\left(\frac{1}{2} |\vec{v}| \Delta t'\right)^2
++ \left(\frac{1}{2} c \Delta t \right)^2
+= \left( \frac{1}{2} c \Delta t' \right)^2
+$$
+
+$$
+\left(c^2 - |\vec{v}|^2\right) \left(\Delta t'\right)^2 = c^2 \left(\Delta t\right)^2
+$$
+\end{block}
+\begin{block}
+
+Introduce Lorentz factor $\gamma$ so that we can write:
+$$\gamma = \frac{1}{\sqrt{1 - \frac{|\vec{v}|^2}{c^2}}}$$
+$$\Delta t' = \gamma \Delta t$$
+\end{block}
+
+\end{frame}
+
+
+\section{Some \LaTeX{} Examples}
+
+\subsection{Tables and Figures}
+
+\begin{frame}{Tables and Figures}
+
+\begin{itemize}
+\item Use \texttt{tabular} for basic tables --- see Table~\ref{tab:widgets}, for example.
+\item You can upload a figure (JPEG, PNG or PDF) using the files menu. 
+\item To include it in your document, use the \texttt{includegraphics} command (see the comment below in the source code).
+\end{itemize}
+
+% Commands to include a figure:
+%\begin{figure}
+%\includegraphics[width=\textwidth]{your-figure's-file-name}
+%\caption{\label{fig:your-figure}Caption goes here.}
+%\end{figure}
+
+\begin{table}
+\centering
+\begin{tabular}{l|r}
+Item & Quantity \\\hline
+Widgets & 42 \\
+Gadgets & 13
+\end{tabular}
+\caption{\label{tab:widgets}An example table.}
+\end{table}
+
+\end{frame}
+
+\subsection{Mathematics}
+
+\begin{frame}{Readable Mathematics}
+
+Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
+\[ S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
+      = \frac{1}{n}\sum_{i}^{n} X_i \]
+denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
+
+\end{frame}
+
+\end{document}

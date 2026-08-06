@@ -1,0 +1,180 @@
+%  This LaTeX template is based on T.J. Hitchman's work which is itself based on Dana Ernst's template.  
+% 
+% --------------------------------------------------------------
+% Skip this stuff, and head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx,gensymb}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{quotes,angles}
+\newenvironment{statement}[2][Statement]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+ 
+% --------------------------------------------------------------
+%
+%                         Start here
+%
+% --------------------------------------------------------------
+
+ 
+\title{Measurement and Error Analysis Primer} % replace with the problem you are writing up
+\author{Grant Yang} % replace with your name
+\maketitle
+
+
+\section{Part 1}
+
+\subsection{Subpart f}
+Skim Halliday, Resnick, and Walker (HRW) chapter 1, or read carefully if helpful, and do problem 9 at the end of the chapter.  After you estimate the number of cubic centimeters of ice in Antarctica, estimate the change in world sea level if that ice was converted to water and spread evenly over the 70\% of Earth’s surface that is oceanic.  Record the biggest assumptions and approximations that you are making.
+
+\begin{itemize}
+\item Antarctica is roughly semicircular, with a radius of 2000 km (Fig. 1-5). The average thickness of its ice cover is 3000 m. How many cubic centimeters of ice does Antarctica contain? (Ignore the curvature of Earth.)
+\end{itemize}
+
+\subsubsection{Solution}
+
+The volume of a semicircular prism is half the volume of a cylinder, and  is given by the following equation, with $V_\text{semi}$ being the volume, $h$ being the height, and $r$ being the radius of the circular part.
+
+\[
+V_\text{semi} = \frac{1}{2} \pi h r^2
+\]
+
+This formula can be directly used to calculate the ice's volume:
+% and $V_\text{ice} = V_\text{semi} = \frac{1}{2} \pi h_\text{ice} r_\text{ice}^2$.
+
+\[
+V_\text{ice} =  V_\text{semi} = \frac{1}{2} \pi h_\text{ice} r_\text{ice}^2 \]\[= \frac{1}{2} \pi\,\left(3000\,\si{m}\right)\,\left(2000\,\si{km} \times \frac{10^3\,\si{m}}{1\,\si{km}}\right)^2 \left(\frac{10^2\,\si{cm}}{1\,\si{m}}\right)^3 \approx \boxed{2 \times 10^{22}\,\si{cm^3}}
+\]
+
+Next, to estimate the sea level rise from the melting of this ice, we will calculate the surface area of Earth's oceans. The surface area of a sphere of radius $r$ is given by:
+
+\[
+A_\text{sphere} = 4 \pi r^2
+\]
+
+Assuming that the Earth is a perfect sphere, we can use this formula, plugging in that the radius of the earth is approximately $r_\text{earth} = 6.37 \times 10^6\,\si{m}$ (from WolframAlpha). Then, we estimate that 70\% of this area is ocean: 
+
+\[A_\text{ocean} = 0.7 \times 4 \pi r_\text{earth}^2 \]
+
+% \[
+% A_\text{ocean} = A_\text{earth} \times 0.7 = 4 \pi \left( 6.37 \times 10^6\,\si{m} \times \frac{10^2\,\si{cm}}{1\,\si{m}} \right)^2 \times 0.7\approx 3.57 \times 10^{18}\,\si{cm^2}
+% \]
+
+Ignoring the density difference between ice and seawater, we can assume that the volume of Antarctic ice translates to the same volume of new seawater. By also assuming that the shape of that volume can be approximated by a prism (although wrapped around the earth), we can approximate the sea level rise with the following equation:
+
+% \[
+% h_\text{rise} = \frac{V_\text{ice}}{A_\text{ocean}} = \frac{1.88 \times 10^{22}\,\si{cm^3}}{3.57 \times 10^{18}\,\si{cm^2}} \times \frac{1\,\si{m}}{10^2\,\si{cm}} \approx \boxed{52.8\,\si{m}}
+% \]
+
+\[
+h_\text{rise} = \frac{V_\text{ice}}{A_\text{ocean}} = \frac{\frac{1}{2} \pi h_\text{ice} r_\text{ice}^2}{0.7\times 4 \pi r_\text{earth}^2} = \frac{\pi \left(3000\,\si{m}\right) \left(2000\,\si{km}\times \frac{10^3\,\si{m}}{1\,\si{km}}\right)^2}{0.7 \times 8 \pi \left(6.37\times 10^6\,\si{m}\right)^2} \approx \boxed{50\,\si{m}}
+\]
+
+% Those two assumptions are not entirely accurate, but they should be good enough estimates. Seawater is denser than freshwater because of its salt content, and ice is less dense than both. However, the difference in density only introduces a factor of $\rho_\text{seawater}/{\rho_\text{ice}} \approx 1.12$ (from WolframAlpha), which would only change our answer by about 5 meters.
+
+\subsection{Subpart g}
+Review HRW chapter 3 as needed and complete these Problems (not the Questions, which come before the Problems): 6, 9, 12
+
+ 
+\subsubsection{Solution to 6}
+
+A heavy piece of machinery is raised by sliding it a distance $d=12.5\,\si{m}$ along a plank oriented at angle $\theta = 20.0\degree$ to the horizontal.
+
+We know that the magnitude of displacement is $d$ and that the direction is $\theta$ from the horizontal, so the final displacement may be calculated by:
+
+\[
+\left(12.5\,\si{m}\right)\begin{bmatrix}
+\cos{20.0\,\degree} \\ \sin{20.0\,\degree}
+\end{bmatrix}
+\approx
+\begin{bmatrix}
+11.7\,\si{m}\\ 4.28\,\si{m}
+\end{bmatrix}
+\]
+
+Thus, it is moved
+\fbox{
+\textbf{A.} $11.7\,\si{m}$ horizontally, and \textbf{B.} $4.28\,\si{m}$ vertically.
+}
+
+\subsubsection{Solution to 9}
+
+For the vectors $\vec{a}$ and $\vec{b}$:
+\[
+\vec{a}=(4.0\,\si{m})\hat{i} - (3.0\,\si{m})\hat{j}+(1.0\,\si{m})\hat{k}
+\]
+\[
+\vec{b}=(-1.0\,\si{m})\hat{i} + (1.0\,\si{m})\hat{j}+(4.0\,\si{m})\hat{k}
+\]
+
+\begin{itemize}
+\item[] \textbf{A.} $\vec{a}+\vec{b} = \boxed{(3.0\,\si{m})\hat{i} - (2.0\,\si{m})\hat{j}+(5.0\,\si{m})\hat{k}}$
+\item[] \textbf{B.} $\vec{a}-\vec{b} = \boxed{(5.0
+\,\si{m})\hat{i} - (4.0\,\si{m})\hat{j}-(3.0\,\si{m})\hat{k}}$
+\item[] \textbf{C.} $\vec{a} - \vec{b} + \vec{c} = \vec{0} \implies \vec{c} = \boxed{-(5.0
+\,\si{m})\hat{i} + (4.0\,\si{m})\hat{j}+(3.0\,\si{m})\hat{k}}$
+\end{itemize}
+
+\subsubsection{Solution to 12}
+
+A car is driven east for a distance of $50\,\si{km}$, then north for $30\,\si{km}$, and then in a direction $30\degree$ east of north for $25\,\si{km}$. Sketch the vector diagram and determine (a) the magnitude and (b) the angle of the car's total displacement from its starting point.
+
+\begin{figure}[!h]
+\centering
+\begin{tikzpicture}
+\coordinate (end) at (6.25, 5.1651);
+\coordinate (angb) at (5, 3);
+\coordinate (top) at (5,5);
+\draw[black,->] (0,0) -- (5,0);
+\draw[black] (2.5, 0) node[anchor=south] {$50\,\si{km}$};
+\draw[black,->] (5,0) -- (angb);
+\draw[black] (5, 1.5) node[anchor=east] {$30\,\si{km}$};
+\draw[black,->] (angb) -- (end);
+\draw[dashed,black] (angb) -- (top);
+\draw[black] (5.63, 4.08) node[anchor=west] {$25\,\si{km}$};
+\draw[black] pic["$30\degree$",draw=red,<->,angle eccentricity=1.2,angle radius=1.5cm] {angle=end--angb--top};
+\end{tikzpicture}
+\caption{Vector diagram of the path of the car}
+\end{figure}
+
+The total displacement is given by:
+
+\[
+\vec{d}=\begin{bmatrix}
+50\,\si{km} \\ 0
+\end{bmatrix}
++
+\begin{bmatrix}
+0 \\ 30\,\si{km}
+\end{bmatrix}
++
+\left( 25\,\si{km} \right)
+\begin{bmatrix}
+\cos{60\degree} \\
+\sin{60\degree}
+\end{bmatrix}
+\approx
+\begin{bmatrix}
+62.5\,\si{km} \\
+51.7\,\si{km}
+\end{bmatrix}
+\]
+
+\begin{itemize}
+\item[] \textbf{A.} The magnitude is \[
+\| \vec{d} \| = \sqrt{\left(62.5\,\si{km}\right)^2 + \left(51.7\,\si{km}\right)^2} \approx \boxed{81\,\si{km}}
+\]
+\item[] \textbf{B.} The angle of displacement, counterclockwise from the east, is \[
+\tan^{-1}{\left(\frac{51.7\,\si{km}}{62.5\,\si{km}}\right)} \approx \boxed{40.\degree}
+\]
+\end{itemize}
+
+ 
+\end{document}

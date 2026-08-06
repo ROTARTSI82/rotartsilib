@@ -1,0 +1,204 @@
+%  This LaTeX template is based on T.J. Hitchman's work which is itself based on Dana Ernst's template.  
+% 
+% --------------------------------------------------------------
+% Skip this stuff, and head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[style=verbose]{biblatex}
+\usepackage{siunitx}
+\usepackage{listings,xcolor}
+\newenvironment{statement}[2][Statement]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\addbibresource{sources.bib}
+
+\lstset{language=Mathematica}
+\lstset{basicstyle={\sffamily\footnotesize},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  breaklines=true,
+  captionpos={t},
+  frame={lines},
+  rulecolor=\color{black},
+  framerule=0.5pt,
+  columns=flexible,
+  tabsize=2
+}
+\begin{document}
+ 
+% --------------------------------------------------------------
+%
+%                         Start here
+%
+% --------------------------------------------------------------
+ 
+\title{Problem Set 1: Planck} % replace with the problem you are writing up
+\author{Grant Yang Period 6} % replace with your name
+\maketitle
+
+%\section{Instructions}
+%During the first two weeks of class you will gain exposure to the basic concepts needed to address these questions and problems. You will not necessarily get everything you need in class. You will need to use that wonderful research tool called The Internet as well as the library, to fill in the gaps and extend your understanding (be sure to cite your sources and always have more than one). The idea behind the homework is to get you to ask questions. DO NOT attempt to do this assignment, or any other, in one sitting or at the last minute. You will need to ponder your answers, look up definitions and physical constants, and verify your responses.
+
+% \newpage
+
+\section{Questions}
+
+\paragraph{1. Blackbodies} \emph{Explain what we mean when we say something behaves like a blackbody (be very thorough in your explanation, include what defines a blackbody, how we can characterize it and give examples of good blackbodies, poor blackbodies and non-blackbodies). Does a blackbody always appear black (explain)? A good response to this question is typically about one full page.} \medskip
+
+If something behaves like a blackbody, it is a complex object (a solid, liquid, or plasma) that emits light in a continuous spectrum when hot (also known as the continuous, Planck, or blackbody spectrum). It also does not reflect or transmit much light. The blackbody spectrum is a function mapping the wavelength of light ($\si{nm}$) to its specific intensity ($\si{\frac{W}{\Omega\cdot m^2 \cdot nm}}$). The units of specific intensity give the power of the light, independent of the three proportional factors: the surface area of the blackbody emitting the light, the solid angle from the source to the detector collecting light (steradians, $\Omega$), and the width of the range of wavelengths you consider ($\si{nm}$). The factor of $\si{nm^{-1}}$ is needed as the wavelength of light is a continuous quantity, so it does not make sense to consider a single wavelength. Thus, the spectrum must be integrated to get energy flux, similar to how one must integrate a probability distribution function. The functional form of this spectrum is given by Planck's law, where $I_\lambda$ is specific intensity and $\lambda$ is wavelength:
+
+\begin{equation}
+    I_\lambda\,\rm{d}\lambda = \frac{2\pi h c^2}{\lambda^5} \left(e^{\frac{h c}{\lambda k T}} - 1\right)^{-1}\,\rm{d}\lambda.
+\end{equation}
+
+In the thermal emission spectrum, the most intense color of light has a wavelength proportional to $1/T$ where $T$ is the temperature of the blackbody (Wien's law, $\lambda_\text{max} = \frac{b}{T}$). This can be mathematically derived by taking the derivative of Planck's law with respect to wavelength $\lambda$ and setting it to 0 to find the maximum.
+
+The total energy flux radiating from a blackbody in all wavelengths would be proportional to $T^4$ (Stefan-Boltzmann law, $\Phi = \sigma T^4$). This energy flux can be obtained by integrating the specific intensity over all wavelengths of light, and thus it has units of $\si{\frac{W}{m^2}}$. 
+
+An ideal, perfect blackbody would absorb all incoming light energy and re-emit all of it so that it would remain at an equilibrium temperature (it does not heat up to infinite temperature or cool down to absolute zero). It would also not reflect or transmit any light. Although an ideal blackbody at room temperature would appear totally black with no perceptible depth, most blackbodies do not appear totally black as they may reflect some wavelengths of light. At room temperature, the thermal emissions of all blackbodies would appear black to humans, but there are still substantial emissions, just not in the visible part of the spectrum. 
+
+Most everyday objects, like clothes, tables, or chairs are good blackbodies. Poor blackbodies are the things with high reflection (like mirrors) or high transmission (like glass windows, with respect to visible light at least). Non-blackbodies are things that do not emit continuous spectra, like rarefied (low-density) gasses of pure elements, which emit discontinuous line spectra. Neon lights would be an example of non-blackbodies.
+
+% \newpage
+
+\paragraph{2. Stefan-Boltzmann} \emph{The relation,  is exact for blackbodies and holds for all temperatures. What is the name of this relationship? What are the units of $\Phi$? What is the statistical basis for the definition of temperature (i.e., how is it related to kinetic energy)? Use your description of temperature the concept of heat to explain why you can put your hand in a $100\degree\,\si{C}$ oven but not a $100\degree\,\si{C}$ pot of water. Explain why the $\sigma T^4$ relation is NOT used as the basis for a definition of temperature. Give examples of where this relationship does not work well, and at all, and explain why.} \medskip
+
+The Stefan-Boltzmann relationship relates the total energy flux $\Phi$ to the temperature of a blackbody:
+\begin{equation}
+    \Phi = \sigma T^4.
+\end{equation}
+
+$\Phi$ has units of $\si{W.m^{-2}}$, which represents the power ($\si{W}$, energy per unit time) being radiated out, depending on the area of the blackbody ($\si{m^{-2}}$). Temperature $T$ is proportional to the average kinetic energy of the particles in an object, so it is an intensive property of the system. 
+% In statistical mechanics, it is defined as the partial derivative of internal energy with respect to entropy, meaning that higher temperature systems correspond to higher energies needed to increase entropy. 
+However, this understanding of temperature says nothing about the rate of energy transfer from one body to another. Heat, what we are actually able to feel, is this rate at which energy is flowing. Usually, increased temperature means increased heat, but because air is such a poor conductor of heat energy compared to water, $100\degree\,\si{C}$ water feels much hotter than $100\degree\,\si{C}$ air.
+
+The $\sigma T^4$ relation is not used as a basis for the definition of temperature because it can only be used to quantify the temperature of blackbodies, complex objects which emit continuous spectra. It will not work at all for things like rarefied gasses, which are not blackbodies (they emit discontinuous line spectra) but still clearly have a defined temperature. Under this definition, it would be practically impossible to determine the temperature of poor blackbodies like glass since one would have to separate out the emissions from other objects near the glass when these emissions would transmit through or reflect off of the glass and reach the detector.
+
+\paragraph{3. Quantization} \emph{What do we mean by the term “quantized”? Are there quantized quantities in classical physics? Is energy quantized in classical physics? Be sure to explain your answers.} \medskip
+
+A quantized value can only ever take on discrete values, not the full range of continuous values. More specifically, the system can only exist for the specific valid values of the quantized value, and anything in between does not have physical meaning. In classical physics, there are very few truly quantized values. One example of such a value is the wavelength of standing waves because by their nature, they must have at least 2 stationary nodes, and the number of stationary nodes must be an integer. Thus, standing waves can only ever exist at wavelengths that are integer fractions of the medium's length $2L$. That is, the wavelengths follow the sequence of $2L$ times the harmonic series $1/n$ where $n \in \mathbb{Z}_{>0}$. Energy, however, is not a quantized value in classical physics. The units that energy is built up from (time, length, and mass) are all continuous values in classical physics, meaning they are infinitely divisible. Thus, energy itself is continuous: the masses and velocities giving rise to kinetic energy are continuous, and so are the heights of elevated masses in gravitational potential energy.
+
+\paragraph{4. Rest Masses} \emph{Elementary particles seem to have a discrete set of rest masses. Can this observation be regarded as quantization of mass? Explain your reasoning.} \medskip
+
+If elementary particles have a discrete set of masses, and all matter (and therefore masses) is composed of elementary particles, then all masses must be a linear combination of particle masses. Although this may seem to imply that mass is discrete and quantized, it is only true if masses add linearly and all mass comes from elementary particles. Elementary particles having discrete masses does not by itself preclude in-between masses from physically making sense and existing, and even the assumption that mass adds linearly does not seem to hold: protons are orders of magnitude heavier than their component quarks.\footcite{proton} Thus, this observation should not be regarded as the quantization of mass.
+
+\paragraph{5. Planck's Postulate} \emph{What is Planck’s Postulate for oscillators? (please do not try and invent this postulate, just look it up in the notes). What does it mean in simple language? For quantum effects to be visible on scales important to our everyday lives, what would be the minimum order of magnitude of Planck's constant? Explain/justify your reasoning.} \medskip
+
+Planck's postulate states that if something oscillates with one degree of freedom in a sinusoid, then its total energy $E_\text{tot}$ is quantized to be equal to $n h \nu$, where $n$ is an integer, $h$ is Planck's constant, and $\nu$ is the frequency of oscillation. This means that if something is oscillating at a certain frequency, the energy levels that oscillator can take on are discrete and quantized to be integer increments of $h \nu$. For example, if a spring is oscillating at its resonant frequency, the amplitude of oscillation must take on discrete, quantized values since the square of amplitude is proportional to energy. However, note that the metaphorical rungs on the amplitude ladder get closer and closer together at higher amplitudes so that the rungs on the energy ladder remain evenly spaced. When it is extrapolated, Planck's postulate also implies that light energy comes in discrete packets called photons: you can only have certain discrete values for the amount of energy carried by a certain wavelength of light.
+
+To calculate the value of $h$ such that this effect would be visible with the naked eye, let us consider an ideal undamped spring with a $1\,\si{g}$ mass undergoing simple harmonic oscillation at $1\,\si{Hz}$ with amplitude $1\,\si{cm}$, starting with the spring fully taught:
+\begin{equation}
+    x(t) = (1\,\si{cm}) \cos(\frac{2\pi}{1\,\si{sec}} t).
+\end{equation}
+At $t=0\,\si{s}$, the oscillator has zero velocity so all energy is stored in the tension of the spring. However, at exactly $t=0.25\,\si{s}$, one quarter of the way through a cycle, all that energy has been converted to kinetic energy and the spring is totally relaxed. At this moment, the total energy of the system is equal to kinetic energy:
+\begin{equation}
+    E_\text{tot} = E_k = \frac{1}{2} (1\,\si{g}) \dot{x}(0.25\,\si{s})^2 \approx 2\times10^{-6}\,\si{J}.
+\end{equation}
+For quantized energy to be obvious, let us consider the value of $h$ such that the next possible energy state would have an amplitude of $2\,\si{cm}$. In that case, we consider
+\begin{equation}
+    x'(t) = (2\,\si{cm})\cos(\frac{2\pi}{1\,\si{sec}} t)
+\end{equation}
+\begin{equation}
+    E_\text{tot}' = E_k' = \frac{1}{2}(1\,\si{g})\dot{x}'(0.25\,\si{s})^2 \approx 8\times10^{-6}\,\si{J}.
+\end{equation}
+We have confirmed that energy is the square of amplitude: doubling the amplitude increased energy by four times. Finally, we can set $h \nu$ to the difference between the two energy states:
+\begin{equation}
+    h (1\,\si{Hz}) = 6\times10^{-6}\,\si{J}.
+\end{equation}
+In reality, $h = 6.6\times10^{-34}\,\si{J.s}$, not $6\times10^{-6}\,\si{J.s}$. Thus, Planck's constant $h$ will have to be $10^{28}$ times larger than its true value for energy discretization to be noticable in this system.
+
+\paragraph{6. Electron Volts} \emph{Explain what is meant by the term “electron volt”.} \medskip
+
+An electron-volt is the total energy gained by a single electron after it passes through a potential of 1 volt (which is 1 joule per coulomb). Thus, 1 electron-volt per elementary charge (the charge of a single electron) is also equal to 1 volt. In the context of the photoelectric effect, 1 electron-volt is the kinetic energy that an electron must have to successfully jump across the plates with a 1 volt stopping voltage. Because these electrons must get all their kinetic energy from a single photon, the electron-volt is also a natural unit for measuring the energy of photons.\footcite{ev}
+
+\newpage
+\section{Problems}
+
+\paragraph{1.} \emph{Determine the energy in eV (electron volts) for the following frequencies or wavelengths and identify the region of the electromagnetic spectrum where it is found (cite your references):}\footcite{em} \medskip
+
+\begin{itemize}
+    \item[] \textbf{a.} 450 GHz: Far infrared. \[h \nu = (4.13567\times10^{-15}\,\si{eV.Hz^{-1}})(450\times10^9\,\si{Hz}) = \boxed{0.00186\,\si{eV}}\]
+    \item[] \textbf{b.} $5500\,\si{\angstrom} = 550\,\si{nm}$: Green visible light.
+    \[\frac{h c}{\lambda} = \frac{(4.13567\times10^{-15}\,\si{eV.Hz^{-1}}) (3\times10^8\,\si{m/s})}{5500\,\si{\angstrom}\times 10^{-10}\,\si{\frac{m}{\angstrom}}} = \boxed{2.25\,\si{eV}}\]
+    \item[] \textbf{c.} 1 nm: Hard X-Ray.\[\frac{hc}{\lambda} = \frac{(4.13567\times10^{-15}\,\si{eV.Hz^{-1}}) (3\times10^8\,\si{m/s})}{10^{-9}\,\si{m}} = \boxed{1239\,\si{eV}}\]
+    \item[] \textbf{d.} 100 Billion GHz = 100 EHz: Gamma ray.\[h\nu = (4.13567\times10^{-15}\,\si{eV.Hz^{-1}}) (100\times10^9\times10^9\,\si{Hz})=\boxed{413,567\,\si{eV}}\]
+    
+\end{itemize}
+
+\paragraph{2.} \emph{Find the wavelength at which the radiation emitted from the human body is a maximum. What assumptions did you have have to make?} \medskip
+
+We assume that the human body is sufficiently efficient at absorbing and emitting light such that it can be approximated by an ideal blackbody following Planck's law. We also assume that it is uniform enough to be modeled by a $37\degree\,\si{C}$ blackbody,\footcite{wolframalpha} and that blackbody emission is the only source of light emission in humans. Thus, we can apply Wien's law and predict the maximum wavelength is at
+\begin{equation}
+    \lambda_\text{max} = \frac{b}{T} = \frac{0.2898\,\si{cm.K}}{37\degree\,\si{C}+273.15\degree\,\si{K}} = \boxed{9.34\,\si{\mu m}}.
+\end{equation}
+
+\paragraph{3.} \emph{In a thermonuclear explosion the early temperature of the fireball is 107 K. Find the wavelength at which the radiation emitted is a maximum. In what part of the electromagnetic spectrum is this radiation? Again, what assumptions did you have to make?} \medskip
+
+We assume that the plasma in a nuclear explosion is a good blackbody whose emissions can be approximated by Planck's law. The emission at $107\degree$ K is
+\begin{equation}
+    \lambda_\text{max} = \frac{b}{T} = \frac{0.2898\,\si{cm.K}}{107\degree\,\si{K}} = \boxed{27.08\,\si{\mu m}}.
+\end{equation}
+This radiation is in the far infrared.\footcite{em}
+
+\paragraph{4.} \emph{At what wavelength does our sun, with a surface temperature of 5,700 K, radiate most per unit wavelength? What is the approximate color of this wavelength (cite your sources please)? What is the radiant flux of the Sun? Given that the Sun has a radius of 700,000 km, what is the total output power of the Sun in Watts?} \medskip
+
+Using Wien's law, we get
+\begin{equation}
+    \lambda_\text{max} = \frac{b}{T} = \frac{0.2898\,\si{cm.K}}{5700\degree\,\si{K}} = \boxed{508\,\si{nm}}.
+\end{equation}
+This would be a bright green, closer to cyan than yellow.\footcite{em} Applying the Stefan-Boltzmann law, we calculate that the radiant flux of the sun is
+\begin{equation}
+    \Phi_\text{sun} = \sigma T^4 = (5.6704\times10^{-8}\,\si{J.K^{-4}.m^{-2}.s^{-1}}) (5700\degree\,\si{K})^4 = \boxed{60\,\si{MW/m^2}}.
+\end{equation}
+Plugging in the area of the sun, the power of the sun is
+\begin{equation}
+    \Phi_\text{sun} 4\pi (700,000\,\si{km})^2 = \boxed{3.69\times10^{26}\,\si{W}}.
+\end{equation}
+
+\paragraph{5.} \emph{In our Solar Sail discussions in class we derived the relationship for the force that would be applied by photon pressure from the Sun. Assuming a surface temperature of 5,700 K, determine the force on a 1 km radius circular sail at a distance of 1 AU from the Sun (1 AU, or astronomical unit, is the average distance from the Earth to the Sun and is approximately 1.5 x 108 km). What is the weight force equivalent, in pounds, on the surface of the earth of this force on the solar sail? Be sure to do a “sanity check” on your answer.} \medskip
+
+Calculating the total power $P$ from the sun ($T_\text{sun}=5700\degree\,\si{K}, A_\text{sun}=2.348\times10^{12}\,\si{mi^2}$) hitting the solar sail (radius $r_\text{sail}=1\,\si{km}$ at distance $d = 1\,\si{AU}$) we get
+\begin{equation}
+\label{13}
+    P = \sigma T_\text{sun} A_\text{sun} \frac{\pi r_\text{sail}^2}{4\pi d^2} = 4067\,\si{MW}.
+\end{equation}
+Starting from Planck's relation that energy $E=pc$ where $p$ is momentum and $c$ is the speed of light, we can apply the fact that $F=ma=m\dot{v}=\dot{p}$ to take the derivative on both sides of $E=pc$ to get that $P=Fc$. Thus, if all that light energy were absorbed and turned into kinetic energy, by conservation of momentum the sail would experience a force of
+\begin{equation}
+    \frac{P}{c} = \boxed{3.05\,\si{lbf}}.
+\end{equation}
+This is a reasonable human-scale force, and it is pretty small (though that is expected as this force is coming purely from sunlight).
+\newpage
+\paragraph{6.} \emph{Assuming the Earth is a perfect blackbody, what temperature would you expect it to be if we consider that it is only being heated by the sun which has a mean surface temperature of 5700 K? How does this temperature compare to what we experience when we go outside? Is this result surprising to you (and don’t just say yes or no)?} \medskip
+
+If the earth is a perfect blackbody, it will reach thermal equilibrium when the light energy it absorbs from the sun is equal to the light energy it emits through blackbody radiation. We can apply the Stefan-Boltzmann law to set the power of the light absorbed equal to the power of light emitted, and we can use the power of Wolfram Mathematica to do the actual work:
+\begin{equation}
+    \sigma T_\text{sun}^4 A_\text{sun} \frac{\pi r_\text{earth}^2}{4\pi r_\text{orbit}^2} = \sigma T_\text{earth}^4 A_\text{earth}.
+\end{equation}
+
+\begin{lstlisting}[language=Mathematica,caption={The Mathematica code used to solve this equation.}]
+Solve[Quantity[1, "StefanBoltzmannConstant"] Quantity[5700, "Kelvins"]^4*=[surface area of sun]*(\[Pi] =[radius of earth]^2)/(4 \[Pi] =[radius of earth's orbit]^2) == Quantity[1, "StefanBoltzmannConstant"] T^4*=[surface area of earth], T]
+\end{lstlisting}
+The temperature comes out to $\boxed{274.9\degree\,\si{K}}$. That is about $2\degree$ C, and the temperature was not that surprising to me as we have not accounted for factors like the greenhouse effect, which would add substantial warming. Global warming is all the rage nowadays anyways.
+
+% \section{References}
+\newpage
+\printbibliography
+
+% \paragraph{Useful Formulae}
+% \[\Phi = \sigma T^4 \qquad \lambda T = 0.2898\,\si{cm.K} \qquad E=h\nu \qquad c = \lambda \nu\]
+% \paragraph{Useful Constants}
+% \[\sigma = 5.6704\times 10^{-8}\]
+
+
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}

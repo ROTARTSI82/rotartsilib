@@ -1,0 +1,180 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{theorem}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\begin{document}
+\title{MATH 327: Assignment 4}
+\author{Grant Yang}
+\maketitle
+
+% https://sites.math.washington.edu//~conroy/m327-general/homework/assignment04.pdf
+
+\begin{theorem}1
+    Let $(a_n)$ and $(b_n)$ be sequences with $\lim a_n = \infty$. \\
+    Suppose $(b_n)$ is eventually positive and bounded away from zero. \\
+    Then $\lim a_n b_n = \infty$.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ and $(b_n)$ be defined as above. \\
+    Since $(b_n)$ is eventually positive and bounded away from zero, let $N \in \mathbb N$ and $m \in \mathbb R$ be such that $m>0$ and for all $n > N$, $|b_n| > m$ and $b_n > 0$ (i.e. $b_n > m$). \\
+    Let $B > 0$ be any positive real. \\
+    By the Archimedean principle, let $M \in \mathbb N$ be such that $M m > B$. \\
+    Since $\lim a_n = \infty$, let $A \in \mathbb N$ be such that for all $n > A$, $a_n > M$. \\
+    Let $n \in \mathbb N$ be such that $n > \max \{A, N\}$. \\
+    Since $n > A$ and $n > N$, we have $a_n > M$ and $b_n > m$. \\
+    Then, $a_n b_n > M b_n > M m > B$. \\
+    Thus, $\lim a_n b_n = \infty$ since $a_nb_n > B$ for arbitrary $B$ when $n > \max \{A, N\}$.
+\end{proof}
+
+\begin{theorem}{2}
+    Let $(a_n)$ be the sequence defined by
+    \[a_1 = 1 \qquad a_{n+1} = \sqrt{a_n + 3} \;\text{ for }n\ge1.\]
+    Then $\lim a_n = \frac{1}{2}\left(1+\sqrt{13}\right)$.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ be defined as above. \\
+    First, by induction on $n$, we can show that $a_n \ge 1$ for all $n$. \\
+    For our base case, we directly have $a_1 = 1 \ge 1$. \\
+    For the inductive case, let $n \in \mathbb N$, and the inductive hypothesis that $a_n \ge 1$ implies that $a_n + 3 \ge 1+3$ and so $a_{n+1} = \sqrt{a_n + 3} \ge \sqrt{4} \ge 1$. \\
+    Next, we show that $(a_n)$ is bounded above by $\frac{1+\sqrt{13}}{2}$ by inducting on $n$. \\
+    The base case that $a_1 = 1 \le \frac{1+\sqrt{13}}{2}$ is evident by arithmetic. \\
+    For the inductive case, let $n \in \mathbb N$, and the inductive hypothesis implies that
+    \begin{align*}
+        a_n &\le \frac{1+\sqrt{13}}{2} \\
+        a_n+3 &\le \frac{1+6+\sqrt{13}}{2} = \frac{1+13+2\sqrt{13}}{4} = \left(\frac{1+\sqrt{13}}{2}\right)^2 \\
+        a_{n+1} = \sqrt{a_n + 3} &\le \frac{1+\sqrt{13}}{2}.
+    \end{align*}
+    At the last step, we use the fact that $a_n \ge 1 > 0$ and $x \mapsto \sqrt{x}$ is increasing. \\ 
+    Now, we can show that $(a_n)$ is increasing. \\
+    Let $n \in \mathbb N$, and since $a_n \le \frac{1+\sqrt{13}}{2}$, we get
+    \begin{align*}
+        a_n - \frac{1}{2} &\le \frac{\sqrt{13}}{2} \\
+        \left(a_n-\frac{1}{2}\right)^2 &\le  \frac{13}{4} \qquad\; (a_n \ge 1 \text{ so } a_n - \frac{1}{2} > 0, \;\; x\mapsto x^2 \text{ is increasing}) \\
+        a_n^2 -a_n + \frac{1}{4} &\le \frac{13}{4} \\
+        a_n^2 &\le a_n + 3 \\
+        a_n &\le \sqrt{a_n+3} = a_{n+1} \qquad (a_n^2 \ge 0 \;\text{ and } x \mapsto \sqrt{x} \text{ is increasing}).
+    \end{align*}
+    We have shown that $(a_n)$ is increasing and bounded above, so it must have a limit $L = \lim a_n \in \mathbb R$. \\
+    By the definition of $(a_n)$, for all $n \ge 1$ we have $a_{n+1}^2 - a_n-3 = 0$, so 
+    \[
+    \lim \left(a_{n+1}^2 - a_n - 3\right) = 0.\]
+    Note that since $(a_n)$ converges, $\lim a_{n+1} = \lim a_n$, and $\lim (a_{n+1}^2) = (\lim a_n)^2$. Thus, we can replace the limit of sums with the sum of limits:
+    \begin{align*}
+    \lim (a_{n+1}^2) - \lim a_n - 3&=0 \\
+    L^2 - L - 3&= 0.
+    \end{align*}
+    Solving this quadratic, we get $L = \frac{1\pm \sqrt{13}}{2}$. \\ However, since $a_n \ge 1$ for all $n$ and $\frac{1-\sqrt{13}}{2}< 1$, this cannot be the limit, and $L = \frac{1+\sqrt{13}}{2}$.
+\end{proof}
+
+\begin{theorem}{3}
+    Let $(a_n)$ be an increasing sequence and let $(b_n)$ be defined as
+    \[ b_n = \frac{1}{n}\sum_{i=1}^n a_i.\]
+    Then $(b_n)$ is an increasing sequence.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ and $(b_n)$ be defined as above. \\
+    By induction on $n$, we can show that $b_n \le a_n$ for all $n$. \\
+    For the base case, $b_1 = a_1 \le a_1$. \\
+    For the inductive case, we can write
+    \begin{align*}
+        b_{n+1} = \frac{n}{n+1} b_{n} + \frac{a_{n+1}}{n+1}
+    \end{align*}
+    by expanding the definition of $(b_n)$. Then by the inductive hypothesis $b_n \le a_n$,
+    \[
+    b_{n+1} \le \frac{n}{n+1} a_n + \frac{a_{n+1}}{n+1} = \frac{1}{n+1} \left(n a_n + a_{n+1}\right).
+    \]
+    Since $(a_n)$ is increasing, we know $a_n \le a_{n+1}$ and so $na_n + a_{n+1} \le (n+1) a_{n+1}$. Thus,
+    \[
+    b_{n+1} \le \frac{n+1}{n+1} a_{n+1} = a_{n+1}.
+    \]
+    We have shown that $b_n \le a_n$ for all $n \in \mathbb N$. \\
+    Thus, $b_n \le a_n \le a_{n+1}$, and expanding the definition of $b_n$:
+    \begin{alignat*}{2}
+        a_{n+1} &\ge \frac{1}{n}\sum_{i=1}^n a_i \\
+        \frac{a_{n+1}}{n+1} &\ge \frac{1}{n(n+1)} \sum_{i=1}^n a_i &\;= \left(\frac{1}{n} -\frac{1}{n+1}\right) \sum_{i=1}^n a_i \\&\qquad   &= b_n - \frac{1}{n+1} \sum_{i=1}^n a_i.
+    \end{alignat*}
+    Thus, we have \[b_n \le \frac{1}{n+1} \left(a_{n+1} + \sum_{i=1}^n a_i\right) = b_{n+1},\]
+    so $(b_n)$ is an increasing sequence.
+\end{proof}
+
+\begin{theorem}{4}
+    Let $(x_n)$ be a sequence of positive real numbers. \\
+    Suppose $\lim \frac{x_{n+1}}{x_n} < 1$. \\
+    Then 
+    \begin{enumerate}
+        \item[a.] There exist $r,C \in \mathbb R$ with $0 < r < 1$ and $C > 0$ with some $N \in \mathbb N$ such that for all $n > N$, $0 < x_n < C r^n$.
+        \item[b.] $\lim x_n = 0$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Let $(x_n)$ be a sequence of positive reals with $L=\lim \frac{x_{n+1}}{{x_n}} < 1$. \\
+    Because $(x_n)$ is positive, we already have $x_n > 0$ for all $n$. \\
+    Again since $(x_n)$ is positive, $\frac{x_{n+1}}{x_n} > 0$ for all $n \in \mathbb N$, and so $0 \le L < 1$. \\
+    By the definition of the limit above, let $N \in \mathbb N$ be such that for all $n > N$, $\left| \frac{x_{n+1}}{x_n} - L \right| < \frac{1-L}{2}$. \\
+    Let $S = \left\{\frac{x_{n+1}}{x_n} : n > N\right\}$, and note that it is bounded above by $\frac{1+L}{2}<1$. \\
+    $S$ is nonempty and by the completeness axiom, $\sup S$ must exist, so let $r = \sup S$. \\
+    Since $\frac{1+L}{2}$ is an upper bound on $S$, $r \le \frac{1+L}{2} < 1$.\\ 
+    Also note that since $\frac{x_{n+1}}{x_n} > 0$ for all $n$, all elements of $S$ are positive so $r > 0$ and $r^n > 0$. \\
+    By the Archimedean principle, let $C \in \mathbb N$ be such that $C r^{N+1} > x_{N+1}$. \\
+    We can prove by induction on $n$ that for all $n > N$, $Cr^n > x_n$. \\
+    The base case is given by the construction of $C$. \\
+    For the inductive case, fix any $n > N$, and let $a = \frac{x_{n+1}}{x_n}$. \\
+    % Note that since $|a-r| < 1-r$, $a < 1$, and since $(x_n)$ is positive, $0 < a$. \\ 
+    Since $x_n a = x_{n+1}$ and $x_{n+1} > 0$ as $(x_n)$ is positive, the inductive hypothesis that $C r^n > x_n$ implies $C r^n a >x_n a = x_{n+1}$. \\
+    By the definition of $r$ as $\sup S$, we know that $r \ge a$, so $C r^n r \ge C r^n a$. \\
+    Thus, by transitivity, $C r^{n+1} > x_{n+1}$. \\
+    
+    Now, we can show that $\lim x_n = 0$. \\
+    From the previous part, let $0 < r<1$, $C>0$, and $N \in \mathbb N$ be such that for all $n > N$, $0 < x_n < C r^n$. \\
+    Considering the sequences $a_n = 0$, $b_n = x_{N+n}$, and $c_n = C r^{N+n}$, we have $a_n \le b_n \le c_n$ for all $n$. \\
+    We know that $\lim 0 = 0$ and $\lim \left(C r^{N+n}\right) = C r^N \cdot \lim r^n = 0$. \\
+    Thus, by the squeeze theorem, $\lim x_{N+n} = \lim x_n = 0$.
+\end{proof}
+
+\begin{theorem}{5}
+    For any $c > 0$,
+    \[
+    \lim \frac{c^n}{n!} = 0.
+    \]
+\end{theorem}
+\begin{proof}
+    Let $(x_n)$ be the sequence defined by $x_n = \frac{c^n}{n!}$. \\
+    Note that since $c>0$, $(x_n)$ is a positive sequence. \\
+    Consider the sequence \[a_n = \frac{x_{n+1}}{x_n} = \frac{c^{n+1}}{(n+1)!}\cdot \frac{n!}{c^n} = \frac{c}{n+1}.\]
+    Then, we can compute
+    \[
+    \lim a_n = \lim \left(\frac{c}{n+1}\right) = c \cdot \lim \left(\frac{1}{n+1}\right) = 0.
+    \]
+    Thus, $\frac{x_{n+1}}{x_n}$ is a positive sequence with $\lim \frac{x_{n+1}}{x_n} = 0 < 1$, so
+    by Theorem 4 above, this implies that $\lim x_n = 0$ as desired.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{6}
+    Let $(x_n)$ be a sequence of positive real numbers. \\
+    Suppose that $\lim \frac{x_{n+1}}{x_n} > 1$. \\
+    Then $(x_n)$ is not a bounded sequence and does not converge.
+\end{theorem}
+\begin{proof}
+    Let $(x_n)$ be as defined above. \\
+    By the definition of $L = \lim \frac{x_{n+1}}{x_n}$, let $N \in \mathbb N$ be such that for all $n > N$, $\left|\frac{x_{n+1}}{x_n} - L\right| < \frac{L - 1}{2}$. \\
+    Let $S = \left\{\frac{x_{n+1}}{x_n} : n > N\right\}$ and note that $S$ is bounded below by $\frac{1+L}{2} > 1$. \\
+    $S$ is nonempty and by completeness, $r=\inf S$ must exist with $r \ge \frac{1+L}{2} > 1$. \\
+    Let $U = \{ x_n : n > N\}$, and assume FTSOC that $U$ is bounded above. \\
+    By the completeness axiom, $U$ must have a supremum $B = \sup U$. \\
+    Since $(x_n)$ is positive, $B > 0$, so let $b\in \mathbb R$ be any number $\frac{B}{r} < b < B$. \\
+    Since $b$ is not an upper bound on $U$, let $n \in \mathbb N$ be such that $x_n > b$. \\
+    Let $a = \frac{x_{n+1}}{x_n}$, and note that by the definition of $r$, we have $r \le a$. \\
+    Then $x_n r\le x_n a = x_{n+1}$. \\
+    Since $\frac{B}{r} < x_n$, we know that $B < x_n r \le x_{n+1}$. \\
+    However, since $x_{n+1} \in U$, we have found a contradiction with the fact that $B$ is the supremum. \\
+    Thus, $U$ is not bounded above, and so $(x_n)$ is not bounded above and thus does not converge.
+\end{proof}
+\end{document}

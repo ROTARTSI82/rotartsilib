@@ -1,0 +1,148 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{theorem}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\begin{document}
+\title{MATH 327: Assignment 2}
+\author{Grant Yang}
+\maketitle
+
+\begin{theorem}{1}
+Let $A,B \subseteq \mathbb R$ be nonempty sets. \\
+Suppose that for all $a\in A$ and $b \in B$, we have $a \le b$.\\
+Then $\sup A \le \inf  B$.
+\end{theorem}
+\begin{proof}
+Let $A$ and $B$ be as defined above. \\
+First, note that $A$ is bounded above by every element of $B$. \\
+Similarly, $B$ is bounded below by every element of $A$. \\
+Thus, $\sup A$ and $\inf B$ exist by the completeness axiom. \\
+Assume FTSOC that $\sup A > \inf B$, and choose any $m \in (\inf B, \sup A)$. \\
+Because $m < \sup A$ is not an upper bound, let $a' \in A$ be an element such that $a' > m$. \\
+Because $m > \inf B$ is not a lower bound, let $b' \in B$ be an element such that $b' < m$. \\
+By the transitive property, we have $b' < m < a'$. \\
+This contradicts with the fact that $a \le b$ for all $a\in A$ and $b \in B$. \\
+Thus, our assumption was false, and $\sup A \le \inf B$.
+\end{proof}
+
+\begin{theorem}{2}
+    Let $a \in \mathbb R$ be a positive number $a > 0$. \\
+    Then there exists some $n \in \mathbb N$ with $\frac{1}{n} < a < n$.
+\end{theorem}
+\begin{proof}
+    Let $a$ be any positive real number. \\
+    First consider the case that $a \le 1$. \\
+    By the Archimedean property, we can find a $k \in \mathbb N$ such that $k a > 1$. \\
+    Let $m = k+1$, and note that since $ma=ka+a$ and $a > 0$ we still have $ma >1$. \\
+    Since $m$ is the successor of some natural $k > 0$, we have $m > 1$. \\
+    By the transitive property, $a \le 1 < m$. \\
+    From $m a > 1$ and the fact that $m > 0$, we know $\frac{1}{m} < a$. \\
+    Thus, we have our result that $\frac{1}{m}<a<m$. \\
+    Now consider the remaining case that $a > 1$. \\
+    Applying the Archimedean property, we find a $k \in \mathbb N$ such that $k \cdot 1 > a$. \\
+    By the transitive property, we get $k >a > 1$. Dividing by $k$, we get $1 > \frac{1}{k}$. \\
+    By the transitive property again, we get $\frac{1}{k} < 1 < a$. \\
+    Thus, we have our desired result, $\frac{1}{k} < a < k$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{3}
+    Let $A \subseteq \mathbb R$ be a set and suppose there exists some $b \in A$ which is an upper bound for $A$.\\  Then $\sup A = b$.
+\end{theorem}
+\begin{proof}
+    Let $A$ and $b$ be as defined above, and let $x < b$ be any real number. \\
+    Assume for the sake of contradiction that $x$ is an upper bound on $A$. \\
+    Since $b \in A$ and $x$ is an upper bound, $b \le x$. \\
+    However, this contradicts the fact that $x < b$. \\
+    Thus, there exists no upper bound $x$ less than $b$, i.e. $b$ is the least upper bound. \\
+    By the definition of a supremum, $b = \sup A$.
+\end{proof}
+
+\begin{theorem}{4}
+    Let $A, B \subseteq \mathbb R$ be nonempty, bounded sets. \\
+    Then $A \cup B$ is bounded and $\sup (A \cup B) = \sup \; \{\sup A, \sup B\}$.
+\end{theorem}
+\begin{proof}
+    Let $A$ and $B$ be nonempty, bounded sets. \\
+    By the completeness axiom, $\sup A$ and $\sup B$ exist since $A$ and $B$ are bounded. \\
+    Without loss of generality, take that $\sup A \le \sup B$ (you can rename $A$ and $B$). \\
+    Then we have $\sup \; \{\sup A, \sup B\} = \sup B$ by Theorem 3. \\
+    Let $u \in A \cup B$ be any element. \\
+    If $u \in B$, then by definition $u \le \sup B$. \\
+    On the other hand, if $u \in A$, then $u \le \sup A \le \sup B$. \\
+    Thus, $\sup B$ is an upper bound on $A \cup B$. \\
+    For all real $x < \sup B$, we have that $x$ is not an upper bound by the definition of supremum.\\
+    Because $B$ is nonempty, we can find a $b \in B$ such that $b > x$. \\
+    However, we also have $b \in A \cup B$, so no $x < \sup B$ is an upper bound on $A \cup B$. \\
+    We have shown that $\sup B$ is the least upper bound on $A \cup B$. \\ 
+    Thus, by the definition of a supremum, $\sup(A\cup B) = \sup B = \sup \;\{\sup A, \sup B\}$ as desired. \\
+
+    Now separately, we can show that for all sets $A,B\subseteq \mathbb R$ that are bounded below, $A \cup B$ is also bounded below. \\
+    Let $m_a$ be a lower bound for $A$ and let $m_b$ be a lower bound for $B$. \\
+    WLOG let $m_a \le m_b$ (rename $A$ and $B$ if not).\\ For all $u \in A\cup B$, we have $m_a \le u$ directly if $u \in A$, and otherwise we have $m_a \le m_b \le u$ when $u \in B$. \\
+    Thus, $m_a$ is also a lower bound for $A \cup B$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{5}
+    \[\sup\;\left\{1-\frac{1}{n} \;\middle|\; n \in \mathbb N\right\} = 1.\]    
+\end{theorem}
+\begin{proof}
+    Let us call this set $S =\left\{1-\frac{1}{n} \;\middle|\; n \in \mathbb N\right\}$. \\
+    First we show that $1$ is an upper bound. \\
+    Let $s \in S$ be any element, and write $s = 1 - \frac{1}{n}$ for some $n \in \mathbb N$. \\
+    We wish to prove that $s \le 1$, or that $1 - \frac{1}{n} \le 1$. \\ It suffices to prove that $0 \le \frac{1}{n}$. \\
+    Because $n \in \mathbb N$, we have $n > 0$ and thus we have our desired result. \\
+    Now we show that $1$ is the least upper bound. \\
+    Assume FTSOC that there exists some $x < 1$ such that $\forall s \in S,s \le x$. \\
+    Since we know that $0 < 1 - x$, we can apply the Archimedean property with $1-x$ and $1$ and take some $k \in \mathbb N$ such that $k \cdot (1 - x) > 1$. \\
+    Rearranging this inequality, we get $1-x>\frac{1}{k}$ and finally $1-\frac{1}{k} > x$. \\
+    However, by the definition of $S$, $1-\frac{1}{k} \in S$, and we have a contradiction with the fact that $x$ is an upper bound. \\
+    Thus, there exists no upper bound for $S$ that is less than $1$, and by the definition of a supremum, the least upper bound is $\sup S = 1$.
+\end{proof}
+
+\begin{theorem}{6}
+Between any two real numbers there are infinitely many rationals.
+\end{theorem}
+\begin{proof}
+    Consider an arbitrary nonempty interval $(a,b)$. \\
+    The rationals are dense in the reals, so we can choose some $q_a \in (a,b)$ and some $q_b \in (q_a, b)$. \\
+    Define a function $f$ from $\mathbb N$ to $(q_a,q_b)$ given by
+    \[f(n) = q_a + \frac{q_b - q_a}{n+1}.\]
+    Let $n \in \mathbb N$. \\
+    Because the rationals are closed under addition and multiplication, $f(n) \in \mathbb Q$. \\
+    Additionally, since $q_b > q_a$, we have $q_b - q_a > 0$. \\
+    Since $\frac{1}{k+1}<\frac{1}{k}$ for any $k \in \mathbb N$, we have $\frac{q_b - q_a}{(n+1)+1} < \frac{q_b - q_a}{n+1}$ so $f(n+1)<f(n)$. \\
+    With this, we see that $f$ is strictly decreasing and thus injective. \\
+    Additionally, since $\frac{q_b - q_a}{n+1} > 0$, we get that $f(n) = q_a +\frac{q_b - q_a}{n+1} > q_a$. \\
+    Because $\frac{q_b - q_a}{2} < q_b - q_a$, we also get $f(1) = q_a + \frac{q_b-q_a}{2} < q_a + (q_b - q_a) = q_b$. \\
+    Since $f$ is decreasing and $f(1) < q_b$, we have $f(n) < q_b$. \\
+    Thus, we have shown that $f$ is an injective function from $\mathbb N$ to $(q_a,q_b)\cap \mathbb Q$, showing that the set is at least countably infinite. \\
+    Since $(q_a, q_b) \subseteq (a,b)$, we have shown that there are infinitely many rationals within any arbitrary interval.
+\end{proof}
+% Yes, this proof can be made simpler but I'm tired.
+
+\newpage{}
+\begin{theorem}{7}
+    Let $(a_n)$ be a sequence given by \[a_n = \frac{n+2}{5n-1}.\]
+    Then $\lim a_n = \frac{1}{5}$.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ be as defined above. For any $n \in \mathbb N$, we can compute \begin{align*}
+        \left|a_n - \frac{1}{5}\right| &= \left|\frac{n+2}{5n-1} - \frac{1}{5}\right| = \left|\frac{5n+10-5n+1}{25n-5}\right| \\
+        &= \frac{11}{25n-5}.
+    \end{align*}
+    At the last step, we can drop the absolute value as $n$ is a natural so $n \ge 1$, implying that $25 n - 5 > 0$ and so $\frac{11}{25n-5} > 0$. \\
+    Let $\varepsilon > 0$ be any positive real.  \\
+    By the archimedean principle, we can find some $N \in \mathbb N$ such that $N \varepsilon > 11$. \\
+    Note also that because $N\ge 1$ since it is a natural number, we have $25 N - 5 > N$. \\ Let $n \in \mathbb N$ be such that $n > N$, and note that $25 n - 5 > 25 N - 5$. \\ By the transitive property, we have that $25 n - 5 > N$. \\ Since $\varepsilon > 0$, the fact that $N \varepsilon > 11$ and $25 n - 5 > N$ implies that $(25 n - 5) \varepsilon > 11$. \\
+    Thus, $\left|a_n - \frac{1}{5} \right|=\frac{11}{25n-5} < \varepsilon$ as desired, and $\lim a_n = \frac{1}{5}$.
+\end{proof}
+\end{document}

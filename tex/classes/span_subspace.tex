@@ -1,0 +1,630 @@
+% \documentclass[conference]{IEEEtran}
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{fontspec}
+\setmonofont{DejaVu Sans Mono}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+\usepackage{color}
+\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
+\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
+\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
+\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
+
+\DeclareMathOperator{\spann}{span}
+\newcommand\spanset[1]{\ensuremath\spann(#1)}
+
+\def\lstlanguagefiles{lstlean.tex}
+% set default language
+\lstset{language=lean}
+\usepackage{graphicx} % Required for inserting images
+
+\title{L$\exists \forall$N Formalization: Spans are Subspaces}
+\author{Grant Yang}
+\date{December 2025}
+
+\begin{document}
+
+\maketitle
+
+We would like to formalize the idea that spans are subspaces in Lean. We start by specifying that there is some type \lstinline@V@ of vectors that forms a module over the reals. We also need to specify that \lstinline@V@ has an additive commutative group structure because Mathlib's definition of \lstinline@Module@ depends on it.
+
+\begin{lstlisting}
+variable {V} [AddCommGroup V] [Module ℝ V]
+\end{lstlisting}
+
+In Lean, sets are simply functions that return true on elements in the set and false on elements not in the set. Actually, these functions do not really return a boolean true or false value, but instead return something called a proposition, \lstinline@Prop@, which is much more powerful. For example, we can define the set of zero and the even natural numbers like so:
+
+\begin{lstlisting}
+def evens_union_zero : Set ℕ := fun x ↦ ∃(n : ℕ), 2 * n = x
+\end{lstlisting}
+
+Notice how \lstinline@Set N@ is synonymous with \lstinline@N -> Prop@, and our code corresponds exactly to the expression $\{x\in \mathbb{N} \mid \exists(n\in \mathbb N), 2n=x\}$ in set builder notation. 
+
+For any $S \subseteq V$, we can now define $\spann S$ to be the set of vectors that are linear combinations of vectors in $S$. A vector $\vec{x}$ is a linear combination of the vectors in $S$ if there exist both a list $a_1,a_2,\dots,a_n$ of real numbers and a list $\vec{v_1},\vec{v_2},\dots,\vec{v_n}$ of vectors in $S$ such that $\vec{x}=a_1 \vec{v_1} + a_2 \vec{v_2}+\dots+ a_n \vec{v_n}$.
+
+For our purposes, we can implement this definition using linked lists of real numbers and vectors. We can zip these lists together into a single list of $\mathbb{R} \times S$, but due to technical details it is somewhat clunky to express the type of elements of the set $S$. Instead, it is easier to use $C \subseteq \mathbb{R}\times V$ and require that we have $\forall (c \in C), \pi_2(c)\in S$.
+
+\begin{lstlisting}
+
+def span (S : Set V) : Set V :=
+  {x : V | ∃(C : List (ℝ×V)),
+    (sumUp C = x) ∧ (allin C S) }
+
+
+-- proposition that all vectors (v : V) in the list are also elements of the set S.
+def allin {V} (ls : List (ℝ × V)) (S : Set V) : Prop := match ls with
+| List.cons ⟨_, v⟩ rest => v ∈ S ∧ allin rest S
+| List.nil => True
+
+def sumUp (vecs : List (ℝ × V)) : V := match vecs with
+  | List.cons ⟨c, v⟩ rest => c • v + sumUp rest
+  | List.nil => 0
+
+\end{lstlisting}
+
+Immediately from this definition, we can already prove that the zero vector is in all spans since we have defined \lstinline@sumUp [] = 0@, so we can always prove ``there exists'' a linear combination for $0$ by providing the empty list as an example. In the following code, the expression appearing after \lstinline@|-@ is where I show the current tactic state, and it is the proposition we are trying to prove.
+
+\begin{lstlisting}
+theorem zero_in_span : ∀(S : Set V), 0 ∈ span S := by
+  intro S
+  unfold span
+  let ex : List (ℝ × V) := List.nil
+  dsimp
+  -- ⊢ ∃ C, sumUp C = 0 ∧ allin C S
+  fconstructor -- constructor for ∃
+  · exact ex -- example empty list
+  · -- unfold definitions to show it's a linear combo for 0
+    unfold ex sumUp allin
+    simp
+\end{lstlisting}
+
+Note that because ``for all'' statements correspond to function types (by the Curry-Howard correspondence), the \lstinline@intro@ tactic allows us to prove a ``for all'' statement by introducing an argument name and constructing the function explicitly.
+
+However, in order to use this definition of span, we must first prove some basic theorems about \lstinline@allin@ and \lstinline@sumUp@ as they are custom operations that we have defined. Let us start by showing that they distribute over list concatenation. If we have two lists \lstinline@la lb : List (ℝ × V)@, then we have \lstinline@allin (la ++ lb) S@ if and only if both \lstinline@allin la S@ and \lstinline@allin lb S@. Similarly, \lstinline@(sumUp la) + (sumUp lb) = sumUp (la ++ lb)@.
+
+Let us start with the proof for the \lstinline@sumUp@ property because it is simpler. Because we are using linked lists, this can be proved inductively.
+
+\begin{lstlisting}
+
+theorem sumup_concat : ∀(a b : List (ℝ×V)),
+    sumUp (a++b) = sumUp a + sumUp b := by
+  intros a b
+  -- linked lists are an inductive type so we can do induction on a
+  induction a with
+  | nil => 
+    -- base case: ⊢ sumUp ([] ++ b) = sumUp [] + sumUp b
+    simp [sumUp] -- just unfold the definition of sumUp!
+  | cons head tail ih =>
+    -- inductive hypothesis ih : sumUp (tail ++ b) = sumUp tail + sumUp b
+    -- inductive case: ⊢ sumUp (head :: tail ++ b) = sumUp (head :: tail) + sumUp b
+    simp [sumUp]
+    -- ⊢ head.1 • head.2 + sumUp (tail ++ b) = head.1 • head.2 + sumUp tail + sumUp b
+    rw [ih]
+    rw [add_assoc]
+\end{lstlisting}
+
+The proof for the analogous property on \lstinline@allin@ follows basically the same structure, but is a bit more involved:
+
+
+\begin{lstlisting}
+theorem allin_concat {V} : ∀(la lb : List (ℝ × V)) (S : Set V),
+    allin la S ∧ allin lb S ↔ allin (la ++ lb) S := by
+  intros la lb S
+  induction la with
+  | nil =>
+    -- ⊢ allin [] S ∧ allin lb S ↔ allin ([] ++ lb) S
+    simp [allin] -- just unfold the definition of allin
+  | cons head tail ih =>
+    -- ih : allin tail S ∧ allin lb S ↔ allin (tail ++ lb) S
+    -- ⊢ allin (head::tail) S ∧ allin lb S ↔ allin (head::tail ++ lb) S
+    simp [allin]
+    rw [and_assoc]
+    -- ⊢ head.2 ∈ S ∧ allin tail S ∧ allin lb S ↔ head.2 ∈ S ∧ allin (tail ++ lb) S
+    constructor -- construct the Iff
+    · -- forward direction of Iff
+      intros m -- head.2 ∈ S ∧ allin tail S ∧ allin lb S
+      constructor -- And constructor
+      · exact m.left -- head.2 ∈ S
+      · exact ih.mp m.right -- allin (tail ++ lb) S
+    · -- backward direction of Iff
+      intros m -- head.2 ∈ S ∧ allin (tail ++ lb) S
+      constructor -- And constructor
+      · exact m.left -- head.2 ∈ S
+      · exact ih.mpr m.right -- allin tail S ∧ allin lb S
+\end{lstlisting}
+
+With these two theorems, we are now able to prove that spans are additively closed! To state this theorem, we use a \lstinline@Subtype@ to express ``elements of the set S'' as a type. Instances of the subtype \lstinline@{v : V // v \in span S}@ are simply an object \lstinline@v : V@ together with a proof that \lstinline@v \in span S@. To prove that spans are additively closed, we show that $\forall(\vec a, \vec b\in \spann S), \vec a + \vec b \in \spann S$. We can use our definition of span to choose linear combinations for $\vec a$ and $\vec b$ and simply concatenate them together to make a linear combination for $\vec{a} + \vec{b}$, using the two theorems we just proved to show that our concatenated linear combination sums up to $\vec{a} + \vec{b}$ and still only uses vectors from $S$.
+
+\begin{lstlisting}
+theorem span_add_closed : ∀(S : Set V) (a b : {v : V // v ∈ span S}),
+    a.val + b.val ∈ span S := by
+  intros S a b
+  let pa := a.prop -- a ∈ span S
+  let pb := b.prop -- b ∈ span S
+  unfold span at pa; dsimp at pa
+  unfold span at pb; dsimp at pb
+
+  -- pa : ∃ C, sumUp C = ↑a ∧ allin C S
+  --      ⟨xa, ⟨sumUp xa = ↑a, allin xa S⟩⟩
+  rcases pa with ⟨xa, ⟨ha_sum, ha_sub⟩⟩
+  -- pb : ∃ C, sumUp C = ↑b ∧ allin C S
+  --      ⟨xb, ⟨sumUp xb = ↑b, allin xb S⟩⟩
+  rcases pb with ⟨xb, ⟨hb_sum, hb_sub⟩⟩
+  have sumeq: sumUp (xa ++ xb) = a.val + b.val := by
+    calc
+      _ = sumUp xa + sumUp xb := by exact sumup_concat xa xb
+      _ = a.val + b.val := by rw [ha_sum, hb_sum]
+  have ain: allin (xa ++ xb) S := by
+    exact (allin_concat xa xb S).mp ⟨ha_sub, hb_sub⟩
+
+  unfold span
+  dsimp
+  -- ⊢ ∃ C, sumUp C = ↑a + ↑b ∧ allin C S
+  constructor
+  · exact ⟨sumeq, ain⟩
+\end{lstlisting}
+
+Now all that is left is to show that spans are multiplicatively closed. To do this, we can show that for all $\vec{u} \in \spann S$ and $r \in \mathbb R$, we can obtain a linear combination for $r \cdot \vec u$ by multiplying the real part of the linear combination for $\vec{u}$ by $r$. We define a new operation $\text{lsmul} : \mathbb{R} \to \text{List}\,(\mathbb{R}\times V )\to \text{List}\,(\mathbb{R} \times V)$ that performs this scalar multiplication of linear combinations, and we need to show that if $C : \text{List}\,(\mathbb{R} \times V)$ is some linear combination for $\vec{u}$, then \lstinline@lsmul r C@ is a linear combination for $r \cdot \vec{u}$.
+
+\begin{lstlisting}
+def lsmul (r : ℝ) (ls : List (ℝ × V)) : List (ℝ × V) :=
+    List.map (fun ⟨a, b⟩ ↦ ⟨r • a, b⟩) ls
+
+-- dedicated theorem just for rewriting between lsmul and its expanded definition. Is there a better way?
+theorem lsmul_def : ∀(ls : List (ℝ×V)) (r : ℝ), lsmul r ls =
+    List.map (fun ⟨a, b⟩ ↦ ⟨r * a, b⟩) ls := by simp [lsmul]
+\end{lstlisting}
+
+Now that we have defined a custom operation, we once again need to prove a few theorems about it. First, let us show that \lstinline@sumUp@ and \lstinline@lsmul@ obey the distributive property as expected, such that \lstinline@sumUp (lsmul r ls) = r • (sumUp ls)@.
+
+\begin{lstlisting}
+-- helper theorem because real multiplication on ℝ (*) and scalar multiplication on modules (•) use different notation.
+theorem real_mul_smul : ∀(a b : ℝ), a * b = a • b := by simp
+
+theorem sumup_lin : ∀(ls : List (ℝ×V)) (r : ℝ),
+    sumUp (lsmul r ls) = r • (sumUp ls) := by
+  intro ls r
+  induction ls with
+  | nil =>
+    unfold lsmul sumUp
+    simp -- empty list: sumUp [] = 0, and 0 = x • 0
+  | cons head tail ih =>
+    -- ih : sumUp (lsmul r tail) = r • sumUp tail
+    unfold sumUp lsmul; dsimp
+    -- ⊢ (r * head.1) • head.2 + sumUp (List.map (fun x ↦ (r * x.1, x.2)) tail) = r • (head.1 • head.2 + sumUp tail)
+    rw [← lsmul_def, ih]
+    -- ⊢ (r * head.1) • head.2 + r • sumUp tail = r • (head.1 • head.2 + sumUp tail)
+    rw [smul_add, real_mul_smul, smul_assoc]
+\end{lstlisting}
+
+Finally, we must prove that \lstinline@lsmul@ does not modify the vector part of the pairs, so we are still only using vectors from $S$. We are actually able to prove this statement as an if and only if:
+
+\begin{lstlisting}
+theorem lsmul_allin : ∀(ls : List (ℝ×V)) (S: Set V) (r : ℝ),
+    allin ls S ↔ allin (lsmul r ls) S := by
+  intros ls S r
+  constructor -- Iff
+  · induction ls with -- forward direction of Iff
+    | nil => -- ⊢ allin [] S → allin (lsmul r []) S
+      unfold lsmul List.map; simp
+    | cons head tail ih =>
+      -- ih : allin tail S → allin (lsmul r tail) S
+      -- ⊢ allin (head :: tail) S → allin (lsmul r (head :: tail)) S
+      unfold allin lsmul; dsimp
+      rw [← lsmul_def]
+      -- ⊢ head.2 ∈ S ∧ allin tail S → head.2 ∈ S ∧ allin (lsmul r tail) S
+      intro ⟨elem, rest⟩
+      exact ⟨elem, ih rest⟩
+  · induction ls with -- backward direction of Iff
+    | nil => -- ⊢ allin (lsmul r []) S → allin [] S
+      unfold lsmul List.map; simp
+    | cons head tail ih =>
+      -- ih : allin (lsmul r tail) S → allin tail S
+      -- ⊢ allin (lsmul r (head :: tail)) S → allin (head :: tail) S
+      unfold allin lsmul; dsimp
+      rw [← lsmul_def]
+      -- ⊢ head.2 ∈ S ∧ allin (lsmul r tail) S → head.2 ∈ S ∧ allin tail S
+      intro ⟨elem, rest⟩
+      exact ⟨elem, ih rest⟩
+\end{lstlisting}
+
+Now, we can prove that spans are multiplicatively closed.
+
+% \newpage{}
+\begin{lstlisting}
+theorem span_mul_closed : ∀(S : Set V) (r : ℝ)
+    (u : {v : V // v ∈ span S}), r • u.val ∈ span S := by
+  intros S r u
+  unfold span; dsimp
+  -- ⊢ ∃ C, sumUp C = r • ↑u ∧ allin C S
+
+  let pu := u.prop
+  unfold span at pu; dsimp at pu
+  -- pu : ∃ C, sumUp C = ↑u ∧ allin C S 
+  --       ⟨lu, sumUp lu = ↑u ∧ allin lu S⟩
+  rcases pu with ⟨lu, pu⟩
+  let ex: List (ℝ × V) := lsmul r lu
+  have sum_val : sumUp ex = r • u := by
+    unfold ex
+    -- ⊢ sumUp (lsmul r lu) = r • ↑u
+    rw [sumup_lin, pu.left]
+  have allin_proof : allin ex S := by
+    unfold ex
+    -- ⊢ allin (lsmul r lu) S
+    exact (lsmul_allin lu S r).mp pu.right
+  constructor -- for ∃
+  · exact ⟨sum_val, allin_proof⟩
+\end{lstlisting}
+
+This mostly completes the formalization! All that is left is to use these theorems to formally construct a \lstinline@Module@ instance on the \lstinline@{v : V // v \in span S}@ subtype. We have to do some ceremony to bridge the gap between the \lstinline@Subtype@ and the type of vectors \lstinline@V@, but completing the construction is mostly straightforward.
+
+\begin{lstlisting}
+-- define the zero vector on the span subspace
+instance (S : Set V) : Zero {v : V // v ∈ span S} where
+  zero := Subtype.mk 0 <| zero_in_span S
+
+-- vector negation
+instance (S : Set V) : Neg {v : V // v ∈ span S} where
+  neg (a : {v : V // v ∈ span S}) :=
+    Subtype.mk (-a.val) <| by
+      have sub : -a.val = (-1 : ℝ) • a.val := by simp
+      rw [sub]
+      exact span_mul_closed S (-1) a
+
+-- vector addition
+instance (S : Set V) : Add {v : V // v ∈ span S} where
+  add (a b : {v: V // v ∈ span S}) :=
+    Subtype.mk (a.val + b.val) <| span_add_closed S a b
+
+@[simp]
+theorem subtype_ext_add : ∀(S: Set V) (a b : {v : V // v ∈ span S}),
+    (a + b).val = a.val + b.val := by intros S a b; rfl
+
+@[simp]
+theorem subtype_ext_neg : ∀(S : Set V) (a : {v : V // v ∈ span S}),
+  (-a).val = -(a.val) := by intros S a; rfl
+
+@[simp]
+theorem subtype_ext_zero : ∀(S : Set V),
+  (0 : {v : V // v ∈ span S}).val = 0 := by intro S; rfl
+
+-- vector addition is an abelian group
+instance (S : Set V) : AddCommGroup {v: V // v ∈ span S} where
+  add_assoc := by intro a b c; ext; simp; rw [add_assoc]
+  zero_add := by intro z; ext; simp;
+  add_zero := by intro a; ext; simp;
+  add_comm := by intro a b; ext; simp; rw [add_comm]
+  neg_add_cancel := by intro a; ext; simp;
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+
+-- scalar multiplication
+instance (S : Set V) : SMul ℝ {v : V // v ∈ span S} where
+  smul (r : ℝ) (u : {v : V // v ∈ span S}) :=
+    Subtype.mk (r • u.val) <| span_mul_closed S r u
+
+@[simp]
+theorem subtype_ext_smul : ∀(S: Set V) (r: ℝ)
+    (u : {v : V // v ∈ span S}), (r • u).val = r • u.val := by
+  intros S a b; rfl
+
+-- we have the module axioms: spans are subspaces!
+instance (S : Set V) : Module ℝ {v : V // v ∈ span S} where
+  one_smul := by intro b; ext; simp
+  mul_smul := by intros a b c; ext; simp; rw [mul_smul]
+  smul_zero := by intros a; ext; simp;
+  smul_add := by intros a b c; ext; simp
+  add_smul := by intros a b c; ext; simp; rw [add_smul]
+  zero_smul := by intros a; ext; simp
+\end{lstlisting}
+
+QED! $\square$
+
+
+\onecolumn
+\newpage{}
+\section{Appendix}
+    \begin{lstlisting}
+import Mathlib.Algebra.Module.Basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+
+-- proposition that all vectors (v : V) in the list are also elements of the set S.
+def allin {V} (ls : List (ℝ × V)) (S : Set V) : Prop := match ls with
+| List.cons ⟨_, v⟩ rest => v ∈ S ∧ allin rest S
+| List.nil => True
+
+theorem allin_concat {V} : ∀(la lb : List (ℝ × V)) (S : Set V),
+    allin la S ∧ allin lb S ↔ allin (la ++ lb) S := by
+  intros la lb S
+  induction la with
+  | nil =>
+    -- ⊢ allin [] S ∧ allin lb S ↔ allin ([] ++ lb) S
+    simp [allin] -- just unfold the definition of allin
+  | cons head tail ih =>
+    -- ih : allin tail S ∧ allin lb S ↔ allin (tail ++ lb) S
+    -- ⊢ allin (head::tail) S ∧ allin lb S ↔ allin (head::tail ++ lb) S
+    simp [allin]
+    rw [and_assoc]
+    -- ⊢ head.2 ∈ S ∧ allin tail S ∧ allin lb S ↔ head.2 ∈ S ∧ allin (tail ++ lb) S
+    constructor -- construct the Iff
+    · -- forward direction of Iff
+      intros m -- head.2 ∈ S ∧ allin tail S ∧ allin lb S
+      constructor -- And constructor
+      · exact m.left -- head.2 ∈ S
+      · exact ih.mp m.right -- allin (tail ++ lb) S
+    · -- backward direction of Iff
+      intros m -- head.2 ∈ S ∧ allin (tail ++ lb) S
+      constructor -- And constructor
+      · exact m.left -- head.2 ∈ S
+      · exact ih.mpr m.right -- allin tail S ∧ allin lb S
+
+/- this is not used in the "subspace closed proof" but
+  i wrote it as i was trying to figure out how to do inductive proofs -/
+theorem allin_ordering {V} : ∀(ls : List (ℝ × V)) (A B : Set V),
+    A ⊆ B → allin ls A → allin ls B := by
+  intros ls A B subset allA
+  induction ls with
+  | nil => simp [allin]
+  | cons head rest ih =>
+    simp [allin] at allA
+    simp [allin]
+    constructor
+    · apply subset
+      exact allA.left
+    · apply ih
+      exact allA.right
+
+-- helper theorem because real multiplication on ℝ (*)
+-- and scalar multiplication on modules (•) use different notation.
+theorem real_mul_smul : ∀(a b : ℝ), a * b = a • b := by simp
+
+namespace Vect
+
+variable {V} [AddCommGroup V] [Module ℝ V]
+
+def sumUp (vecs : List (ℝ × V)) : V := match vecs with
+  | List.cons ⟨c, v⟩ rest => c • v + sumUp rest
+  | List.nil => 0
+
+def span (S : Set V) : Set V :=
+  {x : V | ∃(C : List (ℝ×V)),
+    (sumUp C = x) ∧ (allin C S) }
+
+theorem sumup_concat : ∀(a b : List (ℝ×V)),
+    sumUp (a++b) = sumUp a + sumUp b := by
+  intros a b
+  -- linked lists are an inductive type so we can do induction on a
+  induction a with
+  | nil =>
+    -- base case: ⊢ sumUp ([] ++ b) = sumUp [] + sumUp b
+    simp [sumUp] -- just unfold the definition of sumUp!
+  | cons head tail ih =>
+    -- inductive hypothesis ih : sumUp (tail ++ b) = sumUp tail + sumUp b
+    -- inductive case: ⊢ sumUp (head :: tail ++ b) = sumUp (head :: tail) + sumUp b
+    simp [sumUp]
+    -- ⊢ head.1 • head.2 + sumUp (tail ++ b) = head.1 • head.2 + sumUp tail + sumUp b
+    rw [ih]
+    rw [add_assoc]
+
+def lsmul (r : ℝ) (ls : List (ℝ × V)) : List (ℝ × V) :=
+    List.map (fun ⟨a, b⟩ ↦ ⟨r • a, b⟩) ls
+
+-- dedicated theorem just for rewriting between lsmul and its expanded definition.
+-- Is there a better way?
+omit [AddCommGroup V] [Module ℝ V] in
+theorem lsmul_def : ∀(ls : List (ℝ×V)) (r : ℝ), lsmul r ls =
+    List.map (fun ⟨a, b⟩ ↦ ⟨r * a, b⟩) ls := by simp [lsmul]
+
+theorem sumup_lin : ∀(ls : List (ℝ×V)) (r : ℝ),
+    sumUp (lsmul r ls) = r • (sumUp ls) := by
+  intro ls r
+  induction ls with
+  | nil =>
+    unfold lsmul sumUp
+    simp -- empty list: sumUp [] = 0, and 0 = x • 0
+  | cons head tail ih =>
+    -- ih : sumUp (lsmul r tail) = r • sumUp tail
+    unfold sumUp lsmul; dsimp
+    -- ⊢ (r * head.1) • head.2 + sumUp (List.map (fun x ↦ (r * x.1, x.2)) tail) = r • (head.1 • head.2 + sumUp tail)
+    rw [← lsmul_def, ih]
+    -- ⊢ (r * head.1) • head.2 + r • sumUp tail = r • (head.1 • head.2 + sumUp tail)
+    rw [smul_add, real_mul_smul, smul_assoc]
+
+omit [AddCommGroup V] [Module ℝ V] in
+theorem lsmul_allin : ∀(ls : List (ℝ×V)) (S: Set V) (r : ℝ),
+    allin ls S ↔ allin (lsmul r ls) S := by
+  intros ls S r
+  constructor -- Iff
+  · induction ls with -- forward direction of Iff
+    | nil => -- ⊢ allin [] S → allin (lsmul r []) S
+      unfold lsmul List.map; simp
+    | cons head tail ih =>
+      -- ih : allin tail S → allin (lsmul r tail) S
+      -- ⊢ allin (head :: tail) S → allin (lsmul r (head :: tail)) S
+      unfold allin lsmul; dsimp
+      rw [← lsmul_def]
+      -- ⊢ head.2 ∈ S ∧ allin tail S → head.2 ∈ S ∧ allin (lsmul r tail) S
+      intro ⟨elem, rest⟩
+      exact ⟨elem, ih rest⟩
+  · induction ls with -- backward direction of Iff
+    | nil => -- ⊢ allin (lsmul r []) S → allin [] S
+      unfold lsmul List.map; simp
+    | cons head tail ih =>
+      -- ih : allin (lsmul r tail) S → allin tail S
+      -- ⊢ allin (lsmul r (head :: tail)) S → allin (head :: tail) S
+      unfold allin lsmul; dsimp
+      rw [← lsmul_def]
+      -- ⊢ head.2 ∈ S ∧ allin (lsmul r tail) S → head.2 ∈ S ∧ allin tail S
+      intro ⟨elem, rest⟩
+      exact ⟨elem, ih rest⟩
+
+-- this is also an unused theorem.
+theorem span_ordering : ∀(A B : Set V), A ⊆ B → span A ⊆ span B := by
+  intro A B hypsubset
+  unfold span
+  simp
+  intros v ls hypeq hypall
+  constructor
+  · constructor
+    · apply hypeq
+    · exact allin_ordering ls A B hypsubset hypall
+
+theorem zero_in_span : ∀(S : Set V), 0 ∈ span S := by
+  intro S
+  unfold span
+  let ex : List (ℝ × V) := List.nil
+  dsimp
+  -- ⊢ ∃ C, sumUp C = 0 ∧ allin C S
+  fconstructor -- constructor for ∃
+  · exact ex -- example empty list
+  · -- unfold definitions to show it's a linear combo for 0
+    unfold ex sumUp allin
+    simp
+
+theorem span_mul_closed : ∀(S : Set V) (r : ℝ)
+    (u : {v : V // v ∈ span S}), r • u.val ∈ span S := by
+  intros S r u
+  unfold span; dsimp
+  -- ⊢ ∃ C, sumUp C = r • ↑u ∧ allin C S
+
+  let pu := u.prop
+  unfold span at pu; dsimp at pu
+  -- pu : ∃ C, sumUp C = ↑u ∧ allin C S
+  --       ⟨lu, sumUp lu = ↑u ∧ allin lu S⟩
+  rcases pu with ⟨lu, pu⟩
+  let ex: List (ℝ × V) := lsmul r lu
+  have sum_val : sumUp ex = r • u := by
+    unfold ex
+    -- ⊢ sumUp (lsmul r lu) = r • ↑u
+    rw [sumup_lin, pu.left]
+  have allin_proof : allin ex S := by
+    unfold ex
+    -- ⊢ allin (lsmul r lu) S
+    exact (lsmul_allin lu S r).mp pu.right
+  constructor -- for ∃
+  · exact ⟨sum_val, allin_proof⟩
+
+theorem span_add_closed : ∀(S : Set V) (a b : {v : V // v ∈ span S}),
+    a.val + b.val ∈ span S := by
+  intros S a b
+  let pa := a.prop -- a ∈ span S
+  let pb := b.prop -- b ∈ span S
+  unfold span at pa; dsimp at pa
+  unfold span at pb; dsimp at pb
+
+  -- pa : ∃ C, sumUp C = ↑a ∧ allin C S
+  --      ⟨xa, ⟨sumUp xa = ↑a, allin xa S⟩⟩
+  rcases pa with ⟨xa, ⟨ha_sum, ha_sub⟩⟩
+  -- pb : ∃ C, sumUp C = ↑b ∧ allin C S
+  --      ⟨xb, ⟨sumUp xb = ↑b, allin xb S⟩⟩
+  rcases pb with ⟨xb, ⟨hb_sum, hb_sub⟩⟩
+  have sumeq: sumUp (xa ++ xb) = a.val + b.val := by
+    calc
+      _ = sumUp xa + sumUp xb := by exact sumup_concat xa xb
+      _ = a.val + b.val := by rw [ha_sum, hb_sum]
+  have ain: allin (xa ++ xb) S := by
+    exact (allin_concat xa xb S).mp ⟨ha_sub, hb_sub⟩
+
+  unfold span
+  dsimp
+  -- ⊢ ∃ C, sumUp C = ↑a + ↑b ∧ allin C S
+  constructor
+  · exact ⟨sumeq, ain⟩
+
+-- define the zero vector on the span subspace
+instance (S : Set V) : Zero {v : V // v ∈ span S} where
+  zero := Subtype.mk 0 <| zero_in_span S
+
+-- vector negation
+instance (S : Set V) : Neg {v : V // v ∈ span S} where
+  neg (a : {v : V // v ∈ span S}) :=
+    Subtype.mk (-a.val) <| by
+      have sub : -a.val = (-1 : ℝ) • a.val := by simp
+      rw [sub]
+      exact span_mul_closed S (-1) a
+
+-- vector addition
+instance (S : Set V) : Add {v : V // v ∈ span S} where
+  add (a b : {v: V // v ∈ span S}) :=
+    Subtype.mk (a.val + b.val) <| span_add_closed S a b
+
+@[simp]
+theorem subtype_ext_add : ∀(S: Set V) (a b : {v : V // v ∈ span S}),
+    (a + b).val = a.val + b.val := by intros S a b; rfl
+
+@[simp]
+theorem subtype_ext_neg : ∀(S : Set V) (a : {v : V // v ∈ span S}),
+  (-a).val = -(a.val) := by intros S a; rfl
+
+@[simp]
+theorem subtype_ext_zero : ∀(S : Set V),
+  (0 : {v : V // v ∈ span S}).val = 0 := by intro S; rfl
+
+-- vector addition is an abelian group
+instance (S : Set V) : AddCommGroup {v: V // v ∈ span S} where
+  add_assoc := by intro a b c; ext; simp; rw [add_assoc]
+  zero_add := by intro z; ext; simp;
+  add_zero := by intro a; ext; simp;
+  add_comm := by intro a b; ext; simp; rw [add_comm]
+  neg_add_cancel := by intro a; ext; simp;
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+
+-- scalar multiplication
+instance (S : Set V) : SMul ℝ {v : V // v ∈ span S} where
+  smul (r : ℝ) (u : {v : V // v ∈ span S}) :=
+    Subtype.mk (r • u.val) <| span_mul_closed S r u
+
+@[simp]
+theorem subtype_ext_smul : ∀(S: Set V) (r: ℝ)
+    (u : {v : V // v ∈ span S}), (r • u).val = r • u.val := by
+  intros S a b; rfl
+
+-- we have the module axioms: spans are subspaces!
+instance (S : Set V) : Module ℝ {v : V // v ∈ span S} where
+  one_smul := by intro b; ext; simp
+  mul_smul := by intros a b c; ext; simp; rw [mul_smul]
+  smul_zero := by intros a; ext; simp;
+  smul_add := by intros a b c; ext; simp
+  add_smul := by intros a b c; ext; simp; rw [add_smul]
+  zero_smul := by intros a; ext; simp
+
+def nallz (ls : List (ℝ × V)) : Prop := match ls with
+| List.cons ⟨r, _⟩ rest => r ≠ 0 ∨ nallz rest
+| List.nil => False
+
+def linIndep (S : Set V) : Prop :=
+    ¬∃(C : List (ℝ × V)), sumUp C = 0 ∧ nallz C ∧ allin C S
+
+structure Basis (S : Set V) where
+  spansFull : ∀(v: V), v ∈ span S
+  indep : linIndep S
+
+/- im convinced this is impossible
+theorem dim_invariant : ∀(B₁ B₂ : Set V),
+    (h₁ : Basis B₁) → (h₂ : Basis B₂) →
+      ∃(f : {v : V // v ∈ B₁} → {v : V // v ∈ B₂}), Bijective f := by
+  intros B₁ B₂ h₁ h₂
+  let contra:
+      (¬∃(f : {v : V // v ∈ B₁} → {v : V // v ∈ B₂}), Bijective f)
+        → False := by
+    intro hyp
+    simp at hyp
+    sorry
+  exact Classical.byContradiction contra
+-/
+
+end Vect
+
+    \end{lstlisting}
+
+
+\end{document}

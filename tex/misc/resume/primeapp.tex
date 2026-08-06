@@ -1,0 +1,72 @@
+\documentclass[letterpaper,12pt]{article}
+
+\usepackage{charter}        % Professional Charter font
+\usepackage[utf8]{inputenc} % UTF-8 encoding for international characters
+\usepackage[T1]{fontenc}    % Better font encoding
+\usepackage{microtype}      % Improved typography and spacing
+\usepackage{xcolor}         % Color support
+\usepackage{ifthen}         % Conditional statements
+\usepackage{hyperref}
+
+\usepackage[
+	a4paper,    % Paper size
+	top=1in,    % Top margin
+	bottom=1in, % Bottom margin
+	left=1in,   % Left margin
+	right=1in,  % Right margin
+	%showframe  % Uncomment to show frames around the margins for debugging
+]{geometry}
+
+%\setlength{\parindent}{1pt}     % No paragraph indentation 
+\setlength{\parskip}{0.8em}     % Vertical space between paragraphs
+\linespread{1.1}                % Slightly increased line spacing
+
+\usepackage{wallpaper}      % Background images
+\usepackage{graphicx}       % Required for including images
+\usepackage{fancyhdr}       % Required for customizing headers and footers
+\usepackage{array}          % Advanced table column types
+\usepackage{booktabs}       % Professional table formatting
+\usepackage{lastpage}       % Reference to last page number
+
+\begin{document}
+\pagenumbering{gobble}
+\begin{minipage}[c]{1\textwidth}
+    \raggedleft
+    \begin{tabular}{r}
+        \today
+    \end{tabular}
+\end{minipage}
+
+\noindent Dear UW PRIME team,
+
+% Optional subject line - uncomment if needed
+%\vspace{0.5em}
+%\textbf{Re: \letterSubject}
+%\vspace{0.5em}
+
+% Main letter content goes here
+
+I am writing to express my interest in participating in the program, particularly on the SMT solver project and the diffusion model project.
+
+The SMT solver project is right within an area that I find very interesting, and it is very much related to the work I have already been doing with the UW Math AI Lab and the Lean4 theorem prover. Especially with recent advances in AI, these methods for practical computation and formal verification are more important than ever. Coding up hobby projects, especially ones involving tools or techniques new to me, has always been an obsession of mine, and a project with SMT solvers sits at the intersection of theory and practice, which I find very exciting. This year, I have also been crashing some of the Programming Languages and Software Engineering lab's reading groups, and I am eager to get some hands-on experience after reading both the abstract nonsense papers (``Abstracting Abstract Machines'') and the practical applications (e.g. formal verification for Linux's eBPF JIT).
+
+For a similar reason, I am also interested in the diffusion models project. I would love to learn deeply the theory of these diffusion-style models, especially since stochastic differential equations is an area I do not know much about. Although these courses were not completed here at UW, I have taken electives in Information Theory (where we covered topics including random variables and distributions, conditional probability, entropy and mutual information) and in multivariable calculus (covering the generalized Stokes' theorem). With connections to physics and such effective applications in generative models, learning the theory of diffusion appeals to me as my impression is that it is both powerful and elegant.
+
+Thank you for your time and consideration, and I look forward to hearing from you soon!
+
+%----------------------------------------------------------------------------------------
+% LETTER CLOSING
+%----------------------------------------------------------------------------------------
+
+\vspace{1.5em}
+\noindent Sincerely,
+
+\noindent Grant Yang \\
+Electrical and Computer Engineering \\
+UW College of Engineering \\
+
+
+
+
+
+\end{document}

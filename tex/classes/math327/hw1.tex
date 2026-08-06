@@ -1,0 +1,135 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{theorem}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\begin{document}
+\title{MATH 327: Assignment 1}
+\author{Grant Yang}
+\maketitle
+
+\begin{theorem}{1}
+Let $a,b\in \mathbb R$ with $a>0,b>0$.\\
+Then $(a+b)^n \ge a^n +n a^{n-1}b$ for all $n \in \mathbb N$, taking the convention that $0 \not \in \mathbb N$.
+\end{theorem}
+\begin{proof}
+    We perform induction on $n$. \\
+    For the base case of $n=1$, we wish to prove $P(1)$ that $(a+b)^1 \ge a + 1 a^{1-1} b$. \\
+    Doing algebra, we have $(a + b)^1 = a+b$ and $a+1a^0b = a+b$. \\
+    Thus, $P(1)$ is true by reflexivity. \\
+    For the inductive case, we wish to prove that $P(n)$ implies $P(n+1)$ for all $n$. \\
+    We have our inductive hypothesis $P(n)$:
+    \[
+        (a+b)^n \ge a^n+n a^{n-1}b.
+    \]
+    Because $a > 0$ and $b > 0$, $a+b > 0$ so we can multiply both sides of our inductive hypothesis by $a+b$.
+    We can compute:
+    \begin{align*}
+        (a+b)(a+b)^n &\ge (a+b)(a^n + n a^{n-1}b) \\
+        &= a^{n+1} + n a^n b + b a^n + n a^{n-1} b^2 \\
+        &= a^{n+1}+(n+1)a^n b + na^{n-1}b^2.
+    \end{align*}
+    Because $n>0$, $a>0$, and $b > 0$, $na^{n-1}b^2 > 0$. \\
+    Thus, $a^{n+1} + (n+1)a^n b + na^{n-1}b^2 > a^{n+1}+(n+1)a^nb$, so by the transitive property,
+    \[(a+b)(a+b)^n \ge a^{n+1}+(n+1)a^n b.\]
+    Simplifying the left side, $(a+b)(a+b)^n = (a+b)^{n+1}$. \\
+    This is exactly $P(n+1)$, and we have shown that $P(n)$ implies $P(n+1)$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{2}
+Let $a,b,c\in\mathbb R$. Then 
+\[|a-b| \le c \iff b-c \le a \le b + c.\]
+\end{theorem}
+\begin{proof}
+First consider the forward direction. \\
+Consider the case that $0 \le a-b$. \\
+By the definition of absolute value, the hypothesis becomes $a - b \le c$. \\
+By the transitive property, we have that $0 \le c$. \\
+Simplifying, we also have that $b \le a$ and $a \le b + c$, our desired upper bound. \\
+Because $c \ge 0$, we have that $b - c \le b$. \\
+By the transitive property, we have $b -c \le a$, completing the proof for this case. \\
+Now consider the case that $0 > a - b$. \\
+Our hypothesis becomes $b - a \le c$ by the definition of absolute value. \\
+Since $0 > a - b$, we can negate both sides and obtain $0 < b - a$.\\
+By the transitive property, we have $0 < c$. \\
+Again simplifying, we have $a < b$ and $b -c \le a$, our desired lower bound on $a$. \\
+Because $c > 0$, we have that $b \le b + c$.\\
+By the transitive property, we have $a < b + c$, completing the proof in the forward direction. \\
+Now consider the backward direction. \\
+Unfolding and rearranging the expression, our hypothesis is that \[b - a \le c \quad\text{and}\quad a - b \le c.\]
+Consider the case that $a - b \ge 0$. \\
+Then by the definition of absolute value, $|a-b| \le c \iff a - b \le c$, so we have our result. \\
+Now consider the other case that $a - b < 0$. \\
+Then by the definition of absolute value, $|a-b| \le c \iff -(a -b)\le c$, and we still have our result (i.e, we have $b-a\le c$).
+\end{proof}
+
+\begin{theorem}{3}
+Let $a,b \in \mathbb R$. \\ If $a \le c$ for all $c > b$, then $a \le b$.
+\end{theorem}
+\begin{proof}
+Assume for the sake of contradiction that $a > b$. \\ The interval $(b, a)$ is nonempty, so we can choose a real number $x$ in this interval, e.g. $x = b + \frac{1}{2}(a-b)$. \\ Since $x > b$, by the ``forall'' hypothesis we know that $a \le x$. \\
+However, $x \in (b,a)$ and so $x < a$, a contradiction. \\ Thus, our assumption was false and $a \le b$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{4}
+Let $A,B \subseteq \mathbb R$ be sets with maxima. \\
+Denote $m_1 = \max A$ and $m_2 = \max B$. \\
+Then $\max A\cup B = \max\,\{m_1,m_2\}$.
+\end{theorem}
+\begin{proof}
+Let $m=\max \,\{m_1,m_2\}$ and note that by the definition of maximum, $m=m_1$ if $m_1 > m_2$, and $m=m_2$ otherwise. \\
+Because $m_1 \in A$ and $m_2 \in B$, in either case we know that $m \in A \cup B$. \\
+Note that $m_1 \le m$ and $m_2 \le m$. \\
+Let $x\in A \cup B$ be any element. \\
+First consider the case that $x \in A$. \\
+By the definition of the maximum $m_1$, $x \le m_1 \le m$. \\
+In the remaining case that $x \in B$, we also have $x \le m_2 \le m$. \\
+Thus, $m \in A \cup B$ and $\forall(x \in A \cup B), x \le m$, so $m = \max A \cup B$.
+\end{proof}
+
+\begin{theorem}{5}
+    Let $A,B\subseteq \mathbb R$ be sets with maxima. \\ Let $S = \{a + b \mid a \in A,b\in B\}$.\\
+    Then $\max S = \max A + \max B$.
+\end{theorem}
+\begin{proof}
+Let $m = \max A + \max B$. \\
+We have that $m \in S$ because it is the sum of two elements from $A$ and $B$: $\max A \in A$ and $\max B \in B$. \\
+Let $s \in S$ be any element, and let $s = a + b$ for $a \in A$ and $b \in B$. \\
+By the definition of maximum, we know $a \le \max A$ and $b \le \max B$. \\
+Adding these two inequalities, we get $a + b \le \max A + \max B$. \\
+Thus, $s \le m$. \\
+We have shown that $\max A + \max B \in S$ and $\forall(s \in S), s \le \max A + \max B$, so $\max S = \max A + \max B$.
+\end{proof}
+\newpage{}
+\begin{theorem}{6}
+Let $A,B \subseteq \mathbb R$ be sets bounded above. \\
+Let $S = \{a+b \mid a \in A, b \in B\}$. \\
+Then $S$ is bounded above and $\sup S = \sup A + \sup B$.
+\end{theorem}
+\begin{proof}
+    (We take $A$ and $B$ to be nonempty since we need the suprema to exist, so $S$ is also nonempty). \\
+    Let $s \in S$ be any element, and let $s = a + b$ for $a \in A$ and $b\in B$. \\
+    By the definition of supremum, we have $a \le \sup A$ and $b \le \sup B$. \\
+    Adding these inequalities, we get $a + b \le \sup A + \sup B$. \\
+    Thus, $s \le \sup A + \sup B$, so $S$ is bounded above and has a supremum. \\
+    Let $x \in \mathbb R$ be a real number such that $\forall s'\in S, s' \le x$. \\
+    Assume FTSOC that $x < \sup A + \sup B$. \\
+    Then $x - \sup A < \sup B$, so $x - \sup A$ is not an upper bound on $B$. \\
+    In particular, let $b' \in B$ be an element such that $b' > x - \sup A$. \\
+    Thus, $\sup A + b' > x$, so let $\varepsilon > 0$ be a number such that $\sup A - \varepsilon + b' > x$.
+    Because $\sup A - \varepsilon$ is not an upper bound, let $a'\in A$ be an element such that $a' > \sup A - \varepsilon$.\\
+    Thus, $a' + b' > x$, a contradiction with the fact that $x$ is an upper bound on $S$. \\
+    Our assumption was false, and all upper bounds on $S$ are $\ge \sup A + \sup B$.
+    Thus, $\sup S = \sup A + \sup B$.
+
+    
+\end{proof}
+\end{document}

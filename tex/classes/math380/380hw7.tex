@@ -1,0 +1,114 @@
+\documentclass[12pt]{amsart}
+\pagestyle{empty}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{fancyhdr} 
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+
+\usepackage{url,  mathrsfs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx,  epstopdf}
+\usepackage{subfig}
+\usepackage{color}
+\usepackage{bbm}
+\usepackage{subfloat}
+\usepackage[draft]{fixme}
+\usepackage{bm} 
+\usepackage{bbm} 
+\usepackage{epigraph}
+\usepackage{endnotes}
+\usepackage{ifpdf}
+\usepackage{array}
+
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathbb{C}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\ol}{\overline}
+\newcommand{\J}{\mathcal{J}}
+\newcommand{\X}{\mathcal{X}}
+\theoremstyle{definition}
+\newtheorem{prob}{Problem}
+\newtheorem{extraProb}{Extra Problem}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\ext}{ext}
+
+
+
+
+\begin{document}
+ \thispagestyle{empty}
+\begin{center} {\large \textbf{Math 380 -- Homework  7}} \smallskip \\ 
+Due on Thursday, May 28\ \\ \ \\
+ \end{center}
+
+You are welcome to talk with other students in the class about problems but should write up solutions on your own. 
+Solutions can be handwritten or typed but need to be legible and submitted via Gradescope by the end of the day 
+on Thursday. You should justify all your answers in order to receive full credit.  
+\begin{flushleft}
+
+{\bf Good practice problems} (not to be turned in): \\
+CLO Section 4.3, Exercises 3, 4, 7, 8, 12 \\
+CLO Section 4.4, Exercises 1, 4, 11, 14\\
+\
+
+% Two ideals I and J of k[x1, . . . , xn] are said to be comaximal if and only if I + J =
+% k[x1, . . . , xn].
+% a. Show that if k = C, then I and J are comaximal if and only if V(I) ∩ V(J) = ∅. Give
+% an example to show that this is false in general.
+% b. Show that if I and J are comaximal, then IJ = I ∩ J.
+% 198 Chapter 4 The Algebra–Geometry Dictionary
+% c. Is the converse to part (b) true? That is, if IJ = I ∩ J, does it necessarily follow that I
+% and J are comaximal? Proof or counterexample?
+\begin{prob} CLO \S4.3, Exercise 11 parts (a), (b), (c) \smallskip  \\
+Two ideals $I, J \subseteq k[x_1,\dots,x_n]$ are \emph{comaximal} if and only if $I + J = k[x_1,\dots,x_n]$.
+\begin{enumerate}
+    \item[(a)] Over $k = \mathbb C$, $I$ and $J$ are comaximal if and only if $\mathbf V(I)\cap \mathbf V(J) = \varnothing$. Starting from $I$ and $J$ being comaximal, we get $\mathbf V(I) \cap \mathbf V(J) = \mathbf V(I+J) = \varnothing$, since $1 \in I + J = k[x_1,\dots,x_n]$. To prove the other direction, note that by the Weak Nullstellensatz, $\mathbf V(I)\cap \mathbf V(J) = \mathbf V(I+J)=\varnothing$ implies that $1 \in I+J$. Then, $I + J = k[x_1,\dots,x_n]$ since $1\cdot h(x) \in I+J$ for any $h(x)$.
+
+    The Weak Nullstellensatz only works over algebraically closed fields. For a counterexample in $\mathbb R[x,y]$, take $I = \langle x^2+1\rangle$ and $J = \langle y^2+1\rangle$. We have $\mathbf V(I+J) = \varnothing$ since $x^2 +1 \in I+J$ has no solutions, but $1 \not \in I+J$. In fact, $\{ x^2+1,y^2+1\}$ is a Gr\"obner basis under lexicographic order.
+    \item[(b)] If $I$ and $J$ are comaximal, then $I \cdot J = I \cap J$.
+    \begin{enumerate} 
+    \item[$(\subseteq)$] For any element $p \in I\cdot J$, we can write $p = \sum i_k j_k$ where $i_k \in I$ and $j_k \in J$. For all $k$, we get $i_k j_k \in I \cap J$ as ideals absorb multiplication by arbitrary ring elements, and since $I \cap J$ is an ideal closed under addition, $p \in I \cap J$.\item[$(\supseteq)$] Let $a \in I \cap J$, and note that $1\in I + J$ by the fact that $I$ and $J$ are comaximal. Thus, let $i\in I$ and $j \in J$ be such that $i + j = 1$. Then, $a=a\cdot(i+j) = a\cdot i + a\cdot j$. We have that $a \in J$, so $i \cdot a \in I\cdot J$, and similarly $a \in I$ so $a\cdot j \in I \cdot J$. Finally, $a = a\cdot i + a\cdot j \in I \cdot J$.
+    \end{enumerate}
+    \item[(c)] The converse of (b) is not true. Let $I = \langle 0 \rangle$, and let $J \subsetneq k[x_1,\dots,x_n]$ be any ideal not containing $1$. Then $I \cap J = I\cdot J =\langle 0 \rangle$. However, $1\not\in I+J= J$.
+\end{enumerate}
+\end{prob}
+
+\bigskip 
+
+
+% Let V, W ⊆ kn be varieties. Prove that I(V) : I(W) = I(V \ W).
+% \[ I:J=\{f\in k[x_1,\dots,x_n] : \forall g \in J, fg \in I\}\]
+\begin{prob}  CLO \S4.4, Exercise 8 \smallskip \\
+Let $V,W\subseteq k^n$ be varieties. Then $\mathbf I(V):\mathbf I(W) = \mathbf I(V\setminus W)$. 
+
+\begin{enumerate}
+    \item[$(\subseteq)$] Let $f \in \mathbf I(V) : \mathbf I(W)$, and let $a \in V \setminus W$. Since $W$ is a variety, $W=\mathbf V(\mathbf I (W))$, and \[a \not \in \mathbf V(\mathbf I (W))  \implies \lnot \forall g \in \mathbf I(W), g(a)=0 \implies \exists g \in \mathbf I(W), g(a)\neq 0.\] Take any such $g \in \mathbf I(W)$. By the definition of $f$, we have $(f\cdot g)(a) = 0$, but since $g(a)\neq 0$, we must have that $f(a)=0$. Thus, $f \in \mathbf I(V\setminus W)$.
+    \item[$(\supseteq)$] Let $f \in \mathbf I(V \setminus W)$, and let $g \in \mathbf I(W)$. Let $a \in V$, and first consider $a \not \in W$. In this case, $a \in V \setminus W$ so $f(a) = 0$ and $(f\cdot g)(a)=0$. On the other hand, if $a \in W$, we have $g(a) = 0$, so $(f\cdot g)(a) = 0$. Thus, $f\cdot g \in \mathbf I(V)$, so $f \in \mathbf I(V):\mathbf I(W)$.
+\end{enumerate}
+
+% \emph{Note:} You need to work over an arbitrary field $k$, which may not be algebraically closed.\\
+\end{prob}
+
+\bigskip 
+
+
+\end{flushleft}
+\end{document}

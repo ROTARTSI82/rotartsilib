@@ -1,0 +1,172 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{theorem}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\begin{document}
+\title{MATH 327: Assignment 5}
+\author{Grant Yang}
+\maketitle
+
+% https://sites.math.washington.edu//~conroy/m327-general/homework/assignment05.pdf
+
+\begin{theorem}1
+Let $(a_n)$ be an increasing sequence. If any subsequence of $(a_n)$ is bounded, then $(a_n)$ is also bounded.
+\end{theorem}
+\begin{proof}
+Let $(a_n)$ be an increasing sequence. \\ Let $f(k)$ be any strictly increasing function on the natural numbers. \\
+We will show that if the subsequence $(a_{f(n)})$ is bounded, then $(a_n)$ is also bounded. \\
+Let us first show by induction on $k$ that $f(k) \ge k$ for all $k \in \mathbb N$. \\
+The base case $f(1)\ge 1$ is true because $f(1) \in \mathbb N$ and $1$ is the smallest natural. \\
+For the inductive case, let $k\ge 1$. \\
+Since $f$ is strictly increasing, $f(k+1)> f(k)$, and so $f(k+1) \ge f(k)+1$. \\
+By the inductive hypothesis, $f(k) \ge k$, so  $f(k+1)\ge f(k)+1 \ge k + 1$. \\
+Thus, we have shown that $f(k)\ge k$ implies that $f(k+1) \ge k+ 1$. \\
+Our induction is complete, and $f(k) \ge k$ for all $k \in \mathbb N$. \\
+Suppose that the subsequence $(a_{f(n)})$ has an upper bound $B$. \\
+Let $n \in \mathbb N$, and note that $f(n) \ge n$. \\
+Since $(a_n)$ is increasing, this means that $a_n \le a_{n+1} \le \dots \le a_{f(n)} \le B$. \\
+Thus, $(a_n)$ is also bounded above by $B$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{2}
+    Let $A$ be a sequence of rationals 
+    \[A = \left(\frac{1}{2},\frac{1}{3},\frac{2}{3},\frac{1}{4},\frac{2}{4},\frac{3}{4},\dots\right).\]
+    So $A$ consists of rationals between $0$ and $1$, with all the rationals of the form $i/n, 1\le i < n$ in order, followed by all the rationals of the form $i/(n+1),1\le i< n+1$ in order, etc., for integers $n>2$.
+
+    Then, for all real $x$ with $0 \le x \le 1$, $A$ contains a subsequence which converges to $x$.
+\end{theorem}
+\begin{proof}
+    The following argument can prove a slightly more general statement, that any sequence whose image is dense in an interval has subsequences that converge to any number in the closure of that interval. \\
+    Let $A$ be defined as above, and let $0 \le x \le 1$ be any real number. \\
+    We will consider $A$ as both a sequence and function from $\mathbb N$ to $\mathcal A$, where $\mathcal A$ is its image.\\
+    First, note that $\mathcal A=(0,1)\cap \mathbb Q$ (it enumerates every rational in the interval). \\
+    We will inductively define a strictly increasing $f(k)$ on the naturals such that the subsequence $A_{f(k)}$ satisfies the property that $A_{f(k)} \in \left(x-\frac{1}{k},x+\frac{1}{k}\right)$. \\
+    For $f(1)$, note that $(x-1,x+1)\cap \mathcal A$ is nonempty, so simply choose any $f(1)$ such that $A_{f(1)}$ is in that set. \\
+    For $f(k)$, define the set $R=\{A_i : i > f(k-1)\}$, the set of possible values attainable by $A_{f(k)}$ (forcing $f$ to be strictly increasing). \\
+    Note that $R \supseteq \mathcal A \setminus \{A_i : i \le f(k-1)\}$, so \begin{align}\left(x-\tfrac{1}{k},x+\tfrac{1}{k}\right)\cap R &\supseteq \left(x-\tfrac{1}{k},x+\tfrac{1}{k}\right)\cap \left[\mathcal A\setminus \{A_i : i \le f(k-1) \}\right] \nonumber \\&\quad = \left[\left(x-\tfrac{1}{k},x+\tfrac{1}{k}\right)\cap \mathcal A\right] \setminus \{A_i : i \le f(k-1)\}. \label{eq}\end{align}
+    On a previous homework, we showed that the rationals are dense in any interval, so the set $\left(x-\frac{1}{k},x+\frac{1}{k}\right)\cap \mathcal A$ must be infinite because it is the set of rationals in the nonempty interval $\left(x-\frac{1}{k},x+\frac{1}{k}\right)\cap (0,1)$. \\
+    Since $\{A_i : i \le f(k-1)\}$ is a finite set, we must have that (\ref{eq}) is nonempty as the set difference between an infinite and a finite set. \\
+    With $\left(x-\frac{1}{k},x+\frac{1}{k}\right)\cap R$ being a superset of this set, it must also be nonempty. \\
+    Thus, we may choose $f(k)$ such that $A_{f(k)} \in \left(x-\frac{1}{k},x+\frac{1}{k}\right)\cap R$. \\
+    Let $\varepsilon > 0$ be any real number. \\
+    By the Archimedean property, let $N\in \mathbb N$ be such that $\frac{1}{N} < \varepsilon$. \\
+    Let $n > N$, and note that $(x-\frac{1}{n},x+\frac{1}{n})\subseteq (x-\frac{1}{N},x+\frac{1}{N})$ since $\frac{1}{n} < \frac{1}{N}$. \\
+    Since $A_{f(n)} \in (x-\frac{1}{n},x+\frac{1}{n})$ by construction, we have 
+    \[|A_{f(n)}-x|<\frac{1}{n} < \frac{1}{N} < \varepsilon.\]
+    Thus, $\lim A_{f(k)} = x$.
+    % First let us prove a useful lemma: for any interval $(a,b) \subseteq (0,1)$, the set $S=\left\{q : \frac{p}{q} \in (a,b)\cap \mathbb Q \right\}$ is unbounded. \\
+    % Assume FTSOC that $S$ is bounded above by $B$. \\
+    % Let $p/q \in (a,b) \cap \mathbb Q$. \\ Since $(a,b) \subseteq (0, 1)$ and $q \in S$, we must have $0 < p < q \le B$. \\
+    % This means that $(p,q) \in \mathbb N_B \times S$, so we have an injection from $(a,b)\cap \mathbb Q$ into $\mathbb N_B \times S$. \\
+    % However, since $S \subseteq \mathbb N$ is bounded, it must be finite, and the Cartesian product of finite sets is finite. \\
+    % Thus, $(a,b)\cap \mathbb Q$ must also be finite, a contradiction with the previous homework problem that there are infinite rationals in every interval. \\
+    % Thus, our assumption was false, and $S$ is unbounded. \\
+    % Now, we will construct a strictly increasing function on naturals $f(k)$ such that $|A_{f(k)} - x|< 1/k$. \\
+    % Define $f(1)=1$. This works since $\left|\frac{1}{2} - x\right| < 1$ as $x \in [0, 1]$. \\
+\end{proof}
+
+\newpage{}
+\begin{theorem}{3}
+Let $k$ be a positive real number. \\
+Then \[
+S=\sum\limits_{n=2}^\infty \frac{1}{n(\log n)^k}
+\]
+converges if and only if $k > 1$.
+\end{theorem}
+\begin{proof}
+    Let $k >0$ and $a_n = \frac{1}{n(\log n)^k}$ for $n \ge 2$. Define $a_1$ to be any real number. \\
+    Since $\log n$ and $n^k$ are increasing functions, the denominator is increasing and $S$ is a decreasing term series. \\
+    Since $\log n>0$ for $n \ge 2$ and similarly for $n^k$, every term of $S$ is positive. \\
+    We wish to show that $\sum\limits_{n=2}^\infty a_n$ converges if and only if $k > 1$. \\
+    By Theorem 5 below, $\sum\limits_{n=2}^\infty a_n$ converges if and only if $\sum\limits_{n=1}^\infty a_n$ converges. \\
+    By the Cauchy condensation test, this sum converges if and only if
+    $\sum\limits_{n=0}^\infty 2^na_{2^n}$
+    converges. \\
+    In turn, this sum converges if and only if $\sum\limits_{n=1}^\infty 2^n a_{2^n}$ converges (Theorem 5). \\
+    We can calculate
+    \[
+    \sum\limits_{n=1}^\infty 2^n a_{2^n} = \sum\limits_{n=1}^\infty \frac{2^n}{2^n (\log 2^n)^k} =\sum\limits_{n=1}^\infty \frac{1}{(n\log 2)^k }.
+    \]
+    Finally, since $(\log 2)^k$ is a constant, this sum converges if and only if $\sum\limits_{n=1}^\infty \frac{1}{n^k}$ converges (again by Theorem 5, this time in reverse). \\
+    This is a $p$-series, which converges if and only if $p = k > 1$. \\
+    Thus, by this long chain of `if and only if's, $\sum\limits_{n=2}^\infty a_n$ converges if and only if $k > 1$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{4}
+    Let $t>0$. Let $(a_n)$ be a sequence. \\
+    Then $(a_n)$ converges to $L$ if and only if, for all $0 < \gamma < t$, there exists $N\in \mathbb N$ such that $|a_n - L| < \gamma$ for all $n > N$. 
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ be defined as above. \\
+    
+    First, suppose that $\lim a_n = L$. \\
+    Let $t> 0$ be any real number, and choose any $\gamma \in (0, t)$. \\
+    By the definition of convergence, we can find $N \in \mathbb N$ such that $|a_n - L | < \gamma$, as $\gamma > 0$. \\
+
+    Now, suppose that for some $t > 0$ we have that for all $\gamma \in (0, t)$, there exists a $N \in \mathbb N$ such that $|a_n - L | < \gamma$ for all $n > N$. \\
+    Let $\varepsilon > 0$ be any real. \\
+    First consider the case that $\varepsilon < t$. \\
+    Then directly we can find a $N \in \mathbb N$ to satisfy the definition of a convergent limit, that $\forall n > N$ we have $|a_n - L | < \gamma = \varepsilon$. \\
+    On the other hand, if $\varepsilon \ge t$, let $N \in \mathbb N$ be such that $|a_n - L | < \gamma = t/2$ for all $n > N$. \\
+    Then for all $n > N$ we also have $|a_n - L | < t/2 < t \le \varepsilon$, still satisfying the definition of a convergent limit.\\
+
+    Thus, $(a_n)$ converges to $L$ if and only if there exists $N \in \mathbb N$ such that $|a_n - L| < \gamma$ for all $0 < \gamma < t$ for some $t > 0$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{5}
+    Let $m \in \mathbb N$ and let $c \in \mathbb R$ be any nonzero number. \\
+    Let $(a_n)$ be any sequence. \\
+    Then $\sum\limits_{n=1}^\infty a_n$ converges if and only if $\sum\limits_{n=m}^\infty c \cdot a_n$ converges. 
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$, $m$, and $c$ be defined as above. \\
+    Define the following sequences of partial sums:
+    \begin{align*}
+        S_k = \sum_{n=1}^k a_n \qquad S'_k =\sum_{n=m}^{m+k-1} c\cdot a_n.
+    \end{align*}
+    Note that for all $k\in \mathbb N$, we get
+    \[
+    c\cdot S_{k+m-1} - S'_k = \sum_{n=1}^{m-1} c\cdot a_n,
+    \]
+    where we take the sum to be $0$ if $m = 1$. \\
+    Denote the value of this finite sum as $D = \sum\limits_{n=1}^{m-1} c\cdot a_n$. \\
+    If $S'_k$ is a convergent sequence, then since $S_{k+m-1}= (S'_k + D)c^{-1}$ we get \[\lim S_{k+m-1} = \lim S_k = (\lim S'_k+ D)c^{-1}\] by the properties of limits. \\
+    If $S_k$ is a convergent sequence, then $S_{k+m-1}$ is also a convergent sequence, so again since $S'_k = c\cdot S_{k+m-1}-D$ we get \[\lim S'_k = c\lim S_k-D.\]
+    Thus, $S'_k$ converges if and only if $S_k$ converges, and so by the definition of infinite sums $\sum\limits_{n=1}^\infty a_n$ converges if and only if $\sum\limits_{n=m}^\infty c \cdot a_n$ converges.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{6}
+    Let $(a_n)$ be a non-negative term sequence, and suppose that $\sum\limits_{n=1}^\infty a_n$ converges. \\
+    Then $\sum\limits_{n=1}^\infty a_n^2$ converges.
+\end{theorem}
+\begin{proof}
+    Let $(a_n)$ be defined as above. \\
+    Let $\varepsilon > 0$ be any real number, and we wish to prove the convergence of $\sum a_n^2$ by the Cauchy criterion. \\
+    Without loss of generality (by the same idea as Theorem 4 above), let $\varepsilon < 1$. \\
+    By the convergence of $\sum a_n$, let $N \in \mathbb N$ be such that for all $k,m \in \mathbb N$ where $N < k \le m$, \[ \left|\sum\limits_{i=k}^m a_i\right| < \varepsilon. \]
+    Let $m,k \in \mathbb N$ be such that $N < k \le m$.\\
+    Since $(a_n)$ is a positive term sequence, we know that for any $\ell \in \mathbb N$ and $n > \ell$, we have $0\le\sum\limits_{i=\ell}^n a_i$. \\
+    Let $p \in \mathbb N$ be such that $k \le p \le m$. \\
+    Since $\sum\limits_{i=k}^m a_i=\left|\sum\limits_{i=k}^m a_i\right|< \varepsilon$, we may write
+    \[
+    \left(\sum\limits_{i=k}^{p-1}a_i\right) + a_p + \left(\sum\limits_{i=p+1}^k a_i\right)= \sum\limits_{i=k}^m a_i < \varepsilon
+    \]
+    where we take the relevant sum to be $0$ if $p=k$ or $p=m$. \\ Call these sums $S_1 = \sum\limits_{i=k}^{p-1}a_i$ and $S_2 = \sum\limits_{i=p+1}^k a_i$. \\
+    Then $0\le S_1$ and $0 \le S_2$, and so $a_p < \varepsilon - S_1 - S_2 <1$. \\
+    Thus, we have shown that $a_p^2 < a_p$ for all $p$ where $k \le p \le m$, so \[\left|\sum\limits_{i=k}^m a_i^2\right|=\sum\limits_{i=k}^m a_i^2 < \sum\limits_{i=k}^m a_i < \varepsilon.\]
+    We have shown the necessary $N$ exists for any $\varepsilon > 0$ for this to hold for all $m \ge k > N$, so by the Cauchy criterion $\sum\limits_{n=1}^\infty a_n^2$ converges.
+\end{proof}
+
+% Oops after writing this I realized I could've gotten $a_n < 1$ just from $\lim a_n = 0$ instead of Cauchy criterioning.
+\end{document}

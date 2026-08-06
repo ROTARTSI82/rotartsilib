@@ -1,0 +1,167 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{theorem}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\newtheorem{innercustomlem}{Lemma}
+\newenvironment{lemma}[1]{\renewcommand\theinnercustomlem{#1}\innercustomlem}
+  {\endinnercustomlem}
+
+\newtheorem{innercustomprob}{Problem}
+\newenvironment{problem}[1]{\renewcommand\theinnercustomprob{#1}\innercustomprob}
+  {\endinnercustomprob}
+\begin{document}
+\title{MATH 327: Assignment 7}
+\author{Grant Yang}
+\maketitle
+
+% https://sites.math.washington.edu//~conroy/m327-general/homework/assignment07.pdf
+\begin{theorem}{1}
+    The function $f(x)=|x|$ is continuous at every $x \in \mathbb R$.
+\end{theorem}
+\begin{proof}
+    Let $f(x)=|x|$ and let $x_0 \in \mathbb R$. \\
+    Let $\varepsilon>0$, and take $\delta = \varepsilon$. \\
+    Let $x\in \mathbb R$ be such that $|x-x_0| < \delta$. \\
+    We wish to show that $|f(x)-f(x_0)| = ||x|-|x_0|| < \varepsilon$. \\
+    By the triangle inequality, $|x|=|x-x_0 + x_0| \le |x_0| +|x-x_0|$, so \[|x|-|x_0| \le |x-x_0|.\]
+    Similarly, $|x_0| = |x-x_0-x| \le |x-x_0| +|x|$, so $|x_0|-|x| \le |x-x_0|$ and thus \[-|x-x_0|\le |x|-|x_0|.\]
+    From this, we deduce $||x|-|x_0|| \le |x-x_0| < \delta = \varepsilon$, as desired.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{2}
+    The function $f(x)=\sqrt{x}$ is continuous at all $x\ge0$ (by $\delta$-$\varepsilon$).
+\end{theorem}
+\begin{proof}
+    Let $f(x)=\sqrt{x}$ and let $x_0$ be any $x_0 \ge 0$. \\
+    Let $\varepsilon > 0$. \\
+    
+    First consider the $x_0 = 0$ case. \\
+    Let $\delta = \varepsilon^2$, and let $x \in \mathbb R$ be such that $|x-x_0|<\delta$ and $x \ge 0$. \\
+    Expanding definitions, this condition is simply that $0\le x < \varepsilon^2$. \\
+    This implies that $\sqrt{x} < \varepsilon$ as the square root is increasing, so
+    \[
+        |f(x)-f(x_0)| = \sqrt{x} < \varepsilon
+    \]
+    as desired. \\
+    
+    Now consider $x_0 > 0$. \\ 
+    Take $\delta$ such that $0 < \delta < \varepsilon \sqrt{x_0}$. \\
+    Let $x \in \mathbb R$ be such that $|x-x_0| < \delta$ and $x \ge 0$. \\
+    Then we can calculate
+    \[ |x-x_0| = \left|\sqrt{x} - \sqrt{x_0}\right|\left|\sqrt{x} + \sqrt{x_0}\right| < \delta.\]
+    Since $x_0 > 0$, we get $\sqrt{x} + \sqrt{x_0} > 0$ and so \[\left|\sqrt{x} - \sqrt{x_0}\right|<\frac{\delta}{\sqrt{x} + \sqrt{x_0}}.\]
+    Since $\sqrt{x} + \sqrt{x_0} \ge \sqrt{x_0}$ and $\delta < \varepsilon \sqrt{x_0}$, we get
+    \[
+        |f(x)-f(x_0)|=\left|\sqrt{x} - \sqrt{x_0}\right| <\frac{\delta}{\sqrt{x} + \sqrt{x_0}} \le \frac{\delta}{\sqrt{x_0}} < \varepsilon.
+    \]
+    Thus, $f(x)$ is continuous at all $x \ge 0$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{3}
+    The function $f(x)=\frac{1}{x}$ is continuous at all $x\neq 0$ (by $\delta$-$\varepsilon$).
+\end{theorem}
+\begin{proof}
+    Let $f(x)=\frac{1}{x}$ and let $x_0 \neq 0$. \\
+    Define $B = \frac{1}{2}|x_0|$, and note $B > 0$. \\
+    Let $\varepsilon > 0$. \\
+    Let $\delta$ be such that $0 < \delta < \min \{B, \varepsilon B^2\}$. \\
+    Let $x \in \mathbb R$ be such that $|x-x_0| < \delta$ and $x \neq 0$. \\
+    We wish to show that $|f(x)-f(x_0)| < \varepsilon$, and we can calculate \[\left|\frac{1}{x} -\frac{1}{x_0}\right| = \frac{|x-x_0|}{|x||x_0|} < \frac{\delta}{|x||x_0|}.\]
+    Note that $|x_0| > \frac{1}{2}|x_0| = B$. \\
+    Then, we can also compute \begin{align*}
+    2B&=|x_0| \\ &= |x-x_0-x| \\ &\le |x-x_0| + |x|.\end{align*}
+    Since $|x-x_0| < \delta  < B$, we get $B < 2B - |x-x_0| \le |x|$. \\
+    Thus, we have both $|x_0| > B$ and $|x| > B$, so $\frac{\delta}{|x||x_0|} < \frac{\delta}{B^2}$. \\
+    Since $\delta < \varepsilon B^2$, we get that \[ \left|f(x) - f(x_0) \right| <\frac{\delta}{B^2} < \varepsilon.\]
+    Thus, $f(x)=\frac{1}{x}$ is continuous at all $x \neq 0$.
+\end{proof}
+\newpage{}
+\begin{theorem}{4}
+    Let $f(x)=a_0+a_1 x+\dots+ a_nx^n$ for some $n \in \mathbb N$. \\
+    Then $f$ is continuous at all $x \in \mathbb R$.
+\end{theorem}
+\begin{proof}
+    First, we show that all functions of the form $f_n(x)=a\cdot x^n$ for $n \in \mathbb N$ and $a \in \mathbb R$ are continuous everywhere (induction on $n$). \\
+    For the base case, we have $f_0(x)=a$. \\
+    Let $x_0\in \mathbb R$ and $\varepsilon > 0$. \\
+    Take $\delta = 1$, and let $x \in \mathbb R$ be such that $|x-x_0| < \delta$. \\
+    We have $|f_0(x)-f_0(x_0)| = |a-a|=0<\varepsilon$. \\
+    For the inductive case, our inductive hypothesis is that all functions $f_n(x)=a \cdot x^n$ are continuous everywhere for $n \in \mathbb N$. \\
+    We can see that $\mathrm{Id}(x)=x$ is continuous everywhere. \\
+    Let $x_0 \in \mathbb R$ and $\varepsilon > 0$. \\
+    Take $\delta = \varepsilon$, and let $x \in \mathbb R$ be such that $|x-x_0|<\delta$. \\
+    Then we have $|\mathrm{Id}(x)-\mathrm{Id}(x_0)| = |x-x_0|<\delta = \varepsilon$. \\
+    Thus, we can write every function $f_{n+1}(x)=a \cdot x^{n+1}$ as a product of two continuous functions $(a\cdot x^n)\cdot x$, as $a\cdot x^n$ is continuous by the inductive hypothesis. \\
+    By the theorem in Ross, every $f_{n+1}$ is continuous. \\
+    We have shown that all functions $a \cdot x^n$ being continuous everywhere implies that all functions $a \cdot x^{n+1}$ are continuous everywhere. Our induction is complete. \\
+    Let $f(x)=a_0+a_1 x+\dots + a_n x^n$ be any polynomial. \\
+    Since this is a finite sum of continuous functions, this is also continuous by the theorem in Ross.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{5}
+    Let $f$ be a continuous real-valued function with $\mathrm{dom} f = \mathbb R$. \\
+    If $f(q) = 0$ for all $q \in \mathbb Q$, then $f(x) = 0$ for all $x \in \mathbb R$.
+\end{theorem}
+\begin{proof}
+    Let $f$ be defined as above, with $f(q) = 0$ for all $q \in \mathbb Q$. \\
+    Let $x \in \mathbb R$ be any number. \\
+    We can define a sequence $x_n$ of rationals converging to $x$. \\
+    For any $n \in \mathbb N$, define $x_n$ by choosing any element of $(x-1/n, x+1/n) \cap \mathbb Q$ as the rationals are dense in the reals. \\
+    $\lim x_n =x$ by the Squeeze theorem or just by looking at it. \\
+    Note that $f(x_n) = 0$ for all $n$ since $x_n \in \mathbb Q$. \\
+    By the sequence definition of continuity, we must have $f(\lim x_n) = \lim (f(x_n))$, or $f(x) = \lim 0 = 0$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{6}
+    Define
+    \[f(x) = \begin{cases}x & x \in \mathbb Q \\ -x & \text{otherwise}.\end{cases}\]
+    Then $f(x)$ is continuous at $x =0$ and discontinuous everywhere else.
+\end{theorem}
+\begin{proof}
+    Define $f(x)$ as above. First, we show continuity at $0$. \\
+    Let $\varepsilon > 0$, and take $\delta$ such that $0 < \delta < \varepsilon$. \\
+    Let $x \in \mathbb R$, and we can show that $|x-0| = |x|< \delta$ implies that $|f(x)-f(0)| < \varepsilon$. \\
+    First, consider the case that $x \in \mathbb Q$. Then \\
+    \[|f(x)-f(0)|=|x-0|=|x|<\delta < \varepsilon.\]
+    On the other hand, consider that $x \not \in \mathbb Q$. Then,
+    \[|f(x)-f(0)| = |-x-0|=|x|<\delta < \varepsilon.\]
+    Thus, $f(x_0)$ is continuous at $x_0=0$. \\
+
+    Now, let $x_0$ be any nonzero real. \\
+    Define a sequence $a_n$ of irrationals converging to $x_0$. \\
+    For any $n \in \mathbb N$, we can define $a_n$ by choosing an element of $(x_0-\frac{1}{n},x_0+\frac{1}{n})\setminus \mathbb Q$ as the irrationals are dense in the reals. \\
+    $\lim a_n =x_0$ by the Squeeze theorem. \\
+    Similarly, define a sequence $b_n$ of rationals converging to $x_0$. \\
+    For any $n \in \mathbb N$, we can define $b_n$ by choosing an element of $(x_0 - \frac{1}{n},x_0+\frac{1}{n})\cap \mathbb Q$ as the rationals are dense in the reals. \\
+    $\lim b_n =x_0$ by the Squeeze theorem. \\
+    We have $\lim b_n=\lim a_n = x_0$. \\
+    Note that for all $n$ we also have $a_n \in \mathbb R \setminus \mathbb Q$ while $b_n \in \mathbb Q$. \\
+    First, consider the case that $x_0 \in \mathbb Q$. \\ Then $f(\lim a_n) = f(x_0)=x_0$, but $\lim f(a_n) = \lim (-a_n) =-\lim a_n = -x_0$. \\
+    On the other hand, consider the case that $x_0 \not\in \mathbb Q$. \\
+    Then $f(\lim b_n) = f(x_0) = -x_0$, but $\lim f(b_n) = \lim b_n = x_0$. \\
+    Thus, in either case, $f$ is not continuous at $x_0$ since $x_0\neq 0$ and $x_0 \neq -x_0$.
+\end{proof}
+\end{document}
+
+
+Now consider $x_0 > 0$. % and define $B = \frac{1}{2}\sqrt{x_0}$. \\ 
+    Take $\delta$ such that $0 < \delta < \varepsilon \sqrt{x_0}$. \\ %$0 < \delta < \min \left\{\frac{3}{4}x_0,  2\varepsilon B\right\}$. \\
+    % Note that $B = \frac{1}{2}\sqrt{x_0} < \sqrt{x_0}$.\footnote{I wrote this proof after doing Theorem 3, so I just did the same technique. But now I realize I could've just done $\sqrt{x} + \sqrt{x_0} \ge \sqrt{x_0}$...} \\
+    % We can show that $B < \sqrt{x}$. \\ If $x \ge x_0$, we are already done since then $B < \sqrt{x_0} \le \sqrt{x}$. \\
+    % Considering the remaining case that $x < x_0$, note that \[|x-x_0| = x_0 - x< \delta < \frac{3}{4}x_0.\]
+    % Then, $\frac{1}{4}x_0 < x$, so $B=\frac{1}{2}\sqrt{x_0} < \sqrt{x}$.  \\
+    % Thus, $B < \sqrt{x}$ and $B < \sqrt{x_0}$, so $2B<\sqrt{x} + \sqrt{x_0}$ and
+    % \[
+    % \frac{\delta}{\sqrt{x}+\sqrt{x_0}} < \frac{\delta}{2B}.   \]
+    % Since $\delta < 2\varepsilon B$ we get $\frac{\delta}{2B}<\varepsilon$ as desired.

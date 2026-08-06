@@ -1,0 +1,178 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{theorem}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\newtheorem{innercustomlem}{Lemma}
+\newenvironment{lemma}[1]{\renewcommand\theinnercustomlem{#1}\innercustomlem}
+  {\endinnercustomlem}
+
+\newtheorem{innercustomprob}{Problem}
+\newenvironment{problem}[1]{\renewcommand\theinnercustomprob{#1}\innercustomprob}
+  {\endinnercustomprob}
+\begin{document}
+\title{MATH 327: Assignment 8}
+\author{Grant Yang}
+\maketitle
+
+% https://sites.math.washington.edu//~conroy/m327-general/homework/assignment08.pdf
+\begin{theorem}{1}
+    Let $g$ be a real-valued function on $\mathbb R$. \\
+    Let $K$ be a positive number and suppose that for all $x,y \in \mathbb R$,
+    \[|g(x)-g(y)| \le K|x-y|.\]
+    Then $g$ is continuous everywhere.
+\end{theorem}
+\begin{proof}
+    Let $g$ be defined as above. \\
+    Let $x_0$ be any real number. \\
+    Let $\varepsilon > 0$. \\
+    Take $\delta =\varepsilon / K$. \\
+    Let $x \in \mathbb R$ be such that $|x-x_0| < \delta = \varepsilon/K$. \\
+    Since $K > 0$, we have $K |x-x_0| < \varepsilon$. \\
+    Since $x,x_0 \in \mathbb R$, by the definition of $g$, we have
+    \[|g(x)-g(x_0)| \le K|x-x_0| < \varepsilon.\]
+    Thus, $g$ is continuous at all $x_0 \in \mathbb R$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{2}
+    Let $g$ be defined by
+    \[g(x)=\begin{cases}\sin(1/x) & x \neq 0 \\ 0 & x=0.\end{cases}\]
+    Then $g$ is discontinuous at $x_0 = 0$.
+\end{theorem}
+\begin{proof}
+    Let $g$ be defined as above. \\
+    Define a sequence $x_n = \frac{1}{\pi}\cdot \frac{1}{n+0.5}$. \\
+    This sequence obviously converges to $0$ since $0<x_n < \frac{1}{n}$ for all $n$. \\
+    For any $n$, we can calculate \[g(x_n) = \sin\left(\pi \left(n+\frac{1}{2}\right)\right) = (-1)^n.\]
+    Note that $\lim g(x_n)$ does not converge because $|g(x_n) - 0| = \frac{1}{2}$ for all $n$. \\
+    Also note that $g(\lim x_n) = g(0) = 0$. \\
+    Thus, $\lim g(x_n) \neq g(\lim x_n)$, so $g$ is not continuous at $0$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{3}
+    Let $f$ be a real-valued function with $\mathrm{dom}f \subseteq \mathbb R$. \\
+    Then $f$ is continuous at $x_0 \in \mathrm{dom} f$ if and only if for every monotone sequence $(x_n)$ in $\mathrm{dom}f$ that converges to $x_0$ we have $\lim f(x_n) = f(x_0)$.
+\end{theorem}
+\begin{proof}
+    Let $f$ be defined as above, and let $x_0 \in \mathrm{dom} f$. \\
+    One direction of the implication is obvious--- if $f$ is continuous at $x_0$, \emph{every} sequence $x_n$ converging to $x_0$ must have $\lim f(x_n) = f(\lim x_n)$. \\
+    To prove the other direction, we can prove the contrapositive. \\
+    Suppose that $f$ was discontinuous at $x_0$. \\
+    Let $x_n$ be a sequence with $\lim x_n = x_0$ but $\lim f(x_n) \neq f(x_0)$.\footnote{Abuse of notation, includes the possibility that $\lim f(x_n)$ diverges.} \\
+    Since $\lim f(x_n) \neq f(x_0)$, let $\varepsilon > 0$ be such that \[\forall N \in \mathbb N,\exists n>N,|f(x_n)-f(x_0)| \ge \varepsilon.\]
+    Let $y_n$ be a subsequence of $x_n$ with the property that $\forall n,|f(y_n) - f(x_0)| \ge \varepsilon$. \\
+    Note that $\lim f(y_n) \neq f(x_0)$ and $\lim y_n = x_0$ since it is a subsequence of $x_n$. \\
+    Theorem 11.4 of Ross states that every sequence has a monotone subsequence. \\ Let $z_n$ be a monotone subsequence of $y_n$. \\
+    Because $z_n$ is a subsequence of $y_n$, we must have $\lim z_n = x_0$. \\
+    Since $|f(z_n) - f(x_0)| \ge \varepsilon$ for all $n$, we must have that $\lim f(z_n) \neq f(x_0)$. \\
+    Thus, $f$ being discontinuous at $x_0$ implies that there exists a monotonic sequence $z_n$ with $\lim z_n = x_0$ and $\lim f(z_n) \neq f(x_0)$. \\
+    Finally, we get the desired contrapositive: if every monotone sequence with $\lim z_n = x_0$ satisfies $\lim f(z_n) = f(x_0)$, then $f$ is continuous at $x_0$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{4}
+    Let $j$ be a function on all of $\mathbb R$ with 
+    \[j(x+y)=j(x)j(y)\] for all $x,y \in \mathbb R$. \\
+    Suppose $j$ is continuous at $x= 0$. \\\
+    Then $j$ is continuous everywhere.
+\end{theorem}
+\begin{proof}
+    Let $j$ be defined as above. \\
+    First, consider the case that we have some $y \in \mathbb R$ such that $j(y) = 0$.  \\
+    Let $x \in \mathbb R$ be any real number, and note
+    \[ j(x)=j(y+(x-y))=j(y)j(x-y)=0.\]
+    In this case, $j$ is the constant function $0$ and is continuous everywhere. \\
+    Thus, we need only consider the case that $j(x)\neq 0$ for all $x \in \mathbb R$. \\
+    Let $x_n$ be a convergent sequence with $\lim x_n = x_0$. \\
+    Define $y_n=x_n - x_0$, and note $\lim y_n = 0$. \\
+    Since $j$ is continuous at $0$, we must have $\lim j(y_n) = j(0)$. \\
+    However, note $j(y_n)=j(x_n - x_0) = j(x_n)j(-x_0)$. \\
+    Since $j(-x_0) \neq 0$, we can write $j(x_n) = j(-x_0)^{-1} j(y_n)$.
+    \\ Because $j(y_n)$ is a convergent sequence, $j(x_n)$ is also a convergent sequence. \\
+    In fact, \[\lim j(x_n) = j(-x_0)^{-1} \lim j(y_n) = j(-x_0)^{-1}j(0).\]
+    Note that since $j(0)=j(x_0 -x_0)=j(x_0)j(-x_0)$, we have 
+    \[j(-x_0)^{-1} j(0) =j(x_0),\]
+    and $\lim j(x_n) = j(\lim x_n)$ as desired.
+    \end{proof}
+
+\newpage{}
+\begin{theorem}{5}
+    Let $f$ be defined on $\mathbb R$ by
+    \[f(x)=\begin{cases}\frac{1}{3}x+\frac{5}{3} &\quad x < 1 \\ -2x+4  &\quad 1 \le x < 2 \\ 3x -3  &\quad x \ge 2.\end{cases}\]
+    Then $f$ is discontinuous on $S=\{2\}$ and continuous on $\mathbb R \setminus S$.
+\end{theorem}
+\begin{proof}
+    Let $f$ be defined as above, and let $x_0 = 2$ (so $f(x_0) = 3$). \\
+    Let $\varepsilon = 1$, and let $\delta > 0$ be any positive real. \\
+    Let $\delta_2 = \min\{\delta, 1\}$. \\
+    Take $x = x_0 - \delta_2/2$, and note that $|x- x_0| < \delta_2\le \delta$. \\
+    Note also that $x < 2$, and $x > 1$. \\
+    Thus, 
+    \[f(x) =- 2x+4 = -2(x_0-\delta_2/2)+4=\delta_2.\]
+    With this, $|f(x)-f(x_0)|=|\delta_2-3|$, and since $0 < \delta_2 \le 1$, $2 \le |\delta_2-3|< 3$. \\
+    Thus, $\varepsilon = 1 < 2 \le |f(x)-f(x_0)|$, and $f$ is not continuous at $x_0 = 2$. \\
+
+    Now, consider $x_0 = 1$, so $f(x_0)=2$. \\
+    Let $\varepsilon > 0$, and take $\delta = \min \{\varepsilon/2, 1\}$. \\
+    Let $x \in \mathbb R$ be such that $|x-x_0| < \delta$. \\
+    If $x \ge x_0$, we have that $1\le x<x_0+\delta < x_0+1=2$. \\
+    Thus, $f(x) = -2x+4$, and \[|f(x)-f(x_0)|=|-2x+2|=2|-x+1|\le 2|x-x_0| < 2\delta \le \varepsilon.\]
+    On the other hand, if $x < x_0$, we have $f(x)=\frac{1}{3}x+\frac{5}{3}$ and so 
+    \[ |f(x)-f(x_0)|=\left|\tfrac{1}{3}x - \tfrac{1}{3}\right|=\tfrac{1}{3}|x-x_0|< \tfrac{1}{3}\delta<2\delta \le \varepsilon.\]
+    Thus, $f$ is continuous at $x_0 = 1$. \\
+
+    Finally, consider that $x_0 \in \mathbb R \setminus \{1,2\}$. \\
+    Let $\varepsilon > 0$, and take $0<\delta_0 < \min \{|x_0-1|,|x_0-2|\}$. \\
+    By construction, the interval $(x_0-\delta_0, x_0+\delta_0)$ must lie entirely within $(-\infty, 1)$, $[1,2)$, or $[2,\infty)$. \\
+    Thus, $f$ exactly equal to a continuous linear function on an open interval $U=(x_0-\delta_0, x_0+\delta_0)$. \\
+    Let $g$ be any continuous function such that $g\mid_U = f\mid_U$. \\
+    Take $\delta_1 >0$ such that $\forall x \in \mathbb R$, $|x-x_0|<\delta_1$ implies that $|g(x)-g(x_0)| < \varepsilon$. \\
+    Let $\delta = \min \{\delta_0, \delta_1\}$. 
+    Let $x \in \mathbb R$ be such that $|x-x_0| < \delta$. \\
+    Then since $\delta \le \delta_0$, we know $x \in U$ and since $|x-x_0|<\delta \le \delta_1$,
+    \[|f(x)-f(x_0)|=|g(x)-g(x_0)|< \varepsilon.\]
+    Thus, $f$ is continuous at $x_0$.
+\end{proof}
+
+\newpage{}
+\begin{theorem}{6}
+    Suppose $f$ is a real-valued function with $\mathrm{dom}f = \mathbb R$. \\
+    Suppose $f$ is periodic and continuous on its domain. \\
+    Then $f$ is bounded.
+\end{theorem}
+\begin{proof}
+    Let $f$ be a periodic function defined as above. \\
+    Let $p > 0$ be such that for all $n \in \mathbb Z$ and $x \in \mathbb R$, $f(x+n \cdot p) = f(x)$. \\
+    We can show that $f([-p,p]) = f(\mathbb R)$: \\
+    Let $x$ be any real number. \\
+    Consider the set $S = \{ n \in \mathbb N : p\cdot n < |x|\}$. \\
+    If $S$ is empty, this means that $p \ge |x|$ and so $x \in [-p, p]$. \\
+    If $S$ is nonempty, by Archimedean property it is a bounded set of integers and is thus finite. \\
+    Let $n = \max S$. \\
+    Since $n+1$ is an integer not in $S$, we must have $p\cdot(n+1)\ge |x|$ or $p \ge |x| - p\cdot n$. \\
+    Since $p \cdot n < |x|$, we get $0 <|x|-p\cdot n \le p$. \\
+    If $x>0$, let $x_0 = x - p\cdot n$. \\
+    Then $x_0 \in (0,p] \subseteq [-p,p]$, and $f(x)=f(x_0+p\cdot n)=f(x_0)$. \\
+    If $x \le 0$, let $x_0 = x+p\cdot n$. \\
+    Then $-x_0 = |x|-p\cdot n$, so $x_0 \in [-p,0) \subseteq [-p,p]$, and $f(x)=f(x_0-p\cdot n)=f(x_0)$.
+    Thus, for all $x\in \mathbb R$, we can find some $x_0 \in [-p,p]$ such that $f(x)=f(x_0)$, and $f([-p,p]) = f(\mathbb R)$.
+    
+    Assume FTSOC that $f$ is unbounded. \\
+    Because $f([-p,p]) = f(\mathbb R)$, we can define a sequence $x_n$ in $[-p,p]$ such that $|f(x_n)|>n$ for all $n \in \mathbb N$. \\
+    Since $(x_n)$ is a bounded sequence, by Bolzano-Weierstrass we must have a convergent subsequence $(x_{n(j)})$. \\
+    Then, we have that $\lim f(x_{n(j)})$ does not converge as $|f(x_{n(j)})| \ge n(j)$ is an unbounded sequence. \\
+    However, $f(\lim x_{n(j)})$ must be some real number as $\mathrm{dom} f = \mathbb R$. \\
+    This contradicts $f$ being continuous at $\lim x_{n(j)}$, i.e. $f(\lim x_{n(j)}) = \lim f(x_{n(j)})$. \\
+    Our assumption was false and $f$ is bounded.
+\end{proof}
+
+Oh this is just Extreme Value Theorem.
+\end{document}
