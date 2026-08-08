@@ -23,7 +23,7 @@ Anyways, in the first part of this video, I want to go over the basics of how to
 
 I want you to come away with (at least a vague) picture of how your code gets lowered down into the base type theory. Just as you might have a vague mental model for how the C code you write becomes assembly that your CPU can understand, I want to build a model of how Lean code becomes lambda terms that the Lean kernel can typecheck. I think that only with this deep understanding can you write truly morally correct, not just technically correct, code, and nobody really emphasizes this! Now, this is going to be a lot, and you will definitely have to play around with Lean yourself to get any sort of understanding of this stuff, so it might be good to come back and rewatch this video, as you might be able to really get a larger percentage on a second watch. (Plus, it would be cool if people viewbotted my video to 300% retention, that would also be nice...)
 
-Alright! That's it for the long rambling intro-- now let's learn some lean! The first step is to setup lean, and the normal setup is just vscode with the Lean4 extension. You can figure it out, I trust you.
+Alright! That's it for the long rambling intro-- now let's learn some lean! The first step is to set up lean, and the normal setup is just vscode with the Lean4 extension. You can figure it out, I trust you.
 
 Anyways, I want to start with the type system, and unsurprisingly, Lean supports many of the types that you'd expect from a programming language. We can start by defining a symbol:
 
@@ -112,7 +112,7 @@ We are literally passing `5` into `importantMessage` to get a function from `Str
 
 This is something that took some time to get used to when I was first getting into functional programming. Because you dont write any parentheses, its very easy to forget that function application is left-associative and has a very high operator precedence, so I found myself often writing the wrong thing in more complicated expressions.
 
-Alright, so far so good. But now, its time for the really cool part-- how does lean handle generics and templates? In C++ we might say `std::vector<int>` or `std::vector<std::string>`, and in Java we might say `ArrayList<Integer>` or `ArrayList<String>`. In Lean, we say `List Int` and `List String`:
+Alright, so far so good. But now for something pretty cool-- how does lean handle generics and templates? In C++ we might say `std::vector<int>` or `std::vector<std::string>`, and in Java we might say `ArrayList<Integer>` or `ArrayList<String>`. In Lean, we say `List Int` and `List String`:
 
 ```lean ctx
 def myList : List Int := [1, 2, 3, 4, 5]
@@ -125,7 +125,7 @@ Instead of being a bespoke language feature, generics are just functions! `List`
 #check (List : Type → Type)
 ```
 
-`List` is quite literally a function that takes in any type and returns a new type, the type of Lists of that type! In fact, it is a monoid in the category of endofunctors, but thats neither here nor there... The main point here is that _types_ have a type:
+`List` is just a function that takes in any type and returns a new type, the type of Lists of that type! In fact, it is a monoid in the category of endofunctors, but thats neither here nor there... The main point here is that _types_ have a type:
 
 ```lean ctx
 #check (String : Type)
@@ -133,7 +133,7 @@ Instead of being a bespoke language feature, generics are just functions! `List`
 #check (List Int : Type)
 ```
 
-And since types can behave just like normal objects in Lean, we can write our own custom generic functions like so:
+And since types can behave just like normal objects in Lean, we can leverage the fact that Lean is _dependently typed_ to write our own custom generic functions like so:
 
 ```lean ctx
 def reverseList (α : Type) (ls : List α) : List α :=
@@ -235,13 +235,13 @@ Again, I want to emphasize that the universe levels 1,2,3 do not exist _within_ 
 A few more examples to see how the universe levels keep stepping up:
 
 ```lean ctx
-#check List.{1} Type
+#check List Type
 -- List Type : Type 1
 
-#check List.{2} (Type 1)
+#check List (Type 1)
 -- List (Type 1) : Type 2
 
-#check List.{3} (Type 2)
+#check List (Type 2)
 -- List (Type 2) : Type 3
 ```
 
@@ -278,7 +278,7 @@ def reverseList.{u} {α : Type u} (ls : List α) : List α :=
 
 Unfortunately, we haven't told Lean how to print out Lists of functions on Types, so we can't see the value of the list, but trust me bro-- it worked!
 
-Anyways, that's about it for universes for now. There is one other special universe that we haven't covered yet, `Prop`, the universe of Propositions, but it's an exception to the general rule and we'll cover it once we start proving mathematical theorems.
+That's about it for universes for now, though there is one other special universe that we haven't covered yet, `Prop`, the universe of Propositions. However, it's an exception to the general rule, and we'll cover it once we start proving mathematical theorems.
 
 Now, let's take a step back. We've just seen how type universes like `Type u` work, and we've also seen how to define, type-check, and evaluate dependently-typed functions like `reverseList`. It turns out that these are already two of the three categories of fundamental objects in Lean's type theory! That's right-- everything in Lean is either a type universe, a dependent function, or some form of an _inductive type_.
 
@@ -286,15 +286,323 @@ Now arguably, you might want to count quotients as a kind of fourth fundamental 
 
 For now, just know that inductive types are by far the biggest and most powerful category of the three, so we will get to know them slowly.
 
+First, I want to point out that we have been using inductive types this entire time! `List`, `Int`, `String` are all examples of inductive types, and the defining feature of inductive types is that we can `match` them against patterns. Before we get to those types, let's see some simpler example of an inductive type:
+
+```lean ctx
+inductive Weekday where
+| monday
+| tuesday
+| wednesday
+| thursday
+| friday
+
+#check Weekday          -- Weekday : Type
+#check Weekday.monday   -- Weekday.monday : Weekday
+#check Weekday.tuesday  -- Weekday.tuesday : Weekday
+-- and so on...
+```
+
+If you are familiar with Rust, note that this looks exactly like a Rust `enum`! When we define the `Weekday` type, we have introduced all these new constants. We have our new type `Weekday : Type` of course, but we also have these _constructors_ for this type. These constructors are exactly the cases that we have to cover with a `match`:
+
+```lean ctx
+def toDayNumber (day : Weekday) : Int :=
+  match day with
+  | .monday => 1
+  | .tuesday => 2
+  | .wednesday => 3
+  | .thursday => 4
+  | .friday => 5
+
+#eval toDayNumber Weekday.wednesday  -- 3
+```
+
+One thing to note about match statements in Lean is that they have to be _exhaustive_. That means we have to provide a value for every possible input, so we have to cover every single constructor of `Weekday` with a case. Under the hood when the kernel type checks, Lean will essentially translate your `match` statement into a call to `Weekday.rec`, which is a function that is automatically generated for every inductive type. This function is called the _recursor_:
+
+```lean ctx
+#check Weekday.rec
+-- Weekday.rec.{u} {motive : Weekday → Sort u} (monday : motive Weekday.monday) (tuesday : motive Weekday.tuesday)
+--  (wednesday : motive Weekday.wednesday) (thursday : motive Weekday.thursday) (friday : motive Weekday.friday)
+--  (t : Weekday) : motive t
+```
+
+Let's digest this type signature slowy. First, note that we have a type universe variable, and this is just so our `match` expression can return a value that lives in any type universe. Here, we use `Sort` instead of `Type` to handle the case of `Prop`, the universe of propositions. The details aren't important for now, but just know that `Sort u` is literally the same thing as `Type (u+1)`, so it is just a different numbering system.
+
+We see that the first argument is `motive`, and this is just a method for enabling different arms of our `match` to be dependently typed. In the case of our `toDayNumber` function, our `motive` will just be this constant function (`fun x => Int`), always returning `Int`.
+
+Then, we see an argument for each of the constructors we specified for our inductive type, and these will be the values that our `match` expression will take on in each case.
+
+Finally, we take the argument `t : Weekday`, and this is the value we match against. The entire function then returns the value that the `match` should take on! Thus, our `toDayNumber` function in theory can be written as thus:
+
+```lean ctx
+noncomputable def toDayNumberV2 (day : Weekday) : Int :=
+  @Weekday.rec (fun _ => Int) 1 2 3 4 5 day
+```
+
+The fact that we have to mark this function as `noncomputable` is just a quirk of lean, as it only likes to generate executable code for `match` expressions but not raw calls into the recursor. Did I mention that you can compile your lean code into executable binaries? You can totally write real programs with Lean, but we won't be investigating that side of the language much.
+
+Also, notice how the motive is an implicit parameter, but I'm choosing to explicitly write it out here! Lean's elaborator is able to automatically infer and construct the `motive` for your `match` statements, so normally you don't have to worry about writing the boilerplate for it even if you're using raw calls to the recursor.
+
+However, for completeness, I want to show you an example of a slightly more complicated `motive`. If for some reason we wanted to write a function that returns values of different types depending on what day it is, we can do that!
+
+```lean ctx
+def myMotive (d : Weekday) : Type :=
+  match d with
+  | .monday => Int
+  | .tuesday => Bool
+  | .wednesday => String
+  | .thursday => List Bool
+  | .friday => List Int
+
+def myFunction (d : Weekday) : myMotive d :=
+  match d with
+  | .monday => (5 : Int)
+  | .tuesday => Bool.true
+  | .wednesday => "it's wednesday"
+  | .thursday => [Bool.true, Bool.false]
+  | .friday => [1, 2, 3]
+
+#eval myFunction Weekday.monday     -- 5
+#eval myFunction Weekday.wednesday  -- "it's wednesday"
+```
+
+Note that we have to use the recursor to build the `myMotive` function before we can use it in our definition of `myFunction`! However, it won't be turtles all the way down, as the motive for the motive will just be a constant function:
+
+```lean ctx
+noncomputable def myMotiveV2 (d : Weekday) : Type :=
+  @Weekday.rec (fun _ => Type) Int Bool String (List Bool) (List Int) d
+
+noncomputable def myFunctionV2 (d : Weekday) : myMotiveV2 d :=
+  @Weekday.rec myMotiveV2 (5 : Int) Bool.true "it's wednesday" [Bool.true, Bool.false] [1, 2, 3] d
+```
+
+With this, we have a firm handle on these simple inductive types, so now we are ready to see something slightly more complicated. First, let's pull up our old definition of our `Weekday` type, and let's write it out more verbosely by just adding a bunch of type annotations:
+
+```lean ctx2
+inductive Weekday : Type where
+| monday : Weekday
+| tuesday : Weekday
+| wednesday : Weekday
+| thursday : Weekday
+| friday : Weekday
+```
+
+Now, let's investigate the `Option` type, which is a type that can either contain `some` value or be `nothing`. Lean already has this type built in, so let's call our type `Opt` like so. Although the real `Option` is polymorphic over universes, let's keep our version simple.
+
+```lean ctx
+inductive Opt (α : Type) : Type where
+| some (_value : α) : Opt α
+| nothing : Opt α
+
+#check (Opt : Type → Type)
+
+#check Opt.some
+-- Opt.some {α : Type} (value : α) : Opt α
+
+#check Opt.nothing
+-- Opt.nothing {α : Type} : Opt α
+
+#check Eq.rec
+```
+
+Notice that we are introducing two new concepts: First, we are now defining an inductive family where we define a new inductive type `Opt α` for every type `α`. Here, since everything exists within our type theory, you can think of `Opt` as quite literally a function from `Type → Type`, just like `List`.
+
+Second, we have a constructor that is taking in a parameter! Instead of just being a constant, a `some` option also holds some data. This will be familiar if you have used Rust's enums, and in C this is similar to a `union` of `struct`s. These two constructors implicitly quantify over types to handle `Option α` for any type `α`, and in the case of `some`, we also take an additional parameter for the inner value of the option. Again, these constructors are literally just irreducible, opaque functions that return an `Opt α`, and they are the only ways to make a `Opt α`.
+
+Let's take a look at some code for how we would use `Opt`:
+
+```lean ctx
+def greet (name : Opt String) : String :=
+  match name with
+  | .some n => "curse you, " ++ n
+  | .nothing => "nobody is attacking me!"
+
+#eval greet Opt.nothing
+-- "nobody is attacking me!"
+
+#eval greet (Opt.some "Odysseus")
+-- "curse you, Odysseus"
+```
+
+Notice how we can access the inner value of the `some` in our `match` expression! Also, as a side note, notice that we never really have to give a name to this inner value, so in fact we could have written this:
+```lean ctx2
+inductive Opt (α : Type) : Type where
+| some : α → Opt α
+| nothing : Opt α
+```
+This is just a different spelling of the same thing, but it is slightly more cryptic. As you can see though, the linter does want us to spell it this way, so iggb.
+
+Anyways, let's take a look at how the recursor works:
+
+```lean ctx2
+#check Opt.rec
+-- Opt.rec.{u} {α : Type} {motive : Opt α → Sort u} (some : (a : α) → motive (Opt.some a)) (nothing : motive Opt.nothing)
+--  (t : Opt α) : motive t
+```
+
+This is almost the exact same as we saw with our `Weekday` type, except that `some` case has more information: the value we return for the `some` case is allowed to depend on the inner value! We give the recursor a function instead of a constant value to return. Again, we can write `greet` in terms of the raw recursor:
+
+```lean ctx2
+noncomputable def greet (name : Opt String) : String :=
+  @Opt.rec String (fun _ => String) (fun n => "curse you, " ++ n) "nobody is attacking me!" name
+```
+
+Ok, so far this seems very boring, but even with just sets of `n` elements like are `Weekday` example, there is already some very unintuitive behavior! If we consider the analogy of inductive types being sets, there are two very important sets that we should pay attention to: the empty set, a set with zero elements, and the singleton set, a set with exaclty one element.
+
+```lean ctx
+inductive EmptySet where
+
+inductive SingletonSet where
+| elem : SingletonSet
+```
+
+Yes, defining an inductive type with zero constructors is totally legal! In Rust, this `EmptySet` type is called `Never` and spelled with an exclamation point `!`. The `SingletonSet` type here is called `Unit`, and can be thought of as the type of empty tuples. In the language of category theory, these two types are special because they are the initial and terminal objects of our category. Namely, with these two types, we can define these two very special functions:
+
+```lean ctx
+def intoSingleton {α : Type} : α → SingletonSet :=
+  fun _ => SingletonSet.elem
+
+def fromEmpty {α : Type} : EmptySet → α :=
+  fun x => nomatch x
+```
+
+For every type `α`, we can define a function `intoSingleton` that maps `α` to `SingletonSet`. This function ignores its input and always just returns the single element of the singleton set, and this function is the only possible function you can define from `α` to `SingletonSet`.
+
+Conversely, for every type `α`, you can also define a function from `EmptySet` to `α`, by pattern matching on the input `x : EmptySet`. Since `EmptySet` is a type with no constructors, our `match` statement on `x` has no cases at all, and in Lean we write this as `nomatch`. In fact, this `fromEmpty` function we have written is exactly the same as the `EmptySet` type's recursor!
+
+```lean ctx
+#check EmptySet.rec
+-- EmptySet.rec.{u} (motive : EmptySet → Sort u) (t : EmptySet) : motive t
+
+noncomputable def fromEmptyV2 {α : Type} : EmptySet → α :=
+  EmptySet.rec
+```
+
+This is very strange. We have created a value of type `α` out of thin air, without writing any code at all. All this weirdness comes from the fact that we are defining a function on the empty set.
+
+Here, remember this (`x : EmptySet`) can be implicitly read as `x` is an element of the empty set, which seems like a logical impossibility but is actually perfectly valid. Remember the context: we are defining a function. In the body of the function, we are working under the assumption that someone passed to us some element `x : EmptySet`, but since this `x` got passed to us from the outside, the act of using it to define this function is still perfectly fine.
+
+But this discussion does hint at something pretty important: it will be utterly _impossible_ to actually call this function! There are no constructors for `EmptySet`, so you can never actually make a term `el : EmptySet`, so you can never actually call `fromEmpty el`. This is why Rust calls this type `Never`.
+
+Even though this function can never be called, it is still a real function. In fact, it is the _only_ possible function that you can define from `EmptySet` to `α` for any type `α`.
+
+Formally, a function $`f : X → Y` can be thought of as simply a set of (input, output) pairs ($`f ⊆ X × Y`). For example, consider these functions and the sets that they correspond to:
+
+`toString : Int → String`
+$$`\{..., (-2, "-2"), (-1, "-1"), (0, "0"), (1, "1"), ...\}`
+...
+
+The first part of every pair in the set is from `X` and the second part is from `Y`. It must be a well defined total function, so every element `x ∈ X` must appear in exactly one pair in `f`.
+
+Now consider the case that `X` is the empty set. Then, we would need $`f : ∅ → Y` to be a set of pairs, where the first of each pair is from the empty set and the second is from `Y` ($`f ⊆ ∅ × Y`). Since the empty set is empty, there is only one such possible set of pairs: the empty set ($`f ⊆ ∅ × Y = ∅ \implies f = ∅`). `f` is an empty relation, and it is unique-- the only way to define a function from `∅` to `Y`.
+
+As you can see, in this view we have completely avoided the need to choose an element of `Y` in order to define our function, and one can think of the `nomatch` in Lean as doing the same thing. We are taking advantage of the properties of the empty sets to vacously construct our function: In math, it would be perfectly valid to say that "for all numbers X in the empty set, X is prime and X is equal to 4". In Lean, it is perfectly valid for our function `fromEmpty` to say "for all terms of type `EmptySet`, I can give you a term of type `α`".
 
 
+So, hopefully you are getting the hang of these simple inductive types, but there is still so much more to cover!
+All of the data types we have seen so far have not been recursive, and recursion is really the core of what inductive types are for! I think we are finally ready to tackle the `List` type, and this time I will make it polymorphic over universes. This will code will be exactly the same as how the real `List` type is implemented in Lean:
+
+```lean ctx
+inductive MyList.{u} (α : Type u) : Type u where
+| empty : MyList α
+| cons : α → MyList α → MyList α
+
+#check MyList.cons
+-- MyList.cons.{u} {α : Type u} : α → MyList α → MyList α
+
+-- this is the list [1, 2, 3]
+def oneTwoThree : MyList Int :=
+  MyList.cons 1 (MyList.cons 2 (MyList.cons 3 MyList.empty))
+```
+
+If you have taken an intro to computer science class, you will recognize what we have written here as a linked list! Every list is either the empty list (`MyList.empty`), or it contains some first element along with a (possibly empty) list of the remaining elements. Just like with regular lists, we can use `match`'s pattern matching to define recursive functions-- for example, we can write a function that appends an element to the end of the list:
+
+```lean ctx
+def appendAtEnd.{u} {α : Type u} (ls : MyList α) (a : α) : MyList α :=
+  match ls with
+  | .empty => MyList.cons a MyList.empty
+  | .cons x xs => MyList.cons x (appendAtEnd xs a)
+
+#eval appendAtEnd oneTwoThree 4
+-- MyList.cons 1 (MyList.cons 2 (MyList.cons 3 (MyList.cons 4 (MyList.empty))))
+```
+
+Here, if we want to append `a` to the end of an empty list, we can just return a new list with a single element. Otherwise, we can recurse down into the list: mentally we take out the first element `x` and then use a recursive call to append `a` to the list of reamining elements `xs`.
+
+Note that this code is extremely similar to what we were able to write with Lean's built in lists in `reverseList`. It is almost one-to-one, accounting for the fact that the functions are doing two slightly different things. One of the only differences is that the built in `List` has nicer notation, where we can write the `.empty` constructor as simply `[]`, and we can write `x::xs` instead of `.cons x xs`. We can also write `[1, 2, 3]` instead of repeatedly calling the constructor `MyList.cons`. All of this, however, are just custom notation and macros, and it just expands out to the same thing. That's right, you can define custom infix notations and macros in Lean itself, and if you ctrl/command click in VsCode, you can actually just read the Lean code that implements these syntaxes! Even things like `match` expressions and the `+` operator are defined in Lean itself.
+
+```
+-- `+` gets translated to a call to the `hAdd` function.
+-- this actually uses typeclasses, which is a feature we haven't covered yet.
+@[inherit_doc] infixl:65 " + "   => HAdd.hAdd
+
+-- macro for the [1, 2, 3] list syntax
+macro_rules
+  | `([ $elems,* ]) => do
+    -- NOTE: we do not have `TSepArray.getElems` yet at this point
+    let rec expandListLit (i : Nat) (skip : Bool) (result : TSyntax `term) : MacroM Syntax := do
+      match i, skip with
+      | 0,   _     => pure result
+      | i+1, true  => expandListLit i false result
+      | i+1, false => expandListLit i true  (← ``(List.cons $(⟨elems.elemsAndSeps.get!Internal i⟩) $result))
+    let size := elems.elemsAndSeps.size
+    if size < 64 then
+      expandListLit size (size % 2 == 0) (← ``(List.nil))
+    else
+      `(%[ $elems,* | List.nil ])
+```
+
+These features are obviously very cool and very useful, but just as obviously it's beyond the scope of this video.
+
+Anyways, back to inductive types. Let's see how the List type's recursor works:
+
+```lean ctx
+#check MyList.rec
+-- MyList.rec.{u_1, u} {α : Type u} {motive : MyList α → Sort u_1} (empty : motive MyList.empty)
+--  (cons : (a : α) → (a_1 : MyList α) → motive a_1 → motive (MyList.cons a a_1)) (t : MyList α) : motive t
+```
+
+TODO TODO TODO
+
+structural recursion
+
+variables
+```lean ctx
+universe u
+variable {α : Type u}
+```
+actually this is not necessary, but they are useful if you want an argument that is not a just type.
+
+```lean ctx
+noncomputable def appendAtEndV2 (ls : MyList α) (a : α) : MyList α :=
+  @MyList.rec α (fun _ => MyList α) (MyList.cons a MyList.empty)
+    (fun x _xs append_of_xs => MyList.cons x append_of_xs) ls
+
+#check appendAtEndV2
+-- appendAtEndV2.{u} {α : Type u} (ls : MyList α) (a : α) : MyList α
+```
+
+proof of termination: `WellFounded.fix`
+- induction implies complete induction
+- everything gets rephrased into a structural recursion
+
+partial functions. kinda like the opposite of noncomputable.
 
 
+```lean ctx
+inductive NatNum : Type where
+| zero : NatNum
+| succ : NatNum → NatNum
+```
+
+TODO TODO
 
 
+```lean ctx2
+inductive Equals {α : Type} (a : α) : α → Type where
+| refl : Equals a a
 
-
-
+#print Equals.rec
+```
 
 
 
