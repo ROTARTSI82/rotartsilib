@@ -230,6 +230,8 @@ Anyways, what's the point of all this? So far this might all seem like a load of
 -- List.{u} : Type u → Type u
 ```
 
+Note that `List` takes a `Type u` returns another `Type u` and not a `Type`-- a type that lives in a smaller universe cannot contain things from a bigger universe!
+
 Again, I want to emphasize that the universe levels 1,2,3 do not exist _within_ Lean's type theory, but in fact are part of the metatheory. This means that in the syntax of `List.{u}`, the `u` is not actually a parameter into a function, but is a variable at the level of the metatheory. We have to consider `List.{u}` as literally an infinite family of functions, NOT as a function that takes a universe level `u` and gives you a function from `Type u` to `Type u`, however tempting that might be.
 
 A few more examples to see how the universe levels keep stepping up:
@@ -247,7 +249,16 @@ A few more examples to see how the universe levels keep stepping up:
 
 <explanation>
 
-Anyways, this means we can do fun things like make lists of types and such:
+On a somewhat unrelated note, another detail about universes that I want to highlight is that universe levels in Lean are not cumulative. This means that if `X : Sort u` and `Sort u : Sort v`, then it is not true that `X : Sort v`. If you read academic papers about type theory or use another proof assistant like Rocq/Coq, you will find that they often take this approach. Lean chooses to avoid this, as this makes type checking easier and allows the Lean kernel to be simpler. Part of the Lean philosphy is to make the kernel as simple as possible, as the kernel is what garauntees the correctness of your proofs.
+
+Also, the fact that universes are not cumulative is not a problem at all: you can define a function `ULift.{u,v}` that lifts values from one universe to a higher one:
+```lean ctx
+#check ULift
+-- ULift.{r, s} (α : Type s) : Type (max s r)
+```
+This means that you can write anything that you might want to write if universes were cumulative, the only caveat being that you have to explicitly convert between universe levels with this `ULift` function. At the cost of some extra boilerplate, the typechecking algorithm can be simplified! This `ULift` function is also not anything special, and it is actually just another example of something called an _inductive type_, which is a category that includes types like `String` and `Int`.
+
+Anyways, the heirarchy of universes means that we can do fun things like make lists of types and such:
 
 ```leanInit ctx
 ```
@@ -408,7 +419,7 @@ Notice that we are introducing two new concepts: First, we are now defining an i
 
 Second, we have a constructor that is taking in a parameter! Instead of just being a constant, a `some` option also holds some data. This will be familiar if you have used Rust's enums, and in C this is similar to a `union` of `struct`s. These two constructors implicitly quantify over types to handle `Option α` for any type `α`, and in the case of `some`, we also take an additional parameter for the inner value of the option. Again, these constructors are literally just irreducible, opaque functions that return an `Opt α`, and they are the only ways to make a `Opt α`.
 
-Let's take a look at some code for how we would use `Opt`:
+Ok, let's take a look at some code for how we would use `Opt`:
 
 ```lean ctx
 def greet (name : Opt String) : String :=
@@ -455,7 +466,7 @@ inductive SingletonSet where
 | elem : SingletonSet
 ```
 
-Yes, defining an inductive type with zero constructors is totally legal! In Rust, this `EmptySet` type is called `Never` and spelled with an exclamation point `!`. The `SingletonSet` type here is called `Unit`, and can be thought of as the type of empty tuples. In the language of category theory, these two types are special because they are the initial and terminal objects of our category. Namely, with these two types, we can define these two very special functions:
+Yes, defining an inductive type with zero constructors is totally legal! In Rust, this `EmptySet` type is called `Never` and spelled with an exclamation point (`!`). The `SingletonSet` type here is called `Unit`, and can be thought of as the type of empty tuples. In the language of category theory, these two types are special because they are the initial and terminal objects of our category. Namely, with these two types, we can define these two very special functions:
 
 ```lean ctx
 def intoSingleton {α : Type} : α → SingletonSet :=
@@ -465,9 +476,27 @@ def fromEmpty {α : Type} : EmptySet → α :=
   fun x => nomatch x
 ```
 
-For every type `α`, we can define a function `intoSingleton` that maps `α` to `SingletonSet`. This function ignores its input and always just returns the single element of the singleton set, and this function is the only possible function you can define from `α` to `SingletonSet`.
+Let's look at `SingletonSet` first. For every type `α`, we can define a function `intoSingleton` that maps `α` to `SingletonSet`. This function ignores its input and always just returns the single element of the singleton set, and this function is the only possible function you can define from `α` to `SingletonSet`.
 
-Conversely, for every type `α`, you can also define a function from `EmptySet` to `α`, by pattern matching on the input `x : EmptySet`. Since `EmptySet` is a type with no constructors, our `match` statement on `x` has no cases at all, and in Lean we write this as `nomatch`. In fact, this `fromEmpty` function we have written is exactly the same as the `EmptySet` type's recursor!
+From a category theoretic perspective, there is also another important property that this `SingletonSet` has. First, notice that functions `SingletonSet → α` necessarily must be constant functions, so these functions correspond one-to-one with terms of the type `α`.
+
+```lean ctx
+def fromSingleton {α : Type} (a : α) : SingletonSet → α :=
+  fun x => match x with
+    | .elem => a
+```
+
+This property is exactly encoded in the type of the `SingletonSet`'s recursor:
+
+```lean ctx
+#check SingletonSet.rec
+-- SingletonSet.rec.{u} {motive : SingletonSet → Sort u} (elem : motive SingletonSet.elem) (t : SingletonSet) : motive t
+
+noncomputable def fromSingletonV2 {α : Type} (a : α) : SingletonSet → α :=
+  SingletonSet.rec a
+```
+
+Conversely we can also look the `EmptySet`, which is dual to the `SingletonSet`. For every type `α`, you can define a unique function from `EmptySet` to `α` by pattern matching on the input `x : EmptySet`. Since `EmptySet` is a type with no constructors, our `match` statement on `x` has no cases at all, and in Lean we write this as `nomatch`. In fact, this `fromEmpty` function we have written is exactly the same as the `EmptySet` type's recursor!
 
 ```lean ctx
 #check EmptySet.rec
@@ -497,12 +526,146 @@ Now consider the case that `X` is the empty set. Then, we would need $`f : ∅ �
 
 As you can see, in this view we have completely avoided the need to choose an element of `Y` in order to define our function, and one can think of the `nomatch` in Lean as doing the same thing. We are taking advantage of the properties of the empty sets to vacously construct our function: In math, it would be perfectly valid to say that "for all numbers X in the empty set, X is prime and X is equal to 4". In Lean, it is perfectly valid for our function `fromEmpty` to say "for all terms of type `EmptySet`, I can give you a term of type `α`".
 
+In fact, this analogy is the basis for mathematics in Lean! We can think of the `SingletonSet` as encoding 'True' and the `EmptySet` as encoding 'False'. Types correspond to propositions, and terms of the type correspond to proofs of the proposition: 'True' always has a trivial proof, but 'False' has no possible proof. This is called the Curry-Howard correspondence, and I suppose now it is finally time to explain how to do math in Lean and how the `Prop` universe works.
+
+First, the `Prop` universe. Every mathematical proposition lives in this type universe, and it lives at the bottom of the type universe heirarchy. `Prop` can also be written as `Sort 0` or just `Sort`.
+
+```lean ctx
+#check Prop    -- Prop : Type
+#check Sort 0  -- Prop : Type
+```
+
+As mentioned when I skipped over it initially, `Prop` does not follow the normal rules for type universes. This is because lean has a feature called _proof irrelevance_ that causes some weirdness, but I will talk more about that later. For now, just know that Lean considers two proofs of the same proposition as literally the same object, even if these two proofs were constructed in completely different ways. This has the effect of essentially forcing every type in the `Prop` universe to be either be empty like `EmptySet` or contain exactly one term like `SingletonSet`. This makes proofs easier to reason about
+
+Again, it requires some finesse to avoid having this lead to logical paradoxes, but we'll cover that later. First, let's see how to express various logical statements as types. We would like to be able to express the following logical statements as types in the `Prop` universe:
+
+true, false, and, or, 'not', 'implies', 'for all', 'there exists'.
+
+```lean ctx
+inductive MyTrue : Prop where
+| mk : MyTrue
+
+inductive MyFalse : Prop where
+
+inductive MyAnd (P : Prop) (Q : Prop) : Prop where
+| intro (_proofOfP : P) (_proofOfQ : Q) : MyAnd P Q
+
+inductive MyOr (P : Prop) (Q : Prop) : Prop where
+| inl (_proofOfP : P) : MyOr P Q
+| inr (_proofOfQ : Q) : MyOr P Q
+```
+
+First, we see that `MyTrue` and `MyFalse` is the same thing as our `SingletonSet` and `EmptySet` that we just saw. Then, we see that we can define our logical connectives, `And` and `Or`: our `And` type has one constructor.
+
+```
+MyAnd.intro : P → Q → MyAnd P Q
+```
+
+It takes in both a proof of P and a proof of Q, and it constructs a proof of `P ∧ Q`. This makes sense-- to prove `P ∧ Q`, you must separately prove both `P` and `Q`.
+
+Similarly, our `Or` type has two constructors, `inl` for 'in from the left' and `inr` for 'in from the right'.
+
+```
+MyOr.inl : P → MyOr P Q
+MyOr.inr : Q → MyOr P Q
+```
+
+To prove `P ∨ Q`, you can either prove `P` or prove `Q`. Thus, a proof of `P ∨ Q` is either just a proof of `P` or a proof of `Q`.
+
+If you're familiar with algebraic datatypes, you will recognize that `And` is just the algebraic product type, and `Or` is just the algebraic sum type! `And` is simply a `struct`, and `Or` is simply a Rust `enum` or a C `union`. In the language of sets, `And` is the cartesian product, and `Or` is the disjoint union or 'direct sum'.
+
+Ok then, next up is 'implies'. Remember that 'P implies Q' just means that 'if P is true, then Q is also true'. Let's begin by reviewing the truth table for 'implies':
+
+```
+| P | Q | P → Q |
+| - * - * ----- |
+| F | F | T     |
+| F | T | T     |
+| T | F | F     |
+| T | T | T     |
+```
+
+<concrete example: "drinking alcohol" => "over 18">
+
+This truth table asks the question 'if P and Q take on these specific values, would it be true that P implies Q?'. First off, if P is false, then 'P implies Q' would be vacously true, since the condition for it to mean anything has not been met. Our rule that 'if P then Q' does not come into effect if P is not true in the first place!
+
+On the other hand, if P is true and Q is also true, the our rule that "if P then Q" is obviously working. This corresponds to _modus ponens_, and it is intuitively the normal way one would apply the rule.
+
+Finally, the only row where `P → Q` is false is the case where P is true, but Q is not true. This case is a direct counterexample to our rule that "if P, then Q", and it corresponds to _modus tollens_ or the contrapositive of the statement.
+
+With this truth table in mind, here's how you would encode this as a type: the logical statement 'P implies Q' corresponds to type of functions from P → Q! To prove that `P` implies `Q`, one needs to provide a function that takes in a proof of `P` and returns a proof of `Q`. Note also that if `P` is in `Prop` and `Q` is in `Prop`, then the function type `P → Q` is also in `Prop`. This is the behavior that we would expect from any type universe, for example `Int : Type` and `String : Type`, so the function type `Int → String : Type`.
+
+Anyways, look at the truth table: the first two rows correspond to the `fromEmpty` function we saw before: we are always able to construct a function that takes in a proof of a false proposition (or, an element of the `EmptySet`) and returns a proof of any proposition whatsoever.
+
+```lean ctx
+theorem fromFalse (Q : Prop) : MyFalse → Q :=
+  fun x => nomatch x
+
+-- or, alternatively:
+theorem fromFalseV2 (Q : Prop) : MyFalse → Q :=
+  MyFalse.rec
+```
+
+Here, `theorem` is basically the same thing as `def`, except you are forced to ultimately return a value in the `Prop` universe, meaning you are not allowed to return a value whose type lives in any other universe.
+
+Under this interpretation, the weird behavior of the empty set's recursor corresponds to the _principle of explosion_ in logic, where once you have a proof of a false statement, you can prove anything at all! _ex falso quodlibet_.
+
+Similarly, for two true propositions `P` and `Q`, one is able to construct a function that maps the proof of `P` to the proof of `Q`, thereby proving that `P` implies `Q`. Remember that `P` and `Q` are essentially the `SingletonSet` type, meaning they have one term because of proof irrelevance.
+
+On the other hand, it would be impossible to construct a function that maps a proof of a true proposition to a false proposition: this function must construct a term of an empty type, which is impossible if you do not already have a term of an empty type. Thus, it will be impossible to prove that `True` implies `False`.
+
+Now that about covers it for 'implies', which are regular old function types. But what about _dependent_ function types? It turns out, you end up with 'for all', and here is where the `Prop` universe's weirdness begins to show a little bit.
+
+```lean ctx
+def ForAll {X : Type} (P : X → Prop) : Prop :=
+  (x : X) → P x
+```
+
+Essentially, to prove that 'for all x, P(x) is true', you just write a function that takes in any arbitrary 'x' and returns a proof of 'P(x)'. Here, you are taking advantage of lean being dependently typed, as the type of the return value depends on the value of the input to the function! Recall back to our example of using motives with the `Weekday` inductive type. <show code here>. In this new example, 'P' would be our motive. For now, I'm going to keep things abstract, but we will look at an example later, after we have covered all the basic constructions we need to start doing real math.
+
+But first, let me point out that these 'for all' propositions are breaking the rules a little bit! This function type (`(x : X) → P x`) lives in `Prop`, but `X` lives in `Type`. How is that possible? Remember what I said about normal type universes? <quote here>
+
+Normally, we would expect the universe level of `α → β` to be the maximum of the universe levels that `α` and `β` belong to!
+
+For example, consider `Nat → Type`. This could be the type of a function like `ArrayN`, for instance, a function that takes in a number `n` and gives you the type of arrays of fixed length `n`. Then, since `Nat : Type` and `Type : Type 1`, we haeve that `Nat → Type : Type 1`, the maximum of the two. But the `Prop` universe is not following this rule!
+
+We have `(x : X) → P x : Prop`, but `X : Type` and `P x : Prop`, and `Type` is a bigger universe than `Prop` as `Prop : Type`. Normally, this would mean that `(x : X) → P x : Type`, but the `Prop` universe is special. If your function ultimately returns a value whose type is in the `Prop` universe, that function type is also in the `Prop` universe. This means that the function types corresponding to 'for all' statements remain in the `Prop` universe, as desired. This is exactly why the `imax` function on universe levels is defined in such a weird way, where if the second parameter is `0` you return `0`. Remember that `Sort 0` is `Prop`, so this definition allows you to write the following code cleanly:
+
+```lean ctx
+universe u v
+
+variable (X : Sort u) (Y : Sort v)
+
+#check X → Y  -- X → Y : Sort (imax u v)
+```
+
+If you are curious for more details, you can look into the chapter on universe levels in 'Theorem Proving in Lean4'. But take a look at this example and notice how this mechanism enables the 'for all' proposition's propensity to propogate its `Prop`ness upwards:
+
+```lean ctx
+section
+
+variable (IsSpecial : String → Int → Prop)
+variable (s : String)
+
+#check (n : Int) → IsSpecial s n
+-- ∀ (n : Int), IsSpecial s n : Prop
+
+#check (s : String) → (n : Int) → IsSpecial s n
+-- ∀ (s : String) (n : Int), IsSpecial s n : Prop
+end
+```
+
+Remember that `→` is right-associative, so first lets look at the function on the right hand side. We see that given some string `s`, this function type `(n : Int) → IsSpecial s n` is a proposition that 'for all integers n, s and n are special'. Even though the type of the first argument lives in `Type`, the type of the return value lives in `Prop`, so this function type lives in `Prop`. Then, our overall type can be interpreted as a function type that takes in a `String` and returns a value of this function type, which as we have just established, lives in `Prop`. This, overall we have a function `String`, which is a `Type`, to `Int → P s n`, which is a `Prop`, so the overall type is also still a `Prop`. We have propogated the `Prop`ness of `IsSpecial s n` all the way up to the entire function type! This is the type of a function that takes in a string `s` and an integer `n` and ultimately returns a proof that `s` and `n` are special, and this function itself is a proof that 'for all s and n, s and n are special'.
+
+Ok, admittedly that was a pretty confusing example, but the overall point is just that even if your function takes multiple arguments, your function type will still be a `Prop` corresponding to a 'for all' if you ultimately return a type that lives in `Prop` at the end.
+
+
 
 So, hopefully you are getting the hang of these simple inductive types, but there is still so much more to cover!
 All of the data types we have seen so far have not been recursive, and recursion is really the core of what inductive types are for! I think we are finally ready to tackle the `List` type, and this time I will make it polymorphic over universes. This will code will be exactly the same as how the real `List` type is implemented in Lean:
 
 ```lean ctx
-inductive MyList.{u} (α : Type u) : Type u where
+inductive MyList (α : Type u) : Type u where
 | empty : MyList α
 | cons : α → MyList α → MyList α
 
@@ -517,7 +680,7 @@ def oneTwoThree : MyList Int :=
 If you have taken an intro to computer science class, you will recognize what we have written here as a linked list! Every list is either the empty list (`MyList.empty`), or it contains some first element along with a (possibly empty) list of the remaining elements. Just like with regular lists, we can use `match`'s pattern matching to define recursive functions-- for example, we can write a function that appends an element to the end of the list:
 
 ```lean ctx
-def appendAtEnd.{u} {α : Type u} (ls : MyList α) (a : α) : MyList α :=
+def appendAtEnd {α : Type u} (ls : MyList α) (a : α) : MyList α :=
   match ls with
   | .empty => MyList.cons a MyList.empty
   | .cons x xs => MyList.cons x (appendAtEnd xs a)
@@ -567,7 +730,6 @@ structural recursion
 
 variables
 ```lean ctx
-universe u
 variable {α : Type u}
 ```
 actually this is not necessary, but they are useful if you want an argument that is not a just type.
@@ -603,78 +765,3 @@ inductive Equals {α : Type} (a : α) : α → Type where
 
 #print Equals.rec
 ```
-
-
-
-
-
-
-Here are some examples showcasing *Verso*'s capabilities:
-
-# 1. Markdown Features
-Verso supports standard Markdown features, meaning you can easily write:
-* *Bold text* and _italic text_
-* [Links to cool resources](https://leanprover.github.io/)
-* `inline code snippets`
-
-You can also create nested lists:
-1. First item
-2. Second item
-   * A sub-item
-   * Another sub-item
-
-# 2. LaTeX and Math
-You can include mathematical notation using LaTeX! For inline math, you can write $`\alpha + \beta = \gamma`.
-
-For block equations, you can use double dollar signs with a backtick block:
-$$`\int dx = x + C`
-
-# 3. Tables
-Since Verso's blog templates do not support standard Markdown tables or the `table` directive out of the box, you can use a code block to format tabular data for now:
-
-```
-| Item   | Description   | Quantity |
-|--------|---------------|----------|
-| Apple  | Red fruit     | 5        |
-| Banana | Yellow fruit  | 10       |
-```
-
-# 4. Lean Code and Diagrams
-Finally, the most powerful feature of Verso is that Lean code blocks are actually typechecked during the build!
-
-```leanInit introContext
-```
-
-```lean introContext
-open Illuminate
-
-def hello : String := "world"
-
-#check hello
-
-theorem easy : 1 + 1 = 2 := rfl
-```
-
-> Note: While the `Illuminate` code above is typechecked by Lean, Verso does not currently have a built-in directive to render `Illuminate` diagrams directly into the HTML blog output (it only works interactively in the Lean IDE via `#diagram`).
-
-If you want diagrams in your blog right now, you can use MathJax's matrix or commutative diagram features! For example:
-$$`
-\begin{matrix}
-A & \xrightarrow{f} & B \\
-\downarrow & & \downarrow \\
-C & \xrightarrow{g} & D
-\end{matrix}
-`
-
-Isn't that awesome? Your code and proofs are guaranteed to be correct!
-
-
-
-For now, just one more thing: Lean's universes are _not_ cumulative. If you read academic papers about type theory (i know, i know), you will often find that they will define universes such that `X : Type u` will imply that `X : Type (u + 1)`. Other proof assistants like Rocq also do this, but Lean enforces that everything is a term of exactly one type. This makes type checking easier and makes the Lean kernel simpler, and part of the Lean philosphy is to make the kernel as simple as possible, as the kernel is what garauntees the correctness of your proofs.
-
-Also, the fact that universes are not cumulative is not a problem at all: you can define a function `ULift.{u,v}` that lifts values from one universe to a higher one:
-```lean ctx
-#check ULift
--- ULift.{r, s} (α : Type s) : Type (max s r)
-```
-This means that you can write anything that you might want to write if universes were cumulative, the only caveat being that you have to explicitly convert between universe levels with this `ULift` function. At the cost of some extra boilerplate, the typechecking algorithm can be simplified!
