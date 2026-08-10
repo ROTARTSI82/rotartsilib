@@ -23,7 +23,9 @@ This repository serves as a unified monorepo for math and Lean-related projects.
 
 ## Agent Guidelines for modifying this repo
 1. **Adding a new Lean program**: Create a new folder in `Executables/`, write the `Main.lean`, and add a corresponding `[[lean_exe]]` to `lakefile.toml`.
-2. **Adding a Verso presentation**: Add the Lean file in `Verso/` and hook it into `Verso.Main` (or add a separate `[[lean_exe]]` in the manifest if it warrants a distinct standalone site).
+2. **Adding a Verso presentation**: 
+   - **For Books/Blogs**: Add the Lean file in `VersoContent/` and hook it into `VersoContent.BookMain` or `VersoContent.BlogMain`.
+   - **For Slideshows**: We maintain multiple slideshows cleanly in the `VersoContent/Slides/` directory. To add a new slideshow, create your Lean file there (e.g. `VersoContent/Slides/MySlideshow.lean`), and update `VersoContent/SlidesMain.lean` to build it to its own directory (e.g. `outputDir := "_slides/MySlideshow"`). Then run `make verso` which copies everything to `outputs/verso/slides/`.
 3. **Modifying Math Code**: All pure math or shared utilities belong in `Rotartsilib/`. Do not pollute `Executables/` with library code.
 4. **Docs**: To render the mathlib-style docs for `Rotartsilib`, use `make docs`.
 

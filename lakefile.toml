@@ -1,10 +1,7 @@
 name = "rotartsilib"
 version = "0.1.0"
-defaultTargets = ["app1", "app2", "build_blog", "build_book"]
+defaultTargets = ["app1", "app2", "build_blog", "build_book", "build_slides"]
 
-[[require]]
-name = "mathlib"
-scope = "leanprover-community"
 
 [[require]]
 name = "doc-gen4"
@@ -15,6 +12,15 @@ rev = "main"
 name = "verso"
 git = "https://github.com/leanprover/verso.git"
 rev = "main"
+
+[[require]]
+name = "verso-slides"
+git = "https://github.com/leanprover/verso-slides.git"
+rev = "main"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
 
 [[lean_lib]]
 name = "Rotartsilib"
@@ -38,3 +44,7 @@ root = "VersoContent.BlogMain"
 [[lean_exe]]
 name = "build_book"
 root = "VersoContent.BookMain"
+
+[[lean_exe]]
+name = "build_slides"
+root = "VersoContent.SlidesMain"

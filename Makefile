@@ -14,10 +14,13 @@ docs:
 verso: lean
 	lake exe build_blog
 	lake exe build_book
+	lake exe build_slides
 	@mkdir -p outputs/verso/blog
 	@mkdir -p outputs/verso/book
+	@mkdir -p outputs/verso/slides
 	@cp -r _site/* outputs/verso/blog/ || true
 	@cp -r _out/html-multi/* outputs/verso/book/ || true
+	@cp -r _slides/* outputs/verso/slides/ || true
 
 TEX_FILES := $(shell find tex -type f -name '*.tex' -exec grep -l '\\begin{document}' {} +)
 TEX_PDFS := $(patsubst tex/%.tex, outputs/tex/%.pdf, $(TEX_FILES))
@@ -39,4 +42,4 @@ typst: $(TYPST_PDFS)
 
 clean:
 	lake clean
-	rm -rf outputs/ _site/ _out/
+	rm -rf outputs/ _site/ _out/ _slides/
