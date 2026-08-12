@@ -8,6 +8,9 @@ set_option verso.code.warnLineLength 500
 #doc (Slides) "A Guide to Inductive Types" =>
 
 # Basic Syntax & Functions
+%%%
+vertical := true
+%%%
 
 ```lean
 -- !fragment fadeUp 1
@@ -18,7 +21,7 @@ set_option verso.code.warnLineLength 500
 
 /-- this is documentation. `code`, _formatting_. -/
 def hello : String := "world"
---   ^ !click 2
+--  ^ !click 2
 
 -- !fragment fadeUp 3
 def luckyNumber (s : String) (n : Nat) : String :=
@@ -30,7 +33,7 @@ def luckyNumber (s : String) (n : Nat) : String :=
 #eval luckyNumber "Bob" 2
 ```
 
-# Currying
+## Currying
 ```lean
 -- !fragment fadeUp 1
 def add (a b : Nat) : Nat :=
@@ -49,6 +52,9 @@ def add₂ : Nat → (Nat → Nat) :=
 ```
 
 # `Type`: The Type of Types
+%%%
+vertical := true
+%%%
 
 :::fragment fadeUp
 ```lean -stretch
@@ -71,48 +77,29 @@ def reverseList (α : Type) (input : List α) : List α :=
 ```
 :::
 
-# Implicit Parameters
-:::: attr (style := "margin-top: 0; padding-top: 1rem;")
+## Implicit Parameters
 
 ```lean -stretch
-def myList₂ : List Nat := [1, 2, 3]
-
 def reverseList₂ {α : Type} (input : List α) : List α :=
-  match input with
-  | [] => []
-  | x::xs => (reverseList₂ xs) ++ [x]
+  reverseList α input
 
-#eval reverseList₂ myList₂
+-- !fragment fadeUp
+#eval reverseList₂ myList
 #eval reverseList₂ ["a", "b", "c"]
-```
-:::fragment fadeUp
-```lean -stretch
 #check @reverseList₂ Nat
-#eval @reverseList₂ Nat myList₂
 ```
-:::
-::::
 
-# Simple Inductive Types
-:::fragment fadeUp
-```lean -stretch -panel
+# Inductive Types
+%%%
+vertical := true
+%%%
+
+```lean
 inductive Color where
 | red
 | green
 | blue
-```
-:::
-:::fragment fadeUp
-```lean -stretch -panel
-#check Color
-#check Color.red
-#check Color.green
-#check Color.blue
-```
-:::
 
-# Simple Inductive Types (2)
-```lean
 -- !fragment fadeUp
 def toHexCode (c : Color) : String :=
   match c with
@@ -126,67 +113,29 @@ def toHexCode (c : Color) : String :=
 #eval toHexCode Color.blue
 ```
 
-# Recursors
+## More Inductive Types
 ```lean
-def toHexCode' (c : Color) : String :=
-  match c with
-  | .red => "ff0000"
-  | .green => "00ff00"
-  | .blue => "0000ff"
+inductive Opt (α : Type) : Type where
+| some : α → Opt α
+-- ^ !click
+| none : Opt α
 
 -- !fragment fadeUp
-noncomputable
-def toHexCode₂ (c : Color) : String :=
-  Color.rec "ff0000" "00ff00" "0000ff" c
---       ^ !click
--- !fragment fadeUp
-/- !hide -/
-noncomputable def toHexCode₃ (c : Color) : String :=
-/- !end hide -/
-  @Color.rec (fun _ => String)
-    "ff0000" "00ff00" "0000ff" c
-```
-
-# Dependent Typing
-```lean
--- !fragment fadeUp
-def myMotive (c : Color) : Type :=
-  match c with
-  | .red => Bool
-  | .green => List Int
-  | .blue => String
+def greet (name : Opt String) : String :=
+  match name with
+  | .some n => "curse you, " ++ n
+  | .none => "nobody is attacking me!"
 
 -- !fragment fadeUp
-def dependentlyTyped (c : Color) : myMotive c :=
-  match c with
-  | .red => true
-  | .green => [0, 255, 0]
-  | .blue => "blue"
-
--- !fragment fadeUp
-noncomputable
-def dependentlyTyped₂ (c : Color) : myMotive c :=
-  @Color.rec myMotive true [0, 255, 0] "blue" c
--- !fragment fadeUp
-/- !hide -/
-noncomputable def dependentlyTyped₃ (c : Color) : myMotive c :=
-/- !end hide -/
-  @Color.rec _ true [0, 255, 0] "blue" c
--- !fragment fadeUp
-/- !hide -/
-noncomputable def dependentlyTyped₄ (c : Color) : myMotive c :=
-/- !end hide -/
-  Color.rec true [0, 255, 0] "blue" c
-```
-
-# Dependent Typing (cont)
-```lean -stretch
-#eval dependentlyTyped Color.red
-#eval dependentlyTyped Color.green
-#eval dependentlyTyped Color.blue
+#eval greet Opt.none
+#eval greet (Opt.some "Odysseus")
 ```
 
 # Propositions
+%%%
+vertical := true
+%%%
+
 :::fragment fadeUp
 ```lean -stretch
 #check 2 + 2 = 5
@@ -202,13 +151,136 @@ noncomputable def dependentlyTyped₄ (c : Color) : myMotive c :=
 #check (Eq.refl 4 : 2 + 2 = 4)
 ```
 :::
+
+## Curry-Howard Correspondence
+
 :::fragment fadeUp
 ```lean -stretch
-#check Eq.refl "hi"
+axiom h : 2 + 2 = 5
 ```
 :::
 
-# Implicit Parameters & Universes
-```lean
-#check Eq.refl
+:::fragment fadeUp
+$$`P \implies Q`
+```lean -show
+set_option warn.sorry false
+```
+```lean -stretch
+axiom JohnDrinksAlcohol : Prop
+axiom JohnOver21 : Prop
+
+theorem underage_drinking
+    (_h : JohnDrinksAlcohol) : JohnOver21 :=
+  sorry
+
+-- !fragment fadeUp
+#print axioms underage_drinking
+-- ^ !click
+-- !fragment fadeUp
+#check sorryAx
+```
+:::
+
+## Basic Logical Connectives
+```lean -stretch
+-- P ∨ Q
+inductive Or₂ (P Q : Prop) : Prop where
+| inl : P → Or₂ P Q
+| inr : Q → Or₂ P Q
+
+-- P ∧ Q
+inductive And₂ (P Q : Prop) : Prop where
+| intro : P → Q → And₂ P Q
+```
+
+:::fragment fadeUp
+```lean -stretch
+axiom hjohn : JohnDrinksAlcohol
+
+-- !fragment fadeUp
+example : JohnDrinksAlcohol ∧ JohnOver21 :=
+  And.intro hjohn (underage_drinking hjohn)
+
+-- !fragment fadeUp
+example : JohnDrinksAlcohol ∨ JohnOver21 :=
+  Or.inl hjohn
+
+example : JohnDrinksAlcohol ∨ JohnOver21 :=
+  Or.inr (underage_drinking hjohn)
+```
+:::
+
+
+
+# Recursive Inductive Types
+%%%
+vertical := true
+%%%
+
+```lean -panel
+inductive Lst (α : Type) : Type where
+| empty : Lst α
+| cons : α → Lst α → Lst α
+
+-- !fragment fadeUp
+/-- returns `front ++ back` -/
+def append {α} (back front : Lst α) : Lst α :=
+  match front with
+  | .empty => back
+  | .cons x xs => Lst.cons x (append back xs)
+
+-- !fragment fadeUp
+#eval append
+  (Lst.cons 2 (Lst.cons 3 Lst.empty))
+  (Lst.cons 1 Lst.empty)
+```
+
+## Strict Positivity
+```lean -stretch
+inductive BTree (α : Type) : Type where
+| empty : BTree α
+| node : α → BTree α → BTree α → BTree α
+
+-- !fragment fadeUp
+inductive BTree₂ (α : Type) : Type where
+| empty : BTree₂ α
+| node : α → (Bool → BTree₂ α) → BTree₂ α
+```
+
+:::fragment fadeUp
+```lean +error -stretch
+/--
+error: (kernel) arg #1 of 'Invalid.mk'
+has a non positive occurrence of the
+datatypes being declared
+-/
+#guard_msgs in
+inductive Invalid where
+| mk : (Invalid → String) → Invalid
+
+def undefinedFunc (x : Invalid) : String :=
+  match x with
+  | .mk f => f x
+
+#eval undefinedFunc (Invalid.mk undefinedFunc)
+```
+:::
+
+## No Infinite Loops!
+
+```lean -stretch -panel
+/--
+error: fail to show termination for
+  f
+with errors
+failed to infer structural recursion:
+Not considering parameter x of f:
+  it is unchanged in the recursive calls
+no parameters suitable for structural recursion
+
+well-founded recursion cannot be used, `f` does not take any (non-fixed) arguments
+-/
+#guard_msgs in
+def f (x : Nat) : String :=
+  f x
 ```
