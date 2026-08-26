@@ -330,11 +330,11 @@ One thing to note about match statements in Lean is that they have to be _exhaus
 
 ```lean ctx
 #check Weekday.rec
--- Weekday.rec.{u} {motive : Weekday → Sort u} 
---  (monday : motive Weekday.monday) 
+-- Weekday.rec.{u} {motive : Weekday → Sort u}
+--  (monday : motive Weekday.monday)
 --  (tuesday : motive Weekday.tuesday)
---  (wednesday : motive Weekday.wednesday) 
---  (thursday : motive Weekday.thursday) 
+--  (wednesday : motive Weekday.wednesday)
+--  (thursday : motive Weekday.thursday)
 --  (friday : motive Weekday.friday)
 --  (t : Weekday) : motive t
 ```
@@ -383,11 +383,11 @@ Note that we have to use the recursor to build the `myMotive` function before we
 
 ```lean ctx
 noncomputable def myMotiveV2 (d : Weekday) : Type :=
-  @Weekday.rec (fun _ => Type) Int Bool String 
+  @Weekday.rec (fun _ => Type) Int Bool String
     (List Bool) (List Int) d
 
 noncomputable def myFunctionV2 (d : Weekday) : myMotiveV2 d :=
-  @Weekday.rec myMotiveV2 (5 : Int) Bool.true "it's wednesday" 
+  @Weekday.rec myMotiveV2 (5 : Int) Bool.true "it's wednesday"
     [Bool.true, Bool.false] [1, 2, 3] d
 ```
 
@@ -451,8 +451,8 @@ Anyways, let's take a look at how the recursor works:
 
 ```lean ctx2
 #check Opt.rec
--- Opt.rec.{u} {α : Type} {motive : Opt α → Sort u} 
---  (some : (a : α) → motive (Opt.some a)) 
+-- Opt.rec.{u} {α : Type} {motive : Opt α → Sort u}
+--  (some : (a : α) → motive (Opt.some a))
 --  (nothing : motive Opt.nothing)
 --  (t : Opt α) : motive t
 ```
@@ -461,7 +461,7 @@ This is almost the exact same as we saw with our `Weekday` type, except that `so
 
 ```lean ctx2
 noncomputable def greet (name : Opt String) : String :=
-  @Opt.rec String (fun _ => String) (fun n => "curse you, " ++ n) 
+  @Opt.rec String (fun _ => String) (fun n => "curse you, " ++ n)
     "nobody is attacking me!" name
 ```
 
@@ -498,7 +498,7 @@ This property is exactly encoded in the type of the `SingletonSet`'s recursor:
 
 ```lean ctx
 #check SingletonSet.rec
--- SingletonSet.rec.{u} {motive : SingletonSet → Sort u} 
+-- SingletonSet.rec.{u} {motive : SingletonSet → Sort u}
 --  (elem : motive SingletonSet.elem) (t : SingletonSet) : motive t
 
 noncomputable def fromSingletonV2 {α : Type} (a : α) : SingletonSet → α :=
@@ -608,7 +608,7 @@ axiom JohnIsOver21 : Prop
 
 -- `theorem` is just the same as `def` but for
 -- functions that return a type in `Prop`.
-theorem no_underage_drinking (h : JohnIsDrinkingAlcohol) : JohnIsOver21 := sorry
+theorem no_underage_drinking (_h : JohnIsDrinkingAlcohol) : JohnIsOver21 := sorry
 
 #check @no_underage_drinking
 -- no_underage_drinking : JohnIsDrinkingAlcohol → JohnIsOver21
@@ -749,12 +749,12 @@ Note that this code is extremely similar to what we were able to write with Lean
 macro_rules
   | `([ $elems,* ]) => do
     -- NOTE: we do not have `TSepArray.getElems` yet at this point
-    let rec expandListLit (i : Nat) (skip : Bool) 
+    let rec expandListLit (i : Nat) (skip : Bool)
         (result : TSyntax `term) : MacroM Syntax := do
       match i, skip with
       | 0,   _     => pure result
       | i+1, true  => expandListLit i false result
-      | i+1, false => expandListLit i true  
+      | i+1, false => expandListLit i true
           (← ``(List.cons $(⟨elems.elemsAndSeps.get!Internal i⟩) $result))
     let size := elems.elemsAndSeps.size
     if size < 64 then
@@ -769,10 +769,10 @@ Anyways, back to inductive types. Let's see how the List type's recursor works:
 
 ```lean ctx
 #check MyList.rec
--- MyList.rec.{u_1, u} {α : Type u} {motive : MyList α → Sort u_1} 
+-- MyList.rec.{u_1, u} {α : Type u} {motive : MyList α → Sort u_1}
 --  (empty : motive MyList.empty)
---  (cons : (a : α) → (a_1 : MyList α) → motive a_1 → 
---    motive (MyList.cons a a_1)) 
+--  (cons : (a : α) → (a_1 : MyList α) → motive a_1 →
+--    motive (MyList.cons a a_1))
 --  (t : MyList α) : motive t
 ```
 
@@ -782,12 +782,12 @@ structural recursion
 
 variables
 ```lean ctx
-variable {α : Type u}
+variable {_α : Type u}
 ```
 actually this is not necessary, but they are useful if you want an argument that is not a just type.
 
 ```lean ctx
-noncomputable def appendAtEndV2 (ls : MyList α) (a : α) : MyList α :=
+noncomputable def appendAtEndV2 {α} (ls : MyList α) (a : α) : MyList α :=
   @MyList.rec α (fun _ => MyList α) (MyList.cons a MyList.empty)
     (fun x _xs append_of_xs => MyList.cons x append_of_xs) ls
 

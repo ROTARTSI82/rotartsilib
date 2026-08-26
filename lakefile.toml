@@ -14,6 +14,11 @@ git = "https://github.com/leanprover/verso.git"
 rev = "main"
 
 [[require]]
+name = "subverso"
+git = "https://github.com/leanprover/subverso.git"
+rev = "main"
+
+[[require]]
 name = "verso-slides"
 git = "https://github.com/leanprover/verso-slides.git"
 rev = "main"

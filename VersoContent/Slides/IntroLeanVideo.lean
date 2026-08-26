@@ -7,7 +7,13 @@ set_option verso.code.warnLineLength 500
 
 #doc (Slides) "A Guide to Inductive Types" =>
 
-# Lean Tutorial 1: The Curry-Howard Correspondence
+# Lean Tutorial 1: The Basics
+
+:::fragment fadeUp
+- Dependent Functions
+- Inductive Types
+- Basic Propositions
+:::
 
 # Basic Syntax & Functions
 %%%
@@ -332,7 +338,130 @@ example : proof1.choose = proof2.choose
 ```
 :::
 
-# Lean Tutorial 2: The Natural Numbers
+# Lean Tutorial 2: Typeclasses & Recursive Types
+
+# Structures
+%%%
+vertical := true
+%%%
+
+```lean -stretch
+structure Vec2f : Type where
+  x : Float
+  y : Float
+
+-- !fragment fadeUp
+def Vec2f.norm (vec : Vec2f) : Float :=
+  Float.sqrt (vec.x * vec.x + vec.y * vec.y)
+
+-- !fragment fadeUp
+#eval Vec2f.norm ⟨3, 4⟩
+#eval Vec2f.norm { x := 3, y := 4 }
+#eval (Vec2f.mk 3 4).norm
+--           ^ !click
+```
+
+## Structures (2)
+```lean -stretch
+inductive Vec2f₂ : Type where
+| mk (_x : Float) (_y : Float) : Vec2f₂
+
+namespace Vec2f₂
+variable (vec : Vec2f₂)
+
+def x :=
+--  ^ !click
+  match vec with
+  | .mk val _ => val
+
+def y :=
+  match vec with
+  | .mk _ val => val
+
+def norm :=
+--   ^ !click
+  Float.sqrt (vec.x * vec.x + vec.y * vec.y)
+
+end Vec2f₂
+```
+
+## Structures (3)
+```lean -stretch
+structure Vec2fₐ : Type where
+  constructorName ::
+    x : Float
+    y : Float
+
+#eval Vec2fₐ.constructorName 3 4
+```
+:::fragment fadeUp
+```lean -stretch
+structure Vec3f : Type extends Vec2f where
+  z : Float
+
+#check Vec3f.mk (Vec2f.mk 1 2) 3
+--           ^ !click
+```
+:::
+
+# Typeclasses
+%%%
+vertical := true
+%%%
+```lean -stretch
+class Add₂ (α : Type) : Type where
+  add : α → α → α
+
+-- !fragment fadeUp
+instance : Add₂ Int where
+  add a b := a + b
+
+-- !fragment fadeUp
+instance instAddInt : Add₂ Int :=
+  Add₂.mk (fun a b => a + b)
+
+-- !fragment fadeUp
+def double {α} (a : α) [Add₂ α] : α :=
+  Add₂.add a a
+
+-- !fragment fadeUp
+def double₂ {α : Type} (a : α) [inst : Add₂ α] : α :=
+  inst.add a a
+
+-- !fragment fadeUp
+#eval double (3 : Int)
+#eval @double Int 3 instAddInt
+```
+
+## Typeclasses (2)
+```lean -stretch
+instance instAddMod5 : Add₂ Int where
+  add a b := (a + b) % 5
+
+#eval letI := instAddMod5
+      double (3 : Int)
+#eval letI := instAddInt
+      double (3 : Int)
+```
+:::fragment fadeUp
+```lean -stretch
+#eval letI : Add₂ Int := inferInstance
+      double (3 : Int)
+#check inferInstance
+```
+:::
+
+## Typeclasses (3)
+```lean -stretch
+structure Vec2 (α : Type) : Type where
+  (x y : α)
+
+instance {α} [Add α] : Add (Vec2 α) where
+  add u v := ⟨u.x + v.x, u.y + v.y⟩
+
+#eval (Vec2.mk 1 2) + (Vec2.mk 3 4)
+#eval (Vec2.mk 3.1415 4.2) + (Vec2.mk 6.7 2.7182)
+```
 
 # Recursive Inductive Types
 %%%
@@ -370,11 +499,9 @@ inductive BTree₂ (α : Type) : Type where
 ```
 
 :::fragment fadeUp
-```lean +error -stretch
-/--
-error: (kernel) arg #1 of 'Invalid.mk' has a
-non positive occurrence of the datatypes being declared
--/
+```lean +error -stretch -panel
+/-- error: (kernel) arg #1 of 'Invalid.mk' has a
+non positive occurrence of the datatypes being declared -/
 #guard_msgs in
 inductive Invalid where
 | mk : (Invalid → String) → Invalid
@@ -390,8 +517,7 @@ def undefinedFunc (x : Invalid) : String :=
 ## No Infinite Loops!
 
 ```lean -stretch -panel
-/--
-error: fail to show termination for
+/-- error: fail to show termination for
   f
 with errors
 failed to infer structural recursion:
@@ -399,118 +525,11 @@ Not considering parameter x of f:
   it is unchanged in the recursive calls
 no parameters suitable for structural recursion
 
-well-founded recursion cannot be used, `f` does not take any (non-fixed) arguments
--/
+well-founded recursion cannot be used,
+`f` does not take any (non-fixed) arguments -/
 #guard_msgs in
 def f (x : Nat) : String :=
   f x
-```
-
-# Some Useful Language Features
-%%%
-vertical := true
-%%%
-
-```lean -stretch
-structure Iff₂ (P Q : Prop) : Prop where
-  intro ::
--- ^ !click
-    mp : P → Q
-    mpr : Q → P
-
--- !fragment fadeUp
-theorem trivial_iff : 2 + 2 = 5 ↔ 4 = 5 :=
-  Iff.intro id id
---           ^ !click
--- !fragment fadeUp
-/- !hide -/
-theorem trivial_iff₂ : 2 + 2 = 5 ↔ 4 = 5 :=
-/- !end hide -/
-  ⟨id, id⟩
-
--- !fragment fadeUp
-#check trivial_iff.mp
-#check trivial_iff.mpr
-```
-
-## Structures (cont)
-:::fragment fadeUp
-```lean -stretch
-inductive Iff₃ (P Q : Prop) : Prop where
-| intro : (P → Q) → (Q → P) → Iff₃ P Q
-
--- !fragment fadeUp
-theorem Iff₃.mp {P Q : Prop} (h : Iff₃ P Q) : P → Q :=
-  match h with
-  | .intro mp _ => mp
-
--- !fragment
-namespace Iff₃
-variable {P Q : Prop}
-
-theorem mpr (h : Iff₃ P Q) : Q → P :=
---       ^ !click
-  match h with
-  | .intro _ mpr => mpr
-
-end Iff₃
-```
-:::
-
-## Typeclasses
-```lean -stretch
-class Add₂ (α : Type) : Type where
-  add : α → α → α
-
-#check Add.mk
-```
-```lean -stretch +error
-#eval "3" + "4"
-
-instance instAddString : Add String :=
-  Add.mk (fun a b => a ++ b)
-
-#eval "3" + "4"
-```
-## Typeclasses (cont)
-```lean -stretch
-def addThrice {α : Type} [Add α] (a : α) : α :=
-  a + a + a
-
-#check addThrice
-#eval addThrice "1"
-#eval addThrice 1
-```
-```lean -stretch
-#eval @addThrice String instAddString "1"
-#eval @addThrice _ _ "1"
-```
-
-## Multiple Instances
-```lean -stretch
-instance : Add String where
-  add (a b : String) := a ++ " plus " ++ b
-
-#eval "3" + "4"
-#eval letI := instAddString
-  "3" + "4"
-```
-```lean -show
-set_option warn.classDefReducibility false
-```
-```lean -stretch
-#check inferInstance
-```
-```lean -stretch
-def instCurrent : Add String := inferInstance
-
-#eval instCurrent.add "a" "b"
-#eval instAddString.add "a" "b"
-```
-
-## Instance Chains
-```lean -stretch
-
 ```
 
 # The Natural Numbers

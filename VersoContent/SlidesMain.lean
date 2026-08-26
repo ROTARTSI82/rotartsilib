@@ -5,7 +5,20 @@ open VersoSlides
 
 def main : IO UInt32 := do
   let c1 ← slidesMain
-    (config := { outputDir := "_slides/IntroLeanVideo", theme := "black", slideNumber := true, transition := "slide", width := 2560 / 2, height := 1600 / 2 })
+    (config := {
+      outputDir := "_slides/IntroLeanVideo",
+      theme := "black",
+      slideNumber := true,
+      transition := "slide",
+      width := 2560 / 2, height := 1600 / 2,
+      -- extraCss := #[{
+      --   filename := "extra.css",
+      --   contents := "
+      --     :root {
+      --       --verso-message-info-color: white;
+      --     }
+      --   " }]
+      })
     (doc := %doc VersoContent.Slides.IntroLeanVideo)
 
   if c1 != 0 then return c1

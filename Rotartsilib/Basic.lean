@@ -1,3 +1,5 @@
+def hello := "world"
+
 def IsEven (n : Nat) : Prop :=
   ∃(k : Nat), 2*k = n
 
