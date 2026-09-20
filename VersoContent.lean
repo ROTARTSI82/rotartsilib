@@ -1,13 +1,2 @@
-import VersoContent.Blog
-import VersoContent.Blog.About
-import VersoContent.Blog.FrontPage
-import VersoContent.Blog.Posts
-import VersoContent.Blog.Posts.FirstPost
-import VersoContent.Blog.Posts.IntroLeanVideo
-import VersoContent.BlogMain
-import VersoContent.Book
-import VersoContent.Book.Introduction
-import VersoContent.Book.NextSteps
-import VersoContent.BookMain
-import VersoContent.Slides
+import VersoContent.Slides.IntroLeanVideo
 import VersoContent.SlidesMain

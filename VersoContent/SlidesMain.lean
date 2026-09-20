@@ -1,5 +1,6 @@
-import VersoSlides
-import VersoContent.Slides.IntroLeanVideo
+module
+public import VersoSlides
+public import VersoContent.Slides.IntroLeanVideo
 
 open VersoSlides
 

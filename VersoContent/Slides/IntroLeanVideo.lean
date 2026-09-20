@@ -1,5 +1,8 @@
-import VersoSlides
-import Verso.Doc.Concrete
+module
+public meta import VersoSlides
+public meta import Verso.Doc.Concrete
+public import Verso.Doc
+import VersoSlides.Basic
 
 open VersoSlides
 

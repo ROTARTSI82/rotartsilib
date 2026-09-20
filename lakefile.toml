@@ -1,6 +1,6 @@
 name = "rotartsilib"
 version = "0.1.0"
-defaultTargets = ["app1", "app2", "build_blog", "build_book", "build_slides"]
+defaultTargets = ["app1", "app2", "build_slides"]
 
 
 [[require]]
@@ -41,14 +41,7 @@ root = "Executables.App2.Main"
 
 [[lean_lib]]
 name = "VersoContent"
-
-[[lean_exe]]
-name = "build_blog"
-root = "VersoContent.BlogMain"
-
-[[lean_exe]]
-name = "build_book"
-root = "VersoContent.BookMain"
+requiresModuleSystem = true
 
 [[lean_exe]]
 name = "build_slides"
