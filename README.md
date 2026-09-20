@@ -25,7 +25,7 @@ This is a unified monorepo for math, Lean 4, LaTeX, and Typst projects. It is de
 
 * **`Rotartsilib/`**: The core, reusable pure Lean codebase.
 * **`Executables/`**: Lean programs and scripts (each with their own `Main.lean`).
-* **`Verso/`**: Verso slides, books, and blogs.
+* **`VersoContent/`**: Verso slides.
 * **`tex/`**: All LaTeX documents.
 * **`typst/`**: All Typst documents.
 * **`outputs/`**: Generated non-Lean build artifacts (e.g. PDFs). This folder is completely git-ignored.

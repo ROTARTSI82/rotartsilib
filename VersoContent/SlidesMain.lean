@@ -4,7 +4,7 @@ public import VersoContent.Slides.IntroLeanVideo
 
 open VersoSlides
 
-def main : IO UInt32 := do
+public def main : IO UInt32 := do
   let c1 ← slidesMain
     (config := {
       outputDir := "_slides/IntroLeanVideo",
