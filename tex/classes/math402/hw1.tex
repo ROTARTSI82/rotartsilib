@@ -1,0 +1,101 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\begin{document}
+
+\begin{center} {\large \textbf{Math 402A -- Homework 1}} \smallskip \\ 
+    Grant Yang \hspace{1em} AU26
+ \end{center}
+
+\paragraph{Problem 1.}
+Let $a,b \in \mathbb Z$ be such that $11 \mid (2 + a)$ and $11 \mid (35 - b)$. Let $k_a,k_b \in \mathbb Z$ be such that $11 k_a = 2+a$ and $11 k_b = 35-b$. We can write
+\begin{align*} a + b - 33 &= (2 + a) - (35 - b) \\ &= 11(k_a - k_b). \end{align*}
+Furthermore,
+\[ a + b = 11 (k_a - k_b + 3).\]
+Since $k_a - k_b + 3 \in \mathbb Z$, we must have that $11 \mid (a+b)$. $\square$
+
+
+\paragraph{Problem 2.}
+\begin{align*}
+    (1003,456) &= (1003-2\cdot 456, 456)  \\ 
+    &= (91, 456) = (91, 456 - 5\cdot 91) \\
+    &= (91, 1) = \boxed{1}.
+\end{align*}
+
+\begin{align*}
+    (5858, 1436) &= (5858 - 4\cdot 1436, 1436) \\
+    &= (114, 1436) = (114, 1436 - 12 \cdot 114) \\
+    &= (114, 68) = (114 - 68, 68) \\
+    &= (46, 68) = (46, 22) = (24,22) = \boxed{2}.
+\end{align*}
+
+\paragraph{Problem 3.}
+\[91 = 1003 - 2\cdot 456\]
+\begin{align*}
+    1 &= 456 - 5 \cdot 91 \\
+     &= 456 - 5 \cdot (1003 - 2 \cdot 456) \\
+     &= \boxed{-5 \cdot 1003 + 11 \cdot 456}.
+\end{align*}
+
+\paragraph{Problem 4.} Let $n$ be a positive integer. We can show that $\tfrac{12n+1}{30n+2}$ cannot be reduced by computing
+\begin{align*}
+    \mathrm{gcd}(12n+1,30n+2) &= \mathrm{gcd}(12n+1, 30n+2 - 2[12n+1]) \\ &= \mathrm{gcd}(12n+1, 6n) \\
+    &= \mathrm{gcd}(1, 6n) = 1.
+\end{align*}
+
+Note that this is \emph{not} computing the GCD in $\mathbb Z[n]$, but rather a computation in $\mathbb Z$. Thus, for all positive integer $n$, there exists no common divisor of $12n+1$ and $30n+2$ greater than 1, so $\tfrac{12n+1}{30n+2}$ cannot be reduced.
+
+\paragraph{Problem 5.} We can compute $\mathrm{gcd}(2^{100}-1,2^{120}-1)$ using the Euclidean algorithm:
+\begin{align*}
+    \mathrm{gcd}(2^{100}-1,2^{120}-1) &= \mathrm{gcd}(2^{100}-1,2^{120}-1 - 2^{20}[2^{100} - 1]) = \mathrm{gcd}(2^{100}-1, 2^{20}-1) \\
+    &= \mathrm{gcd}(2^{100}-1 - 2^{80}[2^{20}-1], 2^{20}-1) = \mathrm{gcd}(2^{80}-1, 2^{20}-1) \\
+    &= \mathrm{gcd}(2^{60}-1, 2^{20}-1) = \mathrm{gcd}(2^{40}-1,2^{20}-1) \\
+    &= \mathrm{gcd}(2^{20}-1,2^{20}-1)= \boxed{2^{20}-1}.
+\end{align*}
+
+In general, $\mathrm{gcd}(b^m - 1, b^n - 1) = b^{\mathrm{gcd}(m, n)} - 1$ for $b \in \mathbb{Z}_{\ge 2}$ and $m,n \in \mathbb{Z}_{>0}$.
+
+
+\paragraph{Problem 6.} An integer is divisible by 9 $\iff$ the sum of its digits is divisible by 9. Let $n \in \mathbb Z_{\ge 0}$, and write
+\[n = \sum_{i=0}^\infty d_i 10^i = \sum_{i=0}^\infty d_i (10^i-1) + \sum_{i=0}^\infty d_i. \]
+where only finitely many $d_i$ are nonzero. Note that for all $i$, $10^i - 1 = 9\cdot \sum_{k=0}^{i-1}10^k$ so $9$ divides $10^i - 1$. Since $\sum_{i=0}^\infty d_i(10^i-1)$ is a finite sum of integers divisible by $9$, nine must also divide it. Let $k \in \mathbb Z$ be such that $9k = \sum_{i=0}^\infty d_i (10^i - 1)$.
+
+($\implies$) Suppose $9 \mid n$, and let $\ell \in \mathbb Z$ be such that $n = 9\ell$. We can write
+\[\sum_{i=0}^\infty d_i = n - \sum_{i=0}^\infty d_i (10^i-1) = 9(\ell - k). \]
+Since $\ell - k \in \mathbb Z$, we must have $9 \mid \sum_{i=0}^\infty d_i$ as desired.
+
+($\impliedby$) Suppose $9 \mid \sum_{i=0}^\infty d_i$, and let $\ell \in \mathbb Z$ be such that $\sum_{i=0}^\infty d_i = 9\ell$. We can write
+\[n = \sum_{i=0}^\infty d_i + \sum_{i=0}^\infty d_i (10^i-1) = 9(\ell + k). \]
+Since $\ell + k \in \mathbb Z$, we must have $9 \mid n$ as desired. $\square$
+
+\paragraph{Problem 7.} Let $\{a_1,\dots,a_k\}$ be a set of nonzero integers, and let $m=[a_1,\dots,a_k]$ be their least common multiple. If $t \in \mathbb Z$ is such that $a_i \mid t$ for all $1 \le i \le k$, then $m \mid t$.
+
+By the division algorithm, there exists $q \in \mathbb Z$ and an integer $r$ such that $0 \le r < m$ and $t = m \cdot q + r$. Assume for contradiction that $r \ne 0$, so that $0 < r < m$. Let $i$ be any integer $1 \le i \le k$, and note that $a_i \mid t$ and $a_i \mid m$. Then, since $r = t - mq$, we must have $a_i \mid r$. Thus, $r$ is a positive, nonzero integer such that $a_i \mid r$ for all $1 \le i \le k$. By the definition of least common multiple, this means $m \le r$. However, this contradicts the property of the division algorithm that $r < m$, so we must have that $r = 0$. Thus, $t = m \cdot q$, and $m \mid t$. $\square$
+
+\paragraph{Problem 8.} Let $a,b,c$ be positive, nonzero integers. If $c^2 = ab$ and $\mathrm{gcd}(a, b) = 1$, then $a$ and $b$ are perfect squares.
+
+\paragraph{Problem 9.} Let $p>1$ be a prime. For all $k$ with $1 \le k < p$, $p$ must divide the binomial coefficient $\binom{p}{k}$.
+
+
+
+\paragraph{Useful Lemma.} For all $d,n > 1$, if $d$ divides $n$ then $d$ does not divide $n+1$. Let $k \in \mathbb Z$ be such that $n = dk$. Assume for contradiction that $d$ divides $n+1$, and let $\ell \in \mathbb Z$ be such that $n+1=d\ell$. Then, $1 = n+1-n = d(\ell-k)$, so $d= \pm 1$ and $\ell-k = \pm 1$. However, in either case, this contradicts the fact that $d > 1$. $\square$
+
+\paragraph{Problem 10.} There are infinitely many primes.
+
+Assume for contradiction that there exists a finite set of all primes \[P=\{ p_1, \dots, p_k \} = \{ p \in \mathbb N_{>1} \mid p \text{ is prime}\}.\]
+
+Define $n = \prod_{i=1}^k p_i$, and note that for all $p \in P$, $p \mid n$. Because $n+1$ must have a prime factorization, there must exist a prime $p$ such that $1 < p \le n+1$ and $p \mid (n+1)$. By the contrapositive of the \textbf{Useful Lemma} above, $p$ must not divide $n$. However, $p$ is prime and $p>1$, so $p \in P$ and $p \mid n$. Thus, we have a contradiction, and there exists no such set $P$. $\square$
+
+\paragraph{Problem 11.} Let $n \in \mathbb Z_{>2}$. There exists a prime $p$ such that $n < p < n!$.
+
+Because $n!-1$ must have a prime factorization, there must exist some prime $p$ such that $1 < p \le n! - 1$ and $p \mid (n! - 1)$. By the \textbf{Useful Lemma} above, $p$ must not divide $n!$. However, all integers $1 < d \le n$ divide $n!$, so $p$ must not be equal to any such $d$, and $p$ must satisfy $p > n$. Thus, we have found a prime $n < p < n!$. $\square$
+
+
+\paragraph{Problem 12.}
+\begin{enumerate}
+    \item[a.] For all positive $n$, $10^n \equiv 1 \mod 9$.
+    \item[b.] Every positive integer $n$ is congruent to the sum of its digits mod 9. 
+\end{enumerate}
+
+\end{document}
