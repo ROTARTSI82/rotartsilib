@@ -1,0 +1,68 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\begin{document}
+
+\begin{center} {\large \textbf{Math 441A -- Homework 1}} \smallskip \\ 
+    Grant Yang \hspace{1em} AU26
+ \end{center}
+
+\paragraph{Problem 1.} The symmetric difference $A \Delta B = (A \setminus B) \cup (B \setminus A)$ is associative. First, note that
+\begin{align*}
+    x \in A \Delta B &\iff x \in A \land x \not\in B \lor x \not\in A \land x \in B \\
+    &\iff \lnot(x \in A \land x \in B \lor x \not\in A \land x \not\in B).
+\end{align*}
+
+
+For $A,B,C\subseteq X$, we wish to show that $(A \Delta B) \Delta C = A \Delta (B \Delta C)$.
+
+($\subseteq$) Let $x \in (A \Delta B) \Delta C$, and consider the case that $x \in C$. Then, we must have that $x \not\in A \Delta B$, so either $x \in A \land x \in B$ or $x \not\in A \land x \not\in B$. In the first (sub)case that $x \in A$ and $x \in B$, we get that $x \in B \land x \in C \implies x \not\in B \Delta C$. However, since $x \in A$, $x \in A \Delta (B \Delta C)$. In the second subcase that $x \not\in A$ and $x \not\in B$, we get $x \in C \land x \not\in B \implies x \in B \Delta C$, and then since $x \not\in A$ we deduce $x \in A \Delta (B \Delta C)$. 
+
+In the second case that $x \not\in C$, since $x \in (A\Delta B)\Delta C$ we get $x \in A \Delta B$, so either $x \in A \land x \not\in B$ or $x \not\in A \land x \in B$. asdfasdf
+
+($\supseteq$) I don't want to. You know how it goes.
+
+
+\paragraph{Problem 2.} Let $X$ and $Y$ be sets and let $f : X \to Y$ be a function such that for all $A, B \subseteq X$, $f(A) \setminus f(B) = f(A \setminus B)$. Then $f$ is injective.
+
+Let $x_1, x_2 \in X$ be such that $f(x_1) = f(x_2)$, and consider the singleton set $A = \{ x_1 \}$. Note that $f(x_1) \in f(A)$, so $f(x_1) \not\in f(X) \setminus f(A) = f(X \setminus A)$. Then, since $f(x_1) = f(x_2)$, we get $f(x_2) \not\in f(X \setminus A)$, so $x_2 \not\in X \setminus A$. However, since $x_2 \in X$, this means that $x_2 \in A$. Because $A$ is a singleton set, we get $x_2 = x_1$. Thus, $f$ is injective. $\square$
+
+\paragraph{Problem 3.} There does not exist an uncountable family of pairwise disjoint discs in $\mathbb{R}^2$. 
+
+First, we show that $\mathbb{Q}^2$ is dense in $\mathbb{R}^2$. Let $D$ be any disc in $\mathbb{R}^2$, and in particular let $a,b \in \mathbb R$ and $\varepsilon > 0$ be such that
+\[D = \{(x,y) \in \mathbb{R}^2 : (x-a)^2 + (y-b)^2 < \varepsilon^2 \}. \]
+Using the density of $\mathbb Q$ in $\mathbb R$, choose some $u \in \mathbb Q \cap (a-\varepsilon, a + \varepsilon)$. Note that $|u - a| < \varepsilon$, so we can define $w = \sqrt{\varepsilon^2 - (u - a)^2}$ where $w > 0$. Then, we can choose some $v \in \mathbb Q \cap (b- w, b + w)$, and note that $|v - b| < w$, so we get
+\begin{align*}
+    (u - a)^2 + (v - b)^2 &< (u-a)^2 + w^2 \\
+    &= (u-a)^2 + \varepsilon^2 - (u-a)^2 \le \varepsilon^2.
+\end{align*}
+Thus, we have found $(u,v) \in \mathbb{Q}^2$ such that $(u,v) \in D$.
+
+Assume for contradiction that there exists an uncountable family $\mathcal{X}$ of pairwise disjoint discs. Let this family be indexed by an uncountable set $I$, and define a function $\phi : I \to \mathbb{Q}^2$ by \[i \mapsto \text{choose } (u,v) \in \mathcal{X}_i \cap \mathbb{Q}^2. \]
+Because every $\mathcal{X}_i$ is pairwise disjoint, this function $\phi$ must be injective. However, note that $\mathbb{Q}\times\mathbb{Q}$ is a countable set, and we have constructed an injection from an uncountable set into a countable one. Thus, we have a contradiction, and there does not exist any uncountable family of pairwise disjoint discs.
+
+If instead of considering discs, we consider circles, then it will be possible to have an uncountable family of pairwise disjoint circles, for example a family indexed by $[0, \infty)$ defined as
+\[r \mapsto \{(x,y) \in \mathbb{R}^2 : x^2 - y^2 = r\}. \]
+
+\paragraph{Problem 4.} Let $R \subseteq X \times X$ be a relation, and define $\sim$ to be the intersection of all equivalence relations on $X$ that contain $R$.
+\begin{enumerate}
+    \item[(1)] $\sim$ is an equivalence relation. First, note that $X \times X$ itself is an eqvuialence relation, so there exists an equivalence relation containing $R$ and $\sim$ is nonempty.
+    
+    (Reflexive) Let $x \in X$, and let $E$ be any equivalence relation containing $R$. Since $E$ is reflexive, we get $xEx$. Because $\forall \text{Equiv }E \supseteq R, xEx$, we get $x \sim x$.
+
+    (Symmetric) Let $x,y \in X$, and suppose that $x \sim y$. Let $E \supseteq R$ be any equivalence relation, and note that $x \sim y \implies xEy$. By the symmetry of $E$ we get $yEx$, so we get $\forall\text{Equiv }E \supseteq R, yEx$ and thus $y \sim x$.
+
+    (Transitive) Let $x,y,z \in X$, and suppose $x \sim y$ and $y \sim z$. Same deal. Let $E \supseteq R$ be any equivalence relation, and note that $xEy$ and $yEz$. Thus, $xEz$, and since $\forall\text{Equiv }E\supseteq R, xEz$, we get $x \sim z$.
+
+    \item[(2)] Let $R'$ be a relation such that $xR'y \iff xRy \lor yRx$. Then $x\sim y$ if and only if one of the following is true:
+    \begin{itemize}
+        \item $x = y$ or
+        \item $xR'y$ or
+        \item there exists a finite sequence $z_1,\dots,z_n \in X$ such that \[xR'z_1R'\dots R'z_nR'y.\]
+    \end{itemize}
+    
+
+\end{enumerate}
+
+\end{document}
