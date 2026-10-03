@@ -19,10 +19,11 @@ For $A,B,C\subseteq X$, we wish to show that $(A \Delta B) \Delta C = A \Delta (
 
 ($\subseteq$) Let $x \in (A \Delta B) \Delta C$, and consider the case that $x \in C$. Then, we must have that $x \not\in A \Delta B$, so either $x \in A \land x \in B$ or $x \not\in A \land x \not\in B$. In the first (sub)case that $x \in A$ and $x \in B$, we get that $x \in B \land x \in C \implies x \not\in B \Delta C$. However, since $x \in A$, $x \in A \Delta (B \Delta C)$. In the second subcase that $x \not\in A$ and $x \not\in B$, we get $x \in C \land x \not\in B \implies x \in B \Delta C$, and then since $x \not\in A$ we deduce $x \in A \Delta (B \Delta C)$. 
 
-In the second case that $x \not\in C$, since $x \in (A\Delta B)\Delta C$ we get $x \in A \Delta B$, so either $x \in A \land x \not\in B$ or $x \not\in A \land x \in B$. asdfasdf
+In the second case that $x \not\in C$, since $x \in (A\Delta B)\Delta C$ we get $x \in A \Delta B$, so either $x \in A \land x \not\in B$ or $x \not\in A \land x \in B$. Is anyone actually reading this? In the former case, $x \not\in B \land x \not\in C \implies x \not\in B \Delta C$, and since $x \in A$ we get $x \in A \Delta (B \Delta C)$. In the latter case, I am wondering why you are still reading, but $x \in B$ and $x \not\in C$ implies $x \in B \Delta C$, and since $x \not\in A$ we get $x \in A \Delta (B\Delta C)$.
 
-($\supseteq$) I don't want to. You know how it goes.
+($\supseteq$) Let $x \in A \Delta (B \Delta C)$. Consider the case that $x \in A$. Then, $x \not\in B \Delta C$ and so either $x \in B \land x \in C$ or $x \not\in B \land x \not\in C$. In the first case, $x \in B \land x \in A \implies x \not\in A \Delta B$. Then, $x \not\in A \Delta B \land x \in C \implies x \in (A\Delta B) \Delta C$. In the latter case, $x\in A$ and $x \not\in B$ means $x \in A \Delta B$, and since $x \not\in C$ we get $x \in (A \Delta B) \Delta C$.
 
+If $x \not \in A$, you know how it goes. Come on. We have $x \in B \Delta C$, so either $x \in B \land x \not\in C$ or $x \not\in B \land x \in C$. In the former case, $x \not \in A$ and $x \in B$ so $x \in A \Delta B$, then $x \not\in C$ so $x \in (A\Delta B) \Delta C$. In the latter, $x \not\in A$ and $x \not\in B$ so $x \not\in A \Delta B$. Then $x \in C$, so $x \in (A\Delta B) \Delta C$.
 
 \paragraph{Problem 2.} Let $X$ and $Y$ be sets and let $f : X \to Y$ be a function such that for all $A, B \subseteq X$, $f(A) \setminus f(B) = f(A \setminus B)$. Then $f$ is injective.
 
@@ -35,7 +36,7 @@ First, we show that $\mathbb{Q}^2$ is dense in $\mathbb{R}^2$. Let $D$ be any di
 Using the density of $\mathbb Q$ in $\mathbb R$, choose some $u \in \mathbb Q \cap (a-\varepsilon, a + \varepsilon)$. Note that $|u - a| < \varepsilon$, so we can define $w = \sqrt{\varepsilon^2 - (u - a)^2}$ where $w > 0$. Then, we can choose some $v \in \mathbb Q \cap (b- w, b + w)$, and note that $|v - b| < w$, so we get
 \begin{align*}
     (u - a)^2 + (v - b)^2 &< (u-a)^2 + w^2 \\
-    &= (u-a)^2 + \varepsilon^2 - (u-a)^2 \le \varepsilon^2.
+    &= (u-a)^2 + \varepsilon^2 - (u-a)^2 = \varepsilon^2.
 \end{align*}
 Thus, we have found $(u,v) \in \mathbb{Q}^2$ such that $(u,v) \in D$.
 
@@ -43,11 +44,12 @@ Assume for contradiction that there exists an uncountable family $\mathcal{X}$ o
 Because every $\mathcal{X}_i$ is pairwise disjoint, this function $\phi$ must be injective. However, note that $\mathbb{Q}\times\mathbb{Q}$ is a countable set, and we have constructed an injection from an uncountable set into a countable one. Thus, we have a contradiction, and there does not exist any uncountable family of pairwise disjoint discs.
 
 If instead of considering discs, we consider circles, then it will be possible to have an uncountable family of pairwise disjoint circles, for example a family indexed by $[0, \infty)$ defined as
-\[r \mapsto \{(x,y) \in \mathbb{R}^2 : x^2 - y^2 = r\}. \]
+\[r \mapsto \{(x,y) \in \mathbb{R}^2 : x^2 + y^2 = r\}. \]
 
 \paragraph{Problem 4.} Let $R \subseteq X \times X$ be a relation, and define $\sim$ to be the intersection of all equivalence relations on $X$ that contain $R$.
 \begin{enumerate}
-    \item[(1)] $\sim$ is an equivalence relation. First, note that $X \times X$ itself is an eqvuialence relation, so there exists an equivalence relation containing $R$ and $\sim$ is nonempty.
+    \item[(1)] $\sim$ is an equivalence relation. First, we can verify that $\sim$ is a nonempty intersection \footnote{I mean, empty-set ology but $\sim$ can still be empty if $X$ is empty... For reflexivity we do still have to verify that it is a nonempty intersection, i.e. least one equivalence relation $E \supseteq R$ exists.} 
+    as $X \times X \supseteq R$ is an equivalence relation. Thus, $x \sim y \iff \forall E \supseteq R, xEy$ where $E$ is an equivalence relation.
     
     (Reflexive) Let $x \in X$, and let $E$ be any equivalence relation containing $R$. Since $E$ is reflexive, we get $xEx$. Because $\forall \text{Equiv }E \supseteq R, xEx$, we get $x \sim x$.
 
@@ -57,11 +59,33 @@ If instead of considering discs, we consider circles, then it will be possible t
 
     \item[(2)] Let $R'$ be a relation such that $xR'y \iff xRy \lor yRx$. Then $x\sim y$ if and only if one of the following is true:
     \begin{itemize}
-        \item $x = y$ or
-        \item $xR'y$ or
-        \item there exists a finite sequence $z_1,\dots,z_n \in X$ such that \[xR'z_1R'\dots R'z_nR'y.\]
+        \item $x = y$, or $xR'y$, or there exists a finite sequence $z_1,\dots,z_n \in X$ such that \[xR'z_1R'\dots R'z_nR'y.\]
     \end{itemize}
     
+    ($\implies$) We prove the forward direction by showing that $R^\ast$ defined using the conditions above is an equivalence relation. In particular, define $R^\ast$ such that for all $x,y \in X$,
+    \[xR^\ast y \iff x = y \lor x R' y \lor \exists(z_1,\dots,z_n \in X), xR'z_1R'\dots R'z_nR'y. \]
+
+    First, we can verify that $R^\ast \supseteq R$ as $xRy \implies xR'y \implies xR^\ast y$. 
+
+    (Reflexive) For all $x \in X$, $x = x \implies xR^\ast x$.
+
+    (Symmetric) Let $x,y \in X$, and suppose that $xR^\ast y$. Note that $R'$ is symmetric and that the case of $x=y$ is trivial, so we only need to consider the existence of a transitive sequence. Let $z_1,\dots,z_n \in X$ be such that $xR'z_1R'\dots R'z_nR'y$. However, as $R'$ is symmetric, we also get that $yR'z_nR'\dots R'z_1R'x$. Thus, the reverse of the sequence shows that $yR^\ast x$ as desired.
+
+    (Transitive) Let $a,b,c \in X$ be such that $aR^\ast b$ and $b R^\ast c$. If $a =b$ or $b=c$, we trivially get $a R^\ast c$. For the remaining cases, we can simply append sequences together (considering $aR'b$ or $bR'c$ to be empty sequences):
+    \begin{align*}
+        aR'z_1R'\dots R'z_nR'b \land bR'y_1R'\dots R'y_mR'c \\
+        \implies aR'z_1R'\dots R'z_nR'bR'y_1R'\dots R'y_mR'c.
+    \end{align*}
+
+    Thus, the sequence $z_1,\dots,z_n,b,y_1,\dots,y_m$ (with $m$ and $n$ possibly 0) is a witness that $aR^\ast c$.
+
+    Now, let $x,y \in X$ be such that $x \sim y$. Since $\sim$ is the intersection of all equivalence relations $\supseteq R$, we must have $x \sim y \implies x R^\ast y$, so the right hand side must hold.
+
+    ($\impliedby$) Let $x,y \in X$. First, if $x =y$, by the reflexivity of $\sim$ we must have $x \sim y$.
+    
+    Next, suppose that $xR'y$. Let $E \supseteq R$ be any equivalence relation, and note that since $xRy \lor yRx$, we must get either $xEy$ or $yEx$. Since $E$ is symmetric, however, we can derive $xEy$ in both cases. Thus, $\forall \text{Equiv }E\supseteq R, xEy$, so $x \sim y$.
+    
+    Finally, consider the last case that there is some finite sequence $z_1,\dots,z_n \in X$ such that $xR'z_1R'\dots R'z_nR'y$. Again, let $E \supseteq R$ be any equivalence relation, and note that by the previous argument we must have $xEz_1E\dots z_nEy$. Because $E$ is transitive, we must have $xEy$, and so we have shown $\forall \text{Equiv } E\supseteq R, xEy$ and thus $x \sim y$.
 
 \end{enumerate}
 
