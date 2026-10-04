@@ -30,7 +30,7 @@ Since $k_a - k_b + 3 \in \mathbb Z$, we must have that $11 \mid (a+b)$. $\square
     (5858, 1436) &= (5858 - 4\cdot 1436, 1436) \\
     &= (114, 1436) = (114, 1436 - 12 \cdot 114) \\
     &= (114, 68) = (114 - 68, 68) \\
-    &= (46, 68) = (46, 22) = (24,22) = \boxed{2}.
+    &= (46, 68) = (46, 22) = (24,22) = (2, 22) = (2, 0) = \boxed{2}.
 \end{align*}
 
 \paragraph{Problem 3.}
@@ -47,7 +47,7 @@ Since $k_a - k_b + 3 \in \mathbb Z$, we must have that $11 \mid (a+b)$. $\square
     &= \mathrm{gcd}(1, 6n) = 1.
 \end{align*}
 
-Note that this is \emph{not} computing the GCD in $\mathbb Z[n]$, but rather a computation in $\mathbb Z$. Thus, for all positive integer $n$, there exists no common divisor of $12n+1$ and $30n+2$ greater than 1, so $\tfrac{12n+1}{30n+2}$ cannot be reduced.
+Note that this is \emph{not} computing the GCD in $\mathbb Z[n]$, but rather a computation in $\mathbb Z$. Thus, for all positive integers $n$, there exists no common divisor of $12n+1$ and $30n+2$ greater than 1, so $\tfrac{12n+1}{30n+2}$ cannot be reduced.
 
 \paragraph{Problem 5.} We can compute $\mathrm{gcd}(2^{100}-1,2^{120}-1)$ using the Euclidean algorithm:
 \begin{align*}
@@ -60,9 +60,9 @@ Note that this is \emph{not} computing the GCD in $\mathbb Z[n]$, but rather a c
 In general, $\mathrm{gcd}(b^m - 1, b^n - 1) = b^{\mathrm{gcd}(m, n)} - 1$ for $b \in \mathbb{Z}_{\ge 2}$ and $m,n \in \mathbb{Z}_{>0}$.
 
 
-\paragraph{Problem 6.} An integer is divisible by 9 $\iff$ the sum of its digits is divisible by 9. Let $n \in \mathbb Z_{\ge 0}$, and write
+\paragraph{Problem 6.} A (positive) integer is divisible by 9 $\iff$ the sum of its digits is divisible by 9. Let $n \in \mathbb Z_{\ge 0}$, and write
 \[n = \sum_{i=0}^\infty d_i 10^i = \sum_{i=0}^\infty d_i (10^i-1) + \sum_{i=0}^\infty d_i. \]
-where only finitely many $d_i$ are nonzero. Note that for all $i$, $10^i - 1 = 9\cdot \sum_{k=0}^{i-1}10^k$ so $9$ divides $10^i - 1$. Since $\sum_{i=0}^\infty d_i(10^i-1)$ is a finite sum of integers divisible by $9$, nine must also divide it. Let $k \in \mathbb Z$ be such that $9k = \sum_{i=0}^\infty d_i (10^i - 1)$.
+where $\forall i, 0 \le d_i \le 9$ and only finitely many $d_i$ are nonzero. Note that for all $i$, $10^i - 1 = 9\cdot \sum_{k=0}^{i-1}10^k$ (taking the sum to be 0 when $i=0$), so $9$ divides $10^i - 1$. See \textbf{12a} for more detail I guess. Since $\sum_{i=0}^\infty d_i(10^i-1)$ is a finite sum of integers divisible by $9$, nine must also divide it. Let $k \in \mathbb Z$ be such that $9k = \sum_{i=0}^\infty d_i (10^i - 1)$.
 
 ($\implies$) Suppose $9 \mid n$, and let $\ell \in \mathbb Z$ be such that $n = 9\ell$. We can write
 \[\sum_{i=0}^\infty d_i = n - \sum_{i=0}^\infty d_i (10^i-1) = 9(\ell - k). \]
@@ -79,11 +79,11 @@ By the division algorithm, there exists $q \in \mathbb Z$ and an integer $r$ suc
 \newpage{}
 \paragraph{Problem 8.} Let $a,b,c$ be positive, nonzero integers. If $c^2 = ab$ and $\mathrm{gcd}(a, b) = 1$, then $a$ and $b$ are perfect squares.
 
-Let $P$ be set of positive primes greater than 1, and let $f_a, f_b, f_c : P \to \mathbb N$ be the unique prime factorizations of $a$, $b$, and $c$ such that $a = \prod_{p \in P} p^{f_a(p)}$ and so on. Since $c^2 = ab$ and prime factorizations are unique, $2\cdot f_c = f_a + f_b$. Since $\mathrm{gcd}(a,b) =1$, we must have that $f_a(p) > 0 \implies f_b(p) = 0$ (and vice versa) for all $p \in P$, as otherwise $p \mid a$ and $p \mid b$, implying that $\mathrm{gcd}(a,b) = 1 > p$, a contradiction. Thus, for all $p \in P$, either $f_a(p) = 0$ or $f_a(p) = 2 \cdot f_c(p)$, so $2 \mid f_a(p)$ (and similarly $2 \mid f_b(p)$). 
+Let $P$ be set of positive primes greater than 1, and let $f_a, f_b, f_c : P \to \mathbb N$ be the unique prime factorizations of $a$, $b$, and $c$ such that $a = \prod_{p \in P} p^{f_a(p)}$ and so on. Since $c^2 = ab$ and prime factorizations are unique, $2\cdot f_c = f_a + f_b$. Since $\mathrm{gcd}(a,b) =1$, we must have that $f_a(p) > 0 \implies f_b(p) = 0$ (and vice versa) for all $p \in P$, as otherwise $p \mid a$ and $p \mid b$, implying that $\mathrm{gcd}(a,b) = 1 \ge p$, a contradiction. Thus, for all $p \in P$, either $f_a(p) = 0$ or $f_a(p) = 2 \cdot f_c(p)$, so $2 \mid f_a(p)$ (and similarly $2 \mid f_b(p)$). 
 
 With this, we can define functions $h_a, h_b : P \to \mathbb N$ such that $f_a = 2\cdot h_a$ and $f_b = 2\cdot h_b$. Then,
 \[a = \left(\prod_{p \in P} p^{h_a(p)}\right)^2\]
-and similarly for $b$, so $a$ and $b$ are square numbers. $\square$
+and similarly for $b$, so $a$ and $b$ are square numbers. Sorry for being annoying with this proof, I was annoyed by this problem. $\square$
 
 \paragraph{Problem 9.} Let $p>1$ be a prime. For all $k$ with $1 \le k < p$, $p$ must divide the binomial coefficient $\binom{p}{k}$. First, we prove this useful lemma:
 
@@ -95,7 +95,7 @@ and similarly for $b$, so $a$ and $b$ are square numbers. $\square$
     \end{proof}
 \end{lemma}
 
-    Note that $\binom{p}{k} \in \mathbb Z$ and that $k! (p-k)! \binom{p}{k} = p!$. Since $p \mid p!$, we must have that $p \mid k! (p-k)! \binom{p}{k}$. Thus, we must have that either $p \mid k!(p-k)!$ or $p \mid \binom{p}{k}$ as $p$ is prime. Now, since $k < p$ and $p - k < p$, we must have that $p \nmid k!$ and $p \nmid (p-k)!$, so $p \nmid k!(p-k)!$ by the contrapositive of the theorem on prime divisors. Finally, this must mean that $p \mid \binom{p}{k}$. $\square$
+    Recall the theorem on prime divisors: for $a,b \in \mathbb Z$ and prime $p$, $p \mid ab \implies p \mid a \lor p \mid b$. Note that $\binom{p}{k} \in \mathbb Z$ and that $k! (p-k)! \binom{p}{k} = p!$. Since $p \mid p!$, we must have that $p \mid k! (p-k)! \binom{p}{k}$. Thus, we must have that either $p \mid k!(p-k)!$ or $p \mid \binom{p}{k}$ as $p$ is prime. Now, since $k < p$ and $p - k < p$, we must have that $p \nmid k!$ and $p \nmid (p-k)!$, so $p \nmid k!(p-k)!$ by the contrapositive of the theorem on prime divisors. Finally, this must mean that $p \mid \binom{p}{k}$. $\square$
 
 
     \newpage{}
@@ -112,13 +112,25 @@ Define $n = \prod_{i=1}^k p_i$, and note that for all $p \in P$, $p \mid n$. Bec
 
 \paragraph{Problem 11.} Let $n \in \mathbb Z_{>2}$. There exists a prime $p$ such that $n < p < n!$.
 
-Because $n!-1$ must have a prime factorization, there must exist some prime $p$ such that $1 < p \le n! - 1$ and $p \mid (n! - 1)$. By the \textbf{Useful Lemma} above, $p$ must not divide $n!$. However, all integers $1 < d \le n$ divide $n!$, so $p$ must not be equal to any such $d$, and $p$ must satisfy $p > n$. Thus, we have found a prime $n < p < n!$. $\square$
+Because $n!-1$ must have a prime factorization, there must exist some prime $p$ such that $1 < p \le n! - 1$ and $p \mid (n! - 1)$. By the \textbf{Useful Lemma} above, $p$ must not divide $n!$. However, all integers $1 < d \le n$ divide $n!$, so $p$ must not be equal to any such $d$, and $p$ must satisfy $p > n$. Thus, we have found a prime $n < p \le n! - 1 < n!$. $\square$
 
 
 \paragraph{Problem 12.}
 \begin{enumerate}
-    \item[a.] For all positive $n$, $10^n \equiv 1 \mod 9$.
+    \item[a.] For all nonnegative $n$, $10^n \equiv 1 \pmod 9$.
+    
+    Let $n \in \mathbb N_{\ge0}$. If $n = 0$, then $10^i = 1$ so trivially $10^0 \equiv 1 \pmod 9$ as $9 \mid (1 - 1)$. Otherwise, $n > 0$, so define \[S = \sum_{i= 0}^{n-1} 10^i. \]
+    Note that $10S = \sum_{i=1}^{n} 10^i$, so $9S = 10S - S = 10^n - 1$. Thus, $9 S = 10^n - 1$, so $9 \mid (10^n - 1)$ and $10^n \equiv 1 \pmod 9$. $\square$
+
     \item[b.] Every positive integer $n$ is congruent to the sum of its digits mod 9. 
+    
+    Let $d : \mathbb Z_{\ge 0} \to \mathbb Z_{\ge 0} \cap [0, 9]$ be a finitely supported function representing the digits of $n$ such that
+    \begin{align*}
+        n = \sum_{i = 0}^\infty d(i) 10^i
+    \end{align*}
+
+    Recall that for all $x,y,z,w,m \in \mathbb Z$, $x \equiv z \pmod m$ and $y \equiv w \pmod m$ implies that $x + y \equiv z + w \pmod m$ and $xy \equiv zw \pmod m$. For all $i$, since $10^i \equiv 1 \pmod 9$, this means that $d(i)10^i \equiv d(i) \pmod 9$. Also recall that $\equiv$ is an equivalence relation and thus transitive, and since the following is a finite sum, we have
+    \[n \equiv \sum_{i=0}^\infty d(i)10^i \equiv \sum_{i=0}^\infty d(i) \pmod 9.\]
 \end{enumerate}
 
 \end{document}
