@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 this is a formalization of https://discord.com/channels/687491241793159223/887035729975324732/1537253316910780488
@@ -10,99 +12,52 @@ special case of Sharkovskii's Theorem.
 
 -/
 
-section
+public section
 
 open Function
 
 universe u
+variable {α : Type*}
 
+theorem strictMono_nat_iff [Preorder α] {f : ℕ → α} :
+    StrictMono f ↔ ∀ n, f n < f (n + 1) :=
+  ⟨fun h n ↦ h (Nat.lt_succ_self n), strictMono_nat_of_lt_succ⟩
 
+theorem strictAnti_nat_iff [Preorder α] {f : ℕ → α} :
+    StrictAnti f ↔ ∀ n, f (n + 1) < f n :=
+  ⟨fun h n ↦ h (Nat.lt_succ_self n), strictAnti_nat_of_succ_lt⟩
 
-theorem iterate_not_monotone_of_periodic_of_not_fixed {α : Type u} [PartialOrder α]
-    {f : α → α} {x : α} (hperiod : x ∈ f.periodicPts)
-    (hnotfixed : f x ≠ x) : ¬Monotone (fun n : ℕ => f^[n] x) := by
+theorem monotone_nat_iff [Preorder α] {f : ℕ → α} :
+    Monotone f ↔ ∀ n, f n ≤ f (n + 1) :=
+  ⟨fun h n ↦ h (Nat.le_succ n), monotone_nat_of_le_succ⟩
+
+theorem antitone_nat_iff [Preorder α] {f : ℕ → α} :
+    Antitone f ↔ ∀ n, f (n + 1) ≤ f n :=
+  ⟨fun h n ↦ h (Nat.le_succ n), antitone_nat_of_succ_le⟩
+
+variable {f : α → α} {x : α}
+
+theorem iterate_not_monotone_of_mem_periodicPts [PartialOrder α]
+    (hx : x ∈ periodicPts f) (hnfix : ¬IsFixedPt f x) :
+    ¬Monotone (f^[·] x) := by
   intro h
-  obtain ⟨n, hn, (hp : f^[n] x = x)⟩ := mem_periodicPts.mpr hperiod
-  exact hnotfixed <| le_antisymm_iff.mpr
-    ⟨by simpa [hp] using h hn, h (Nat.zero_le 1)⟩
+  obtain ⟨n, hn, (hp : f^[n] x = x)⟩ := hx
+  refine hnfix <| le_antisymm ?_ (h (Nat.zero_le 1))
+  simpa [hp] using h hn
 
-theorem iterate_not_antitone_of_periodic_of_not_fixed {α : Type u} [PartialOrder α]
-    {f : α → α} {x : α} (hperiod : x ∈ f.periodicPts)
-    (hnotfixed : f x ≠ x) : ¬Antitone (fun n : ℕ => f^[n] x) :=
-  iterate_not_monotone_of_periodic_of_not_fixed (α := αᵒᵈ) hperiod hnotfixed
+theorem exists_map_lt_of_mem_periodicPts [LinearOrder α]
+    (hx : x ∈ periodicPts f) (hnfix : ¬IsFixedPt f x) :
+    ∃ b ∈ periodicOrbit f x, f b < b := by
+  have h := iterate_not_monotone_of_mem_periodicPts hx hnfix
+  rw [monotone_nat_iff] at h
+  push Not at h
+  obtain ⟨n, hn⟩ := h
+  refine ⟨f^[n] x, iterate_mem_periodicOrbit hx n, ?_⟩
+  rwa [iterate_succ'] at hn
 
-theorem monotone_nat_iff {α : Type*} [Preorder α] {u : ℕ → α} :
-    Monotone u ↔ ∀ n, u n ≤ u (n + 1) :=
-  ⟨fun h n => h (Nat.le_succ n), monotone_nat_of_le_succ⟩
-
-theorem antitone_nat_iff {α : Type*} [Preorder α] {u : ℕ → α} :
-    Antitone u ↔ ∀ n, u (n + 1) ≤ u n :=
-  ⟨fun h n => h (Nat.le_succ n), antitone_nat_of_succ_le⟩
-
-theorem exists_of_not_monotone {α : Type*} [LinearOrder α] {u : ℕ → α} :
-    ¬Monotone u ↔ ∃(b : ℕ), u (b + 1) < u b := by
-  constructor
-  · intro h
-    rw [monotone_nat_iff] at h
-    push Not at h
-    exact h
-  · intro ⟨n, hn⟩
-    rw [monotone_nat_iff]
-    push Not
-    exact ⟨n, hn⟩
-
-theorem exists_of_not_antitone {α : Type*} [LinearOrder α] {u : ℕ → α} :
-    ¬Antitone u ↔ ∃(b : ℕ), u b < u (b + 1) := by
-  constructor
-  · intro h
-    rw [antitone_nat_iff] at h
-    push Not at h
-    exact h
-  · intro ⟨n, hn⟩
-    rw [antitone_nat_iff]
-    push Not
-    exact ⟨n, hn⟩
-
-theorem exists_lt_self_of_periodic_of_not_fixed {α : Type u} [LinearOrder α]
-    {f : α → α} {x : α} (hperiod : x ∈ f.periodicPts)
-    (hnotfixed : f x ≠ x) : ∃(b : α), b ∈ f.periodicOrbit x ∧ f b < b:= by
-  have h := iterate_not_monotone_of_periodic_of_not_fixed hperiod hnotfixed
-  by_contra h'
-  push Not at h'
-  obtain ⟨b, hb⟩ := exists_of_not_monotone.mp h
-  simp only [iterate_succ', comp_apply] at hb
-  have h₂ := h' (f^[b] x) (iterate_mem_periodicOrbit hperiod b)
-  exact (not_lt.mpr <| h₂) hb
-
-theorem exists_self_lt_of_periodic_of_not_fixed {α : Type u} [LinearOrder α]
-    {f : α → α} {x : α} (hperiod : x ∈ f.periodicPts)
-    (hnotfixed : f x ≠ x) : ∃(b : α), b ∈ f.periodicOrbit x ∧ b < f b := by
-  have h := iterate_not_antitone_of_periodic_of_not_fixed hperiod hnotfixed
-  by_contra h'
-  push Not at h'
-  obtain ⟨b, hb⟩ := exists_of_not_antitone.mp h
-  simp only [iterate_succ', comp_apply] at hb
-  have h₂ := h' (f^[b] x) (iterate_mem_periodicOrbit hperiod b)
-  exact (not_lt.mpr <| h₂) hb
-
-theorem exists_fixed_pt_of_continuous_of_periodic_pt
-    {f : ℝ → ℝ} (hf : Continuous f)
-    {x₀ : ℝ} (hx₀ : x₀ ∈ f.periodicPts) : ∃(b : ℝ), f b = b := by
-  by_cases hfixed : f x₀ = x₀
-  · use x₀
-  obtain ⟨a, hamem, ha⟩ := exists_self_lt_of_periodic_of_not_fixed hx₀ hfixed
-  obtain ⟨b, hbmem, hb⟩ := exists_lt_self_of_periodic_of_not_fixed hx₀ hfixed
-  let g (x : ℝ) := f x - x
-  have hg : Continuous g := hf.sub continuous_id
-  have hivt := intermediate_value_uIcc (a := a) (b := b) hg.continuousOn
-  have h0 : (0 : ℝ) ∈ Set.uIcc (g a) (g b) := by
-    rw [Set.mem_uIcc]
-    right
-    constructor <;> dsimp [g] <;> linarith
-  obtain ⟨c, hc_mem, hcg⟩ := hivt h0
-  use c
-  dsimp [g] at hcg
-  linarith
+theorem exists_lt_map_of_mem_periodicPts [LinearOrder α]
+    (hx : x ∈ periodicPts f) (hnfix : ¬IsFixedPt f x) :
+    ∃ b ∈ periodicOrbit f x, b < f b :=
+  exists_map_lt_of_mem_periodicPts (α := αᵒᵈ) hx hnfix
 
 end
-

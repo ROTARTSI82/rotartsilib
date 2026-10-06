@@ -1,4 +1,8 @@
-import Mathlib.Tactic
+module
+
+public import Mathlib.Tactic
+
+public section
 
 universe u v
 variable {X : Sort u} {Y : Sort v}
@@ -56,3 +60,5 @@ theorem cantor {X : Type u} (f : X → Set X) : ¬f.Surjective := by
     unfold diag
     rwa [hx]
   exact h h'
+
+end
