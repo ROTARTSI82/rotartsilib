@@ -20,13 +20,13 @@ variable {n m R : Type*} [DecidableEq n] [DecidableEq m]
 variable [Fintype m] [Fintype n] [CommRing R]
 
 def Matrix.selector (J : Set n) : Matrix {x // x ∈ J} n R :=
-  fun i j =>
+  Matrix.of <| fun i j =>
     if i = j then 1 else 0
 
 section
 variable (M : Matrix m n R) (I : Set m) (J : Set n)
 def Matrix.select : Matrix {x // x ∈ I} {x // x ∈ J} R :=
-  fun i j => M i j
+  Matrix.of <| fun i j => M i j
 
 def Matrix.select' : Matrix {x // x ∈ I} {x // x ∈ J} R :=
   M.submatrix Subtype.val Subtype.val
@@ -51,7 +51,6 @@ theorem vecSelect_eq : Matrix.vecSelect v I = (Matrix.selector I) *ᵥ v := by
   simp [Matrix.vecSelect, Matrix.selector, Matrix.mulVec, dotProduct, Finset.sum_ite_eq]
 end
 
--- wanted api
 lemma Fintype.sum_eq_sum_subtype_of_zero {α M} [Fintype α] [AddCommMonoid M]
     (p : α → Prop) [DecidablePred p] (f : α → M) (h : ∀ x, ¬ p x → f x = 0) :
     ∑ x : α, f x = ∑ x : {a // p a}, f ↑x := by
@@ -59,7 +58,6 @@ lemma Fintype.sum_eq_sum_subtype_of_zero {α M} [Fintype α] [AddCommMonoid M]
   have h_zero : (∑ x : {a // ¬ p a}, f ↑x) = 0 := Finset.sum_eq_zero (fun x _ => h x.1 x.2)
   simp only [h_zero, add_zero]
 
--- definitely not slop anymore
 set_option linter.unusedSectionVars false in
 theorem drop_prop (I : Set m) (J : Set n) (M : Matrix m n R) (v : n → R)
     (hv : ∀ j, j ∉ J → v j = 0) [DecidablePred (· ∈ J)] :
@@ -70,18 +68,62 @@ theorem drop_prop (I : Set m) (J : Set n) (M : Matrix m n R) (v : n → R)
 
 end
 
+
 section
 
-variable (n k : ℕ)
+variable {n : Type*} (I : Set n) [DecidablePred (· ∈ I)]
 
-#check { s : Finset (Fin n) // s.card = k }
-#eval let k := 3
-  let n := 5
-  Finset.powersetCard k (Finset.univ : Finset (Fin n))
+def setPartitionIso : n ≃ {x // x ∈ I} ⊕ {x // ¬ (x ∈ I)} where
+  toFun x := if h : x ∈ I then Sum.inl ⟨x, h⟩ else Sum.inr ⟨x, h⟩
+  invFun := Sum.elim Subtype.val Subtype.val 
+  left_inv := by
+    intro x
+    by_cases h : x ∈ I
+    · simp [dite_eq_left h]
+    · simp [dite_eq_right h]
+  right_inv := by
+    intro x
+    rcases x with l | r
+    · simp
+    · simp [r.property]
 
-#check { s : Finset (Fin n) // s.card ≤ k }
-#eval let k := 3
-  let n := 5
-  (Finset.univ : Finset (Fin n)).powerset.filter (fun s => s.card ≤ k)
+#check Fintype.card
+
+variable [hn : Fintype n] 
+  
+instance : Fintype {x // x ∈ I} where
+  elems := hn.elems.filterMap (fun x => if h : x ∈ I then Option.some ⟨x, h⟩ else Option.none) <| by
+    intro a a' b hb₁ hb₂ 
+    by_cases h : a ∈ I
+    · simp [dite_eq_left h] at *
+      rw [← hb₁] at hb₂
+      simp [hb₂]
+    · simp [dite_eq_right h] at *
+  complete := by
+    intro x
+    simp [hn.complete]
 
 end
+
+
+public section
+
+end
+
+
+/- Solutions to the problems -/
+public section
+
+variable {n : Type*} [hn : Fintype n]
+variable {k : ℕ} (hk : k ≤ Fintype.card n)
+variable {I J : Finset n} 
+
+variable (hI : I.card = k) (hJ : J.card = k)
+
+
+
+#check Set.toFinset
+
+end
+
+

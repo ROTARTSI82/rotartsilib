@@ -45,7 +45,7 @@ Since $k_a - k_b + 3 \in \mathbb Z$, we must have that $11 \mid (a+b)$. $\square
 
 \paragraph{Problem 4.} Let $n$ be a positive integer. We can show that $\tfrac{12n+1}{30n+2}$ cannot be reduced by computing
 \begin{align*}
-    \mathrm{gcd}(12n+1,30n+2) &= \mathrm{gcd}(12n+1, 30n+2 - 2[12n+1]) \\ &= \mathrm{gcd}(12n+1, 6n) \\
+    \mathrm{gcd}(12n+1,30n+2) &= \mathrm{gcd}(12n+1, 30n+2 - 2[12n+1]) \\ &= \mathrm{gcd}(12n+1, 6n) = \mathrm{gcd}(12n+1-2\cdot 6n, 6n) \\
     &= \mathrm{gcd}(1, 6n) = 1.
 \end{align*}
 
@@ -64,7 +64,7 @@ In general, $\mathrm{gcd}(b^m - 1, b^n - 1) = b^{\mathrm{gcd}(m, n)} - 1$ for $b
 
 \paragraph{Problem 6.} A (positive) integer is divisible by 9 $\iff$ the sum of its digits is divisible by 9. Let $n \in \mathbb Z_{\ge 0}$, and write
 \[n = \sum_{i=0}^\infty d_i 10^i = \sum_{i=0}^\infty d_i (10^i-1) + \sum_{i=0}^\infty d_i. \]
-where $\forall i, 0 \le d_i \le 9$ and only finitely many $d_i$ are nonzero. Note that for all $i$, $10^i - 1 = 9\cdot \sum_{k=0}^{i-1}10^k$ (taking the sum to be 0 when $i=0$), so $9$ divides $10^i - 1$. See \textbf{12a} for more detail I guess. Since $\sum_{i=0}^\infty d_i(10^i-1)$ is a finite sum of integers divisible by $9$, nine must also divide it. Let $k \in \mathbb Z$ be such that $9k = \sum_{i=0}^\infty d_i (10^i - 1)$.
+where $\forall i, 0 \le d_i \le 9$ and only finitely many $d_i$ are nonzero. Note that for all $i$, $10^i - 1 = 9\cdot \sum_{k=0}^{i-1}10^k$ (taking the sum to be 0 when $i=0$), so $9$ divides $10^i - 1$. Since $\sum_{i=0}^\infty d_i(10^i-1)$ is a finite sum of integers divisible by $9$, nine must also divide it. Let $k \in \mathbb Z$ be such that $9k = \sum_{i=0}^\infty d_i (10^i - 1)$.
 
 ($\implies$) Suppose $9 \mid n$, and let $\ell \in \mathbb Z$ be such that $n = 9\ell$. We can write
 \[\sum_{i=0}^\infty d_i = n - \sum_{i=0}^\infty d_i (10^i-1) = 9(\ell - k). \]
@@ -74,14 +74,16 @@ Since $\ell - k \in \mathbb Z$, we must have $9 \mid \sum_{i=0}^\infty d_i$ as d
 \[n = \sum_{i=0}^\infty d_i + \sum_{i=0}^\infty d_i (10^i-1) = 9(\ell + k). \]
 Since $\ell + k \in \mathbb Z$, we must have $9 \mid n$ as desired. $\square$
 
-\paragraph{Problem 7.} Let $\{a_1,\dots,a_k\}$ be a set of nonzero integers, and let $m=[a_1,\dots,a_k]$ be their least common multiple. If $t \in \mathbb Z$ is such that $a_i \mid t$ for all $1 \le i \le k$, then $m \mid t$.
+\paragraph{Problem 7.} Let $\{a_1,\dots,a_k\}$ be a set of nonzero integers, and let $m=[a_1,\dots,a_k]$ be their least common multiple. Note that $m > 0$. If $t \in \mathbb Z$ is such that $a_i \mid t$ for all $1 \le i \le k$, then $m \mid t$.
 
 By the division algorithm, there exists $q \in \mathbb Z$ and an integer $r$ such that $0 \le r < m$ and $t = m \cdot q + r$. Assume for contradiction that $r \ne 0$, so that $0 < r < m$. Let $i$ be any integer $1 \le i \le k$, and note that $a_i \mid t$ and $a_i \mid m$. Then, since $r = t - mq$, we must have $a_i \mid r$. Thus, $r$ is a positive, nonzero integer such that $a_i \mid r$ for all $1 \le i \le k$. By the definition of least common multiple, this means $m \le r$. However, this contradicts the property of the division algorithm that $r < m$, so we must have that $r = 0$. Thus, $t = m \cdot q$, and $m \mid t$. $\square$
 
 \newpage{}
 \paragraph{Problem 8.} Let $a,b,c$ be positive, nonzero integers. If $c^2 = ab$ and $\mathrm{gcd}(a, b) = 1$, then $a$ and $b$ are perfect squares.
 
-Let $P$ be set of positive primes greater than 1, and let $f_a, f_b, f_c : P \to \mathbb N$ be the unique prime factorizations of $a$, $b$, and $c$ such that $a = \prod_{p \in P} p^{f_a(p)}$ and so on. Since $c^2 = ab$ and prime factorizations are unique, $2\cdot f_c = f_a + f_b$. Since $\mathrm{gcd}(a,b) =1$, we must have that $f_a(p) > 0 \implies f_b(p) = 0$ (and vice versa) for all $p \in P$, as otherwise $p \mid a$ and $p \mid b$, implying that $\mathrm{gcd}(a,b) = 1 \ge p$, a contradiction. Thus, for all $p \in P$, either $f_a(p) = 0$ or $f_a(p) = 2 \cdot f_c(p)$, so $2 \mid f_a(p)$ (and similarly $2 \mid f_b(p)$). 
+Let $P$ be set of primes greater than 1, and let $f_a, f_b, f_c : P \to \mathbb Z_{\ge 0}$ be finitely supported functions, the unique prime factorizations of $a$, $b$, and $c$ such that $a = \prod_{p \in P} p^{f_a(p)}$ and so on. Since $c^2 = ab$ and prime factorizations are unique, $2\cdot f_c = f_a + f_b$. 
+
+Since $\mathrm{gcd}(a,b) =1$, we must have that $f_a(p) > 0 \implies f_b(p) = 0$ (and vice versa) for all $p \in P$. Assume for contradiction that there existed some $p \in P$ such that $f_a(p) > 0$ and $f_b(p) > 0$. Then $p \mid a$ and $p \mid b$, implying that $p \le \mathrm{gcd}(a,b) = 1$, contradicting the fact that $p > 1$. Thus, for all $p \in P$, either $f_a(p) = 0$ or $f_a(p) = 2 \cdot f_c(p)$, so $2 \mid f_a(p)$ (and similarly $2 \mid f_b(p)$). 
 
 With this, we can define functions $h_a, h_b : P \to \mathbb N$ such that $f_a = 2\cdot h_a$ and $f_b = 2\cdot h_b$. Then,
 \[a = \left(\prod_{p \in P} p^{h_a(p)}\right)^2\]
@@ -110,18 +112,19 @@ Let $k \in \mathbb Z$ be such that $n = dk$. Assume for contradiction that $d$ d
 
 Assume for contradiction that there exists a finite set of all primes \[P=\{ p_1, \dots, p_k \} = \{ p \in \mathbb N_{>1} \mid p \text{ is prime}\}.\]
 
-Define $n = \prod_{i=1}^k p_i$, and note that for all $p \in P$, $p \mid n$. Because $n+1$ must have a prime factorization, there must exist a prime $p$ such that $1 < p \le n+1$ and $p \mid (n+1)$. By the contrapositive of the \textbf{Useful Lemma} above, $p$ must not divide $n$. However, $p$ is prime and $p>1$, so $p \in P$ and $p \mid n$. Thus, we have a contradiction, and there exists no such set $P$. $\square$
+Define $n = \prod_{i=1}^k p_i$ so that for all $p \in P$, $p \mid n$. Also note that since 2 is prime, $n \ge 2$. Because $n+1$ must have a prime factorization, there must exist a prime $p$ such that $1 < p \le n+1$ and $p \mid (n+1)$. By the contrapositive of the \textbf{Useful Lemma} above, $p$ must not divide $n$. However, $p$ is prime and $p>1$, so $p \in P$ and $p \mid n$. Thus, we have a contradiction, and there exists no such set $P$. $\square$
 
 \paragraph{Problem 11.} Let $n \in \mathbb Z_{>2}$. There exists a prime $p$ such that $n < p < n!$.
 
-Because $n!-1$ must have a prime factorization, there must exist some prime $p$ such that $1 < p \le n! - 1$ and $p \mid (n! - 1)$. By the \textbf{Useful Lemma} above, $p$ must not divide $n!$. However, all integers $1 < d \le n$ divide $n!$, so $p$ must not be equal to any such $d$, and $p$ must satisfy $p > n$. Thus, we have found a prime $n < p \le n! - 1 < n!$. $\square$
+Note that $2 < n < n! - 1$, and that since $n!-1$ must have a prime factorization, there must exist some prime $p$ such that $1 < p \le n! - 1$ and $p \mid (n! - 1)$. By the \textbf{Useful Lemma} above, $p$ must not divide $n!$. Assume for contradiction that $p \le n$. Then, $p \mid n!$, but this is in direct contradiction with the Useful Lemma's conclusion that $p \nmid n!$. Thus, $p > n$, and we have found a prime $n < p \le n! - 1 < n!$. $\square$
 
 
+\newpage{}
 \paragraph{Problem 12.}
 \begin{enumerate}
     \item[a.] For all nonnegative $n$, $10^n \equiv 1 \pmod 9$.
     
-    Let $n \in \mathbb N_{\ge0}$. If $n = 0$, then $10^i = 1$ so trivially $10^0 \equiv 1 \pmod 9$ as $9 \mid (1 - 1)$. Otherwise, $n > 0$, so define \[S = \sum_{i= 0}^{n-1} 10^i. \]
+    Let $n \in \mathbb N_{\ge0}$. If $n = 0$, then $10^n = 1$ so trivially $10^0 \equiv 1 \pmod 9$ as $9 \mid (1 - 1)$. Otherwise, $n > 0$, so define \[S = \sum_{i= 0}^{n-1} 10^i. \]
     Note that $10S = \sum_{i=1}^{n} 10^i$, so $9S = 10S - S = 10^n - 1$. Thus, $9 S = 10^n - 1$, so $9 \mid (10^n - 1)$ and $10^n \equiv 1 \pmod 9$. $\square$
 
     \item[b.] Every positive integer $n$ is congruent to the sum of its digits mod 9. 
@@ -132,7 +135,7 @@ Because $n!-1$ must have a prime factorization, there must exist some prime $p$ 
     \end{align*}
 
     Recall that for all $x,y,z,w,m \in \mathbb Z$, $x \equiv z \pmod m$ and $y \equiv w \pmod m$ implies that $x + y \equiv z + w \pmod m$ and $xy \equiv zw \pmod m$. For all $i$, since $10^i \equiv 1 \pmod 9$, this means that $d(i)10^i \equiv d(i) \pmod 9$. Also recall that $\equiv$ is an equivalence relation and thus transitive, and since the following is a finite sum, we have
-    \[n \equiv \sum_{i=0}^\infty d(i)10^i \equiv \sum_{i=0}^\infty d(i) \pmod 9.\]
+    \[n = \sum_{i=0}^\infty d(i)10^i \equiv \sum_{i=0}^\infty d(i) \pmod 9.\]
 \end{enumerate}
 
 \end{document}
