@@ -12,6 +12,8 @@ public import Mathlib
 #check Matrix.fromBlocks
 #check Matrix.toBlocks₁₁
 
+namespace MathAI.Resultant
+
 public section
 
 open scoped Matrix
@@ -25,10 +27,10 @@ def Matrix.selector (J : Set n) : Matrix {x // x ∈ J} n R :=
 
 section
 variable (M : Matrix m n R) (I : Set m) (J : Set n)
-def Matrix.select : Matrix {x // x ∈ I} {x // x ∈ J} R :=
+def _root_.Matrix.select : Matrix {x // x ∈ I} {x // x ∈ J} R :=
   Matrix.of <| fun i j => M i j
 
-def Matrix.select' : Matrix {x // x ∈ I} {x // x ∈ J} R :=
+def _root_.Matrix.select' : Matrix {x // x ∈ I} {x // x ∈ J} R :=
   M.submatrix Subtype.val Subtype.val
 
 omit [DecidableEq n] [DecidableEq m] [Fintype m] [Fintype n] [CommRing R] in
@@ -126,4 +128,5 @@ variable (hI : I.card = k) (hJ : J.card = k)
 
 end
 
+end MathAI.Resultant
 

@@ -2,6 +2,8 @@ module
 
 public import Mathlib.Tactic
 
+namespace Rotartsilib.Function
+
 public section
 
 universe u v
@@ -62,3 +64,5 @@ theorem cantor {X : Type u} (f : X → Set X) : ¬f.Surjective := by
   exact h h'
 
 end
+
+end Rotartsilib.Function

@@ -1,3 +1,7 @@
+module
+
+namespace Rotartsilib.Function
+
 def hello := "world"
 
 def IsEven (n : Nat) : Prop :=
@@ -62,3 +66,5 @@ theorem iso₂ {X Y} (s : RelationSet X Y) :
       rfl
 
 #print axioms iso₂
+
+end Rotartsilib.Function

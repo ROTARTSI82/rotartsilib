@@ -12,9 +12,11 @@ special case of Sharkovskii's Theorem.
 
 -/
 
+namespace Rotartsilib.Function
+
 public section
 
-open Function
+open _root_.Function
 
 universe u
 variable {α : Type*}
@@ -61,3 +63,5 @@ theorem exists_lt_map_of_mem_periodicPts [LinearOrder α]
   exists_map_lt_of_mem_periodicPts (α := αᵒᵈ) hx hnfix
 
 end
+
+end Rotartsilib.Function
