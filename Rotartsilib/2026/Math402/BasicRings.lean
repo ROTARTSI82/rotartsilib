@@ -96,10 +96,10 @@ Some implementation details for how scalar multiplication and powers
 are implemented. Not really any mathematical content here.
 -/
 
+abbrev ℕ := Nat
+
 section HMul
 variable [Rng R]
-
-abbrev ℕ := Nat
 
 def nsmul (n : ℕ) (a : R) : R :=
   match n with
@@ -107,28 +107,43 @@ def nsmul (n : ℕ) (a : R) : R :=
   | p+1 => a + nsmul p a
 
 instance : HMul ℕ R R where
-  hMul := nsmul 
+  hMul := nsmul
 
+theorem nsmul_zero {a : R} : (0 : Nat) * a = 0 := by rfl
 theorem nsmul_succ {n : ℕ} {a : R} : (n + 1) * a = n * a + a := by
-  conv => rhs; rw [Rng.add_comm]
-  rfl
+  rw [Rng.add_comm]; rfl
 
-theorem nsmul_add {n m : ℕ} {a : R} : (n + m) * a = n * a + m * a := by
+theorem add_nsmul {n m : ℕ} {a : R} : n * a + m * a = (n + m) * a := by
   induction n with
-  | zero => 
-    dsimp; rw [Nat.zero_add]
-    change m * a = 0 + m * a
-    rw [zero_add]
+  | zero => simp [nsmul_zero] 
   | succ p h =>
     have eq : p.succ + m = (p + m) + 1 := by 
       simp [Nat.add_comm, Nat.add_assoc]
-    rw [eq, nsmul_succ (n := p + m), h, nsmul_succ (n := p)]
+    rw [eq, nsmul_succ (n := p + m), ← h, nsmul_succ (n := p)]
     simp [add_left_comm, Rng.add_comm]
 
-theorem add_nsmul {n m : ℕ} {a : R} : n * a + m * a = (n + m) * a :=
-  nsmul_add.symm
+
+theorem mul_nsmul {n m : ℕ} {a : R} : n * (m * a) = (n * m) * a := by
+  induction n with
+  | zero => simp [nsmul_zero]
+  | succ p h =>
+    rw [nsmul_succ, h, Nat.succ_mul, add_nsmul]
 
 end HMul
+
+section HPow 
+variable [Ring R]
+
+def npow (a : R) (n : ℕ) : R :=
+  match n with
+  | 0 => 1
+  | p+1 => a * npow a p
+
+/-
+ok maybe i give up, I'm realizing how annoying this is lmfao
+-/
+
+end HPow
 
 end
 end M402
