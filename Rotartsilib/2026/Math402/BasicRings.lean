@@ -90,6 +90,15 @@ theorem one_unique (n : R) (h : ∀(a : R), n * a = a) : n = 1 :=
 
 end Ring
 
+section CommRng
+variable [CommRng R]
+
+theorem mul_left_comm : ∀(a b c : R), a * (b * c) = b * (a * c) := by
+  intro a b c
+  rw [← Rng.mul_assoc, CommRng.mul_comm a b, Rng.mul_assoc]
+
+end CommRng
+
 
 /-!
 Some implementation details for how scalar multiplication and powers
@@ -109,25 +118,38 @@ def nsmul (n : ℕ) (a : R) : R :=
 instance : HMul ℕ R R where
   hMul := nsmul
 
-theorem nsmul_zero {a : R} : (0 : Nat) * a = 0 := by rfl
-theorem nsmul_succ {n : ℕ} {a : R} : (n + 1) * a = n * a + a := by
+variable {a b : R} {n m : ℕ}
+
+@[simp] theorem zero_nsmul : (0 : Nat) * a = 0 := by rfl
+theorem succ_nsmul : (n + 1) * a = n * a + a := by
   rw [Rng.add_comm]; rfl
 
-theorem add_nsmul {n m : ℕ} {a : R} : n * a + m * a = (n + m) * a := by
+theorem nsmul_zero : n * (0 : R) = 0 := by
   induction n with
-  | zero => simp [nsmul_zero] 
+  | zero => simp
+  | succ p h => rw [succ_nsmul, add_zero, h]
+
+theorem add_nsmul : n * a + m * a = (n + m) * a := by
+  induction n with
+  | zero => simp [zero_nsmul] 
   | succ p h =>
     have eq : p.succ + m = (p + m) + 1 := by 
       simp [Nat.add_comm, Nat.add_assoc]
-    rw [eq, nsmul_succ (n := p + m), ← h, nsmul_succ (n := p)]
+    rw [eq, succ_nsmul (n := p + m), ← h, succ_nsmul (n := p)]
     simp [add_left_comm, Rng.add_comm]
 
-
-theorem mul_nsmul {n m : ℕ} {a : R} : n * (m * a) = (n * m) * a := by
+theorem nsmul_add : n * (a + b) = n * a + n * b := by
   induction n with
-  | zero => simp [nsmul_zero]
+  | zero => simp
+  | succ p h => 
+    rw [succ_nsmul, h, succ_nsmul, succ_nsmul]
+    simp [add_left_comm, Rng.add_assoc, Rng.add_comm]
+
+theorem mul_nsmul : n * (m * a) = (n * m) * a := by
+  induction n with
+  | zero => simp [zero_nsmul]
   | succ p h =>
-    rw [nsmul_succ, h, Nat.succ_mul, add_nsmul]
+    rw [succ_nsmul, h, Nat.succ_mul, add_nsmul]
 
 end HMul
 
@@ -139,11 +161,85 @@ def npow (a : R) (n : ℕ) : R :=
   | 0 => 1
   | p+1 => a * npow a p
 
-/-
-ok maybe i give up, I'm realizing how annoying this is lmfao
--/
+instance : HPow R ℕ R where
+  hPow := npow
 
+variable {a b : R} {n m : ℕ}
+
+@[simp] theorem pow_zero : a ^ 0 = 1 := by rfl
+theorem pow_succ : a ^ (n + 1) = a * a ^ n := by rfl
+
+@[simp] theorem one_nsmul : (1 : ℕ) * a = a := by 
+  change nsmul 1 a = a; simp [nsmul]
+@[simp] theorem pow_one : a ^ 1 = a := by 
+  change npow a 1 = a; simp [npow]
+
+@[simp] theorem one_pow : (1 : R) ^ n = 1 := by
+  induction n with
+  | zero => rfl
+  | succ p h =>
+    rw [pow_succ, h, one_mul]
+
+theorem pow_add : a ^ (n + m) = a ^ n * a ^ m := by
+  induction n with
+  | zero => simp [pow_zero]
+  | succ p h =>
+    have eq : p.succ + m = (p + m) + 1 := by
+      simp [Nat.add_comm, Nat.add_assoc]
+    rw [eq, pow_succ, pow_succ, Rng.mul_assoc, h]
+
+theorem pow_mul : (a ^ n) ^ m = a ^ (n * m)  := by
+  induction m with
+  | zero => simp
+  | succ p h => 
+    rw [pow_succ, Nat.mul_succ, h, ← pow_add, Nat.add_comm] 
+
+@[simp] theorem zero_pow_succ : (0 : R) ^ (n + 1) = 0 := by
+  induction n with
+  | zero => simp
+  | succ p h => rw [pow_succ, h, mul_zero]
+
+
+theorem nsmul_mul_left : (n * a) * b = n * (a * b) := by
+  induction n with
+  | zero => simp
+  | succ p h => rw [succ_nsmul, succ_nsmul, ← h, Rng.right_distrib]
+
+theorem nsmul_mul_right : a * (n * b) = n * (a * b) := by
+  induction n with
+  | zero => simp
+  | succ p h => rw [succ_nsmul, succ_nsmul, Rng.left_distrib, h]
+
+
+theorem nsmul_mul_nsmul : (n * a) * (m * b) = (n * m) * (a * b) := by
+  induction n with
+  | zero => simp
+  | succ p h =>
+    rw [nsmul_mul_left, succ_nsmul, ← nsmul_mul_left, h,
+      Nat.succ_mul, ← add_nsmul, nsmul_mul_right]
+
+theorem nsmul_pow : (n * a) ^ m = (n ^ m) * a ^ m := by
+  induction m with
+  | zero => simp
+  | succ p h =>
+    rw [pow_succ, pow_succ, Nat.pow_succ, h,
+      nsmul_mul_nsmul, Nat.mul_comm]
+    
 end HPow
+
+section HPowComm
+variable [CommRing R]
+
+variable {a b : R} {n m : ℕ}
+
+theorem mul_pow : (a * b) ^ n = a ^ n * b ^ n := by
+  induction n with
+  | zero => simp
+  | succ p h =>
+    rw [pow_succ, pow_succ, pow_succ, h]
+    simp [mul_left_comm, Rng.mul_assoc]
+
+end HPowComm
 
 end
 end M402
