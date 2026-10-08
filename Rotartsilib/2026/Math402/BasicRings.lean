@@ -72,9 +72,31 @@ theorem neg_mul : ∀(a b : R), (-a) * b = -(a * b) := by
 @[simp] theorem neg_zero : -(0 : R) = 0 :=
   (neg_unique <| add_zero (0 : R)).symm
 
+@[simp] theorem neg_neg {a : R} : -(-a) = a := by
+  refine (neg_unique ?_).symm
+  rw [add_comm, add_neg]
+
+@[simp] theorem neg_mul_neg {a b : R} : (-a) * (-b) = a * b := by
+  simp [mul_neg, neg_mul]
+
 theorem add_left_comm : ∀(a b c : R), a + (b + c) = b + (a + c) := by
   intro a b c
   rw [← Rng.add_assoc, Rng.add_comm a b, Rng.add_assoc]
+
+theorem add_inj {a b c : R} : a + c = b + c ↔ a = b := by
+  constructor
+  · intro h
+    simpa [add_assoc] using congrArg (fun x => x + -c) h 
+  · intro h; rw [h]
+
+theorem neg_distrib : ∀(a b : R), -(a + b) = (-a) + (-b) := by
+  intro a b
+  have h₁ : ((-a) + (-b)) + (a + b) = 0 := by
+    rw [Rng.add_comm a b, Rng.add_assoc]
+    simp [Rng.add_comm, Rng.add_assoc]
+  have h₂ : -(a + b) + (a + b) = 0 := by simp [add_comm]
+  rw [← h₁] at h₂
+  rwa [add_inj] at h₂
 
 end Rng
 
@@ -123,6 +145,11 @@ variable {a b : R} {n m : ℕ}
 @[simp] theorem zero_nsmul : (0 : Nat) * a = 0 := by rfl
 theorem succ_nsmul : (n + 1) * a = n * a + a := by
   rw [Rng.add_comm]; rfl
+
+@[simp] theorem nsmul_neg : n * (-a) = -(n * a) := by
+  induction n with
+  | zero => simp
+  | succ p h => rw [succ_nsmul, h, succ_nsmul, neg_distrib]
 
 theorem nsmul_zero : n * (0 : R) = 0 := by
   induction n with
@@ -210,6 +237,8 @@ theorem nsmul_mul_right : a * (n * b) = n * (a * b) := by
   | zero => simp
   | succ p h => rw [succ_nsmul, succ_nsmul, Rng.left_distrib, h]
 
+@[simp] theorem nsmul_one_mul : (n * (1 : R)) * a = n * a := by
+  simp [nsmul_mul_left]
 
 theorem nsmul_mul_nsmul : (n * a) * (m * b) = (n * m) * (a * b) := by
   induction n with
