@@ -247,6 +247,7 @@ variable {i j : ℤ}
 #check Int.negSucc_mul_ofNat
 
 @[simp] theorem ofNat_zsmul : (n : ℤ) * a = n * a := by rfl
+@[simp] theorem ofNat_zsmul' : (Int.ofNat n) * a = n * a := by rfl
 theorem negSucc_zsmul : (Int.negSucc n) * a = -((n+1)*a) := by rfl
 
 theorem zsmul_add : i * (a + b) = i * a + i * b := by 
@@ -261,110 +262,81 @@ theorem zsmul_add : i * (a + b) = i * a + i * b := by
     simp only [Nat.succ_eq_add_one, Int.natCast_add, Int.cast_ofNat_Int, succ_nsmul]
     rw [neg_distrib, Int.ofNat_add_one_out, Int.neg_ofNat_succ, negSucc_zsmul, succ_nsmul, neg_distrib]
 
-
-theorem succ_zsmul : (i + 1) * a = i * a + a := by
-  rcases i with x | x
-  · change (↑x + ↑(1 : ℕ) : ℤ) * a = (↑x) * a + a
-    rw [← Int.natCast_add, ofNat_zsmul, succ_nsmul]
-  · induction x with
-    | zero => simp
-    | succ p h => 
-      sorry /- 
-case negSucc.succ
-R : Type u
-inst✝ : Rng R
-a : R
-p : Nat
-h : (Int.negSucc p + 1) * a = Int.negSucc p * a + a
-⊢ (Int.negSucc (p + 1) + 1) * a = Int.negSucc (p + 1) * a + a -/
-
+theorem subNatNat_zsmul (n m : ℕ) : (Int.subNatNat n m) * a = n * a + -(m * a) := by
+  refine Int.subNatNat_elim n m (fun x y s => s * a = x * a + -(y * a)) ?_ ?_
+  · intro i n
+    rw [ofNat_zsmul, ← add_nsmul, Rng.add_comm, ← Rng.add_assoc]
+    simp
+  · intro i m
+    rw [negSucc_zsmul, succ_nsmul, succ_nsmul, ← add_nsmul]
+    repeat rw [neg_distrib]
+    rw [Rng.add_assoc, ← Rng.add_assoc (a := m*a), add_neg, zero_add] 
 
 @[simp] theorem zsmul_neg : i * (-a) = -(i * a) := by cases i <;> simp [negSucc_zsmul]
 theorem zsmul_zero : i * (0 : R) = 0 := by cases i <;> simp [negSucc_zsmul, nsmul_zero]
 
-#check Int.negSucc_eq
-
-theorem negSucc_add_ofNat_zsmul : (n + Int.negSucc m : ℤ) * a = n * a + -((m + 1) * a) := by
-  induction n with
-  | zero => simp [negSucc_zsmul]
-  | succ p h => 
-    rw [← neg_ofNat_zsmul, ← ofNat_zsmul (n := p.succ)]
-    sorry /- 
-h : (↑p + Int.negSucc m) * a = p * a + -((m + 1) * a)
-⊢ (↑p.succ + Int.negSucc m) * a = ↑p.succ * a + -↑(m + 1) * a -/
-
-
-theorem nsmul_add_zsmul : ((n : ℤ) + i) * a = n * a + i * a := by
-  induction n with
-  | zero => simp
-  | succ p h =>
-    rcases i with l | l
-    · change (p.succ + l : ℤ) * a = p.succ * a + (l : ℤ) * a
-      rw [Int.ofNat_add_ofNat, ofNat_zsmul, ofNat_zsmul, add_nsmul]
-    · sorry /- case succ.negSucc
-R : Type u
-inst✝ : Rng R
-a : R
-n : ℕ
-p l : Nat
-h : (↑p + Int.negSucc l) * a = p * a + Int.negSucc l * a
-⊢ (↑p.succ + Int.negSucc l) * a = p.succ * a + Int.negSucc l * a -/
-
-
 theorem add_zsmul : i * a + j * a = (i + j) * a := by 
-  cases i <;> cases j 
-  <;> simp [negSucc_zsmul, ← Int.natCast_add, ofNat_zsmul, add_nsmul, succ_nsmul, Int.negSucc_add_negSucc]
-  · sorry /- case ofNat.negSucc
-R : Type u
-inst✝ : Rng R
-a : R
-a✝¹ a✝ : Nat
-⊢ a✝¹ * a + -(a✝ * a + a) = (↑a✝¹ + Int.negSucc a✝) * a  -/
-  · sorry /- 
-case negSucc.ofNat
-R : Type u
-inst✝ : Rng R
-a : R
-a✝¹ a✝ : Nat
-⊢ -(a✝¹ * a + a) + a✝ * a = (Int.negSucc a✝¹ + ↑a✝) * a -/
-  · rw [← add_nsmul] 
+  cases i <;> cases j
+  · simp [← Int.natCast_add, add_nsmul]
+  · simp only [Int.ofNat_eq_natCast, ofNat_zsmul]
+    rw [Int.ofNat_add_negSucc, subNatNat_zsmul, negSucc_zsmul] 
+  · simp only [Int.ofNat_eq_natCast, ofNat_zsmul] 
+    rw [Int.add_comm, Int.ofNat_add_negSucc, subNatNat_zsmul, 
+        negSucc_zsmul, succ_nsmul, neg_distrib]
+    simp [Rng.add_comm]
+  · simp only [negSucc_zsmul, succ_nsmul, Int.negSucc_add_negSucc]
+    rw [← add_nsmul] 
     simp [neg_distrib, add_left_comm, Rng.add_comm, Rng.add_assoc]
-
-  
+ 
 theorem zsmul_nsmul : i * (n * a) = (i * (n : ℤ)) * a := by
   cases i
-  <;> simp [← Int.natCast_mul, mul_nsmul, negSucc_zsmul]
-  induction n with
-  | zero => simp
-  | succ p h => sorry /- 
-h : -((a✝ + 1) * p * a) = Int.negSucc a✝ * ↑p * a
-⊢ -((a✝ + 1) * p.succ * a) = Int.negSucc a✝ * ↑p.succ * a -/
+  · simp [← Int.natCast_mul, mul_nsmul]
+  · rw [negSucc_zsmul, Int.negSucc_mul_ofNat, neg_ofNat_zsmul, mul_nsmul]
 
 theorem nsmul_zsmul : n * (i * a) = (i * (n : ℤ)) * a := by
   cases i
-  <;> simp [← Int.natCast_mul, mul_nsmul, Nat.mul_comm, negSucc_zsmul]
-  sorry /- ⊢ -(n * (a✝ + 1) * a) = Int.negSucc a✝ * ↑n * a -/
+  · simp [← Int.natCast_mul, mul_nsmul, Nat.mul_comm]
+  · rw [negSucc_zsmul, Int.negSucc_mul_ofNat, neg_ofNat_zsmul]
+    rw [nsmul_neg, mul_nsmul]
+    simp [Nat.mul_succ, Nat.succ_mul, Nat.mul_comm] 
 
 theorem mul_zsmul : i * (j * a) = (i * j) * a := by
   cases i <;> cases j 
-  · simp [mul_nsmul]
+  · simp only [Int.ofNat_eq_natCast, ofNat_zsmul, mul_nsmul]
     rw [← Int.natCast_mul, ofNat_zsmul]
-  · simp [negSucc_zsmul] 
-    sorry -- ⊢ -(a✝¹ * ((a✝ + 1) * a)) = ↑a✝¹ * Int.negSucc a✝ * a
-  · simp [negSucc_zsmul]
-    sorry -- ⊢ -((a✝¹ + 1) * (a✝ * a)) = Int.negSucc a✝¹ * ↑a✝ * a
-  · simp [negSucc_zsmul]
-    sorry -- ⊢ (a✝¹ + 1) * ((a✝ + 1) * a) = Int.negSucc a✝¹ * Int.negSucc a✝ * a
-  
-
+  · simp only [Int.ofNat_eq_natCast, negSucc_zsmul, zsmul_neg, ofNat_zsmul] 
+    rw [Int.ofNat_mul_negSucc, neg_ofNat_zsmul, mul_nsmul] 
+  · rw [negSucc_zsmul, ofNat_zsmul', Int.ofNat_eq_natCast, 
+        Int.negSucc_mul_ofNat, neg_ofNat_zsmul]
+    simp [mul_nsmul]
+  · repeat rw [negSucc_zsmul]
+    rw [Int.negSucc_mul_negSucc, ← Int.natCast_mul, ofNat_zsmul]
+    rw [nsmul_neg, neg_neg, mul_nsmul] 
+    
 theorem zsmul_mul_left : (i * a) * b = i * (a * b) := by
-  sorry
+  cases i
+  · simp [nsmul_mul_left]
+  · simp only [negSucc_zsmul, succ_nsmul, neg_distrib, Rng.right_distrib]
+    repeat rw [neg_mul]
+    rw [nsmul_mul_left] 
 
 theorem zsmul_mul_right : a * (i * b) = i * (a * b) := by
-  sorry
+  cases i
+  · simp [nsmul_mul_right]
+  · simp only [negSucc_zsmul, succ_nsmul, neg_distrib, Rng.left_distrib]
+    repeat rw [mul_neg]
+    rw [nsmul_mul_right]
 
 theorem zsmul_mul_zsmul : (i * a) * (j * b) = (i * j) * (a * b) := by
-  sorry
+  cases i <;> cases j
+  · simp [← Int.natCast_mul, nsmul_mul_nsmul]
+  · simp only [negSucc_zsmul, Int.ofNat_eq_natCast,
+        Int.ofNat_mul_negSucc, ofNat_zsmul, neg_ofNat_zsmul, mul_neg, nsmul_mul_nsmul]
+  · simp only [negSucc_zsmul, Int.ofNat_eq_natCast,
+        Int.negSucc_mul_ofNat, ofNat_zsmul, neg_ofNat_zsmul, neg_mul, nsmul_mul_nsmul]
+  · simp only [negSucc_zsmul, neg_mul_neg]
+    rw [Int.negSucc_mul_negSucc]
+    rw [← Int.natCast_mul, nsmul_mul_nsmul, ofNat_zsmul]  
 
 end HMul
 
@@ -380,6 +352,9 @@ instance : HPow R ℕ R where
   hPow := npow
 
 variable {a b : R} {n m : ℕ}
+
+@[simp] theorem nsmul_one_mul : (n * (1 : R)) * a = n * a := by
+  simp [nsmul_mul_left]
 
 @[simp] theorem pow_zero : a ^ 0 = 1 := by rfl
 theorem pow_succ : a ^ (n + 1) = a * a ^ n := by rfl
@@ -412,18 +387,20 @@ theorem pow_mul : (a ^ n) ^ m = a ^ (n * m)  := by
   | zero => simp
   | succ p h => rw [pow_succ, h, mul_zero]
 
-
-@[simp] theorem nsmul_one_mul : (n * (1 : R)) * a = n * a := by
-  simp [nsmul_mul_left]
-
-
 theorem nsmul_pow : (n * a) ^ m = (n ^ m) * a ^ m := by
   induction m with
   | zero => simp
   | succ p h =>
     rw [pow_succ, pow_succ, Nat.pow_succ, h,
       nsmul_mul_nsmul, Nat.mul_comm]
-    
+
+theorem zsmul_pow {i : ℤ} : (i * a) ^ m = (i ^ m) * a ^ m := by
+  induction m with
+  | zero => simp
+  | succ p h =>
+    rw [pow_succ, pow_succ, Int.pow_succ, h,
+        zsmul_mul_zsmul, Int.mul_comm]
+ 
 end HPow
 
 section HPowComm
