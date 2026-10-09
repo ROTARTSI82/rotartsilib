@@ -1,7 +1,11 @@
 module
 
+public import Rotartsilib.Utils
+
 namespace M402
 public section
+
+open Rotartsilib
 
 universe u
 
@@ -24,6 +28,13 @@ class Ring extends Rng R, One R where
   mul_one : ∀(a : R), a * 1 = a
 
 class CommRing extends Ring R, CommRng R
+
+class Field extends CommRing R where
+  isUnit {a : R} : a ≠ 0 → ∃(x : R), a * x = 1
+
+class IntegralDomain extends CommRing R where
+  integralDomain : ∀(a b : R), a ≠ 0 → b ≠ 0 → a * b ≠ 0
+
 
 variable {R}
 
@@ -99,7 +110,7 @@ theorem neg_distrib : ∀(a b : R), -(a + b) = (-a) + (-b) := by
   rwa [add_inj] at h₂
 
 end Rng
-
+    
 
 section Ring
 variable [Ring R]
@@ -109,6 +120,17 @@ variable [Ring R]
 
 theorem one_unique (n : R) (h : ∀(a : R), n * a = a) : n = 1 := 
   mul_one n ▸ h 1
+
+theorem zero_neq_one : Nontrivial R ↔ 0 ≠ (1 : R) := by
+  constructor
+  · intro ⟨a, b, hneq⟩ 
+    intro hc 
+    have ha := congrArg (fun x => x * a) hc
+    have hb := congrArg (fun x => x * b) hc 
+    rw [zero_mul, one_mul] at *
+    exact hneq (ha ▸ hb)
+  · intro h
+    exact ⟨0, 1, h⟩
 
 end Ring
 
@@ -121,6 +143,14 @@ theorem mul_left_comm : ∀(a b c : R), a * (b * c) = b * (a * c) := by
 
 end CommRng
 
+instance [Field R] : IntegralDomain R where
+  integralDomain a b ha hb h := by
+    let ⟨binv, hbinv⟩ := Field.isUnit hb
+    let ⟨ainv, hainv⟩ := Field.isUnit ha
+    have h' := congrArg (fun x => x * ainv * binv) h
+    rw [CommRng.mul_comm a b, Rng.mul_assoc b a, 
+      hainv, mul_one, hbinv, zero_mul, zero_mul] at h'
+    exact zero_neq_one.mp ⟨a, 0, ha⟩ <| h'.symm  
 
 /-!
 Some implementation details for how scalar multiplication and powers
@@ -226,7 +256,8 @@ theorem zsmul_add : i * (a + b) = i * a + i * b := by
   induction n with
   | zero => simp
   | succ p h => 
-    -- weird, don't use the inductive hypothesis here.
+    -- weird, don't use the inductive hypothesis here. 
+    -- just cases for n = 0 and n > 0
     simp only [Nat.succ_eq_add_one, Int.natCast_add, Int.cast_ofNat_Int, succ_nsmul]
     rw [neg_distrib, Int.ofNat_add_one_out, Int.neg_ofNat_succ, negSucc_zsmul, succ_nsmul, neg_distrib]
 

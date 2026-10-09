@@ -1,6 +1,6 @@
 module
 
-namespace Rotartsilib.Function
+namespace Rotartsilib.RelSet
 
 def hello := "world"
 
@@ -67,4 +67,4 @@ theorem iso₂ {X Y} (s : RelationSet X Y) :
 
 #print axioms iso₂
 
-end Rotartsilib.Function
+end Rotartsilib.RelSet
