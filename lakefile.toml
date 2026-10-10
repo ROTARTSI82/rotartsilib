@@ -8,15 +8,15 @@ name = "doc-gen4"
 git = "https://github.com/leanprover/doc-gen4"
 rev = "main"
 
-[[require]]
-name = "verso"
-git = "https://github.com/leanprover/verso.git"
-rev = "main"
+# [[require]]
+# name = "verso"
+# git = "https://github.com/leanprover/verso.git"
+# rev = "main"
 
-[[require]]
-name = "subverso"
-git = "https://github.com/leanprover/subverso.git"
-rev = "main"
+# [[require]]
+# name = "subverso"
+# git = "https://github.com/leanprover/subverso.git"
+# rev = "main"
 
 [[require]]
 name = "verso-slides"

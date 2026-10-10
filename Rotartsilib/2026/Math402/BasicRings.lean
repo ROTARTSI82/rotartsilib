@@ -340,6 +340,17 @@ theorem zsmul_mul_zsmul : (i * a) * (j * b) = (i * j) * (a * b) := by
 
 end HMul
 
+section Coe
+variable [Ring R]
+
+instance : Coe ℕ R where
+  coe n := n * (1 : R)
+
+instance : Coe ℤ R where
+  coe z := z * (1 : R)
+
+end Coe
+
 section HPow 
 variable [Ring R]
 

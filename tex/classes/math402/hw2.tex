@@ -1,0 +1,197 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage{float}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\begin{document}
+
+\begin{center} {\large \textbf{Math 402A -- Homework 2}} \smallskip \\ 
+    Grant Yang \hspace{1em} AU26
+ \end{center}
+
+ \paragraph{Problem 1.} 
+ \begin{enumerate}
+ \item[a] We can show that $43^{101} + 23^{101}$ is divisible by 66. By direct computation, we can verify that $\mathrm{gcd}(43, 66) = 1$ and $\mathrm{gcd}(23, 66) = 1$, and further we can compute Euler's totient function $\varphi(66) = 20$. By Euler's totient theorem, $43^{20} \equiv 1 \pmod{66}$ and $23^{20} \equiv 1 \pmod{66}$. Thus, we can write \begin{align*}43^{101} + 23^{101} &= 43\cdot (43^{20})^5 + 23 \cdot (23^{20})^5 \\ &\equiv 43 + 23 = 66 \equiv 0 \pmod{66}.\end{align*}
+ Alternatively, you could just notice that $43 \equiv -23 \pmod{66}$ and just move the negative sign out of the odd power. :skull emoji:
+ \item[b] For all nonnegative $n$, $133 \mid(11^{n+2} + 12^{2n+1})$. We proceed by induction on $n$. For the base case of $n = 0$, we can directly compute $11^2 + 12 = 133$ and see that $133 \mid 133$. For the inductive case, we can write $11^{n+2} + 12^{2n+1} = 11\cdot 11^{(n-1)+2} + 144\cdot 12^{2(n-1)+1}$. Further, since $144 \equiv 11 \pmod{133}$, we can calculate using $\mathbb Z_{133}$ that \[11^{n+2} + 12^{2n+1} \equiv 11 \cdot (11^{(n-1)+2} + 12^{2(n-1)+1})\pmod{133}.
+ \] By the inductive hypothesis, however, $11^{(n-1)+2} + 12^{2(n-1)+1} \equiv 0 \pmod{133}$, so we get $11^{n+2} + 12^{2n+1} \equiv 0 \pmod{133}$ and thus $133 \mid (11^{n+2} + 12^{2n+1})$.
+ \end{enumerate}
+
+
+ \paragraph{Problem 2.} (p. 36 \#1b)
+ \begin{table}[H]
+    \caption{Addition and Multiplication in $\mathbb Z_4$}
+    \vspace{2mm}
+    \centering
+    \begin{minipage}{.4\linewidth}
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            $+$ & \bf 0 & \bf 1 & \bf 2 & \bf 3 \\ \hline
+            \bf 0 & 0 & 1 & 2 & 3 \\ \hline
+            \bf 1 & 1 & 2 & 3 & 0 \\ \hline
+            \bf 2 & 2 & 3 & 0 & 1 \\ \hline
+            \bf 3 & 3 & 0 & 1 & 2 \\ \hline
+        \end{tabular}
+    \end{minipage}
+    \begin{minipage}{.4\linewidth}
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            $\times$ & \bf 0 & \bf 1 & \bf 2 & \bf 3 \\ \hline
+            \bf 0    &  0    &   0   &  0    &  0 \\ \hline
+            \bf 1    &  0    &   1   &  2    &  3  \\ \hline
+            \bf 2    &  0    &   2   &  0    &  2  \\ \hline
+            \bf 3    &  0    &   3   &  2    &  1 \\ \hline
+        \end{tabular}
+    \end{minipage}
+ \end{table}
+
+\paragraph{Problem 3.} (p. 37 \#14abc)
+\begin{enumerate}
+\item[a] {
+    Solutions to $x^2 + x = 0$ in $\mathbb Z_5$ are $x = 0$ and $x = 4$.
+}
+\item[b] {
+    We can brute force solutions to $x^2 + x = 0$ in $\mathbb Z_6$:
+    \begin{tabular}{c|c|c|c|c|c|c }
+        x & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline
+        x(x+1) & 0 & 2 & 0 & 0 & 2 & 0
+    \end{tabular} \\
+    Thus, our solutions are $x \in \{0, 2, 3, 5\}$.
+}
+\item[c] {
+    If $p$ is prime, the only solutions of $x^2 + x = 0$ in $\mathbb Z_p$ are $0$ and $p-1$.
+
+    \begin{proof}
+        We can directly verify that $x = 0$ is a solution. Now, consider the remaining possible solutions $0 < x < p$. We can factor as $x(x+1) = 0$, and note that a solution must satisfy $p \mid x(x+1)$. Because of our bounds on $x$, we must have $\mathrm{gcd}(p, x) = 1$ since $p$ is prime. By Euclid's lemma, this means $p \mid (x + 1)$, so our solution must be $x \equiv -1 \equiv p - 1$. Thus, the only possible solutions are $x = 0$ and $x = p-1$.
+    \end{proof}
+}
+\end{enumerate}
+
+\paragraph{Problem 4.} (p. 41, \#1abcd) Finding units in rings. We systematically check GCDs:
+\begin{enumerate}
+\item[a] {
+    $\mathbb Z_7$: Since $7$ is prime, every nonzero element is a unit. $\mathbb Z_7^\times = \{1,2,3,4,5,6\}$.
+}
+\item[b] {
+    $\mathbb Z_8$: We can check $(2,8) =2$, $(3, 8) = 1$, $(4, 8) = 4$, $(5, 8) = 1$, $(6, 8) = 2$, and $(7, 8) = 1$. Thus, $\mathbb Z_8^\times = \{1, 3, 5, 7\}$.
+}
+\item[c] {
+    $\mathbb Z_9$: $9 = 3^2$, so an element $x$ is a unit if and only if it is nonzero and $3 \nmid x$. Thus, $\mathbb Z_9^\times = \{1, 2, 4, 5, 7, 8\}$.
+}
+\item[d] {
+    $\mathbb Z_{10}$: No even number is a unit, since $(2x, 10) \ge 2$. We can check $(3, 10) = 1$, $(5, 10) = 5$, $(7, 10) = 1$, and $(9, 10) = 1$. Thus, $\mathbb Z_{10}^\times = \{1,3,7, 9\}$.
+}
+\end{enumerate}
+
+\paragraph{Problem 5.} (p. 41, \#9ab)
+\begin{enumerate}
+\item[a] If $a$ is a unit in $\mathbb Z_n$, then $a$ is not a zero divisor. \begin{proof}
+    Let $b \in \mathbb Z_n$ be any element such that $ab = 0$. Because $a$ is a unit, let $a^{-1} \in \mathbb Z_n$ be an element such that $a^{-1} \cdot a = 1$. Then, $a^{-1}\cdot ab = a^{-1}\cdot 0$, and we get $1\cdot b = 0$. Thus, any element $b$ such that $ab = 0$ must itself be $b = 0$, so $a$ is not a zero divisor.
+\end{proof}
+\item[b] If $a$ is a zero divisor in $\mathbb Z_n$, then $a$ is not a unit. \begin{proof}
+    The contrapositive of part (a). What do you want me to say man?
+\end{proof}
+\end{enumerate}
+
+\paragraph{Problem 6.} (p. 42, \#10) Every nonzero element of $\mathbb Z_n$ is either a unit or a zero divisor, but not both.
+\begin{proof}
+    With Problem 5 above, it suffices to show that if any element $a \in \mathbb Z_n$ is not a zero divisor, then it is a unit. Let $a \in \mathbb Z_n$ be any nonzero element that is not a zero divisor.
+    Consider the sequence of powers of $a$, namely $a^k$ for $k \in \mathbb Z_{> 0}$. By induction, we can show that $a^k$ is not a zero divisor for all $k$. The base case of $k = 1$ follows from our assumption on $a$. For the inductive case, let $b \in \mathbb Z_n$ be such that $a^k b = 0$. Then, $a^{k-1} (a b) = 0$, and by the inductive hypothesis that $a^{k-1}$ is not a zero divisor, we must have $ab = 0$. Since $a$ itself is not a zero divisor, we must have that $b = 0$ as desired.
+    
+    Then, since the sequence of powers $a^k$ is the result of iterating a function $x \mapsto x \cdot a$, and since there are finitely many elements of $\mathbb Z_n$, this sequence must eventually repeat and become periodic. Thus, there must exist some $\lambda, m \in \mathbb Z_{> 0}$ such that $a^{m+\lambda} = a^m$. Then, we must have that $a^{m+\lambda} - a^m = 0$, and $a^m(a^\lambda - 1) = 0$. Because $a^m$ is not a zero divisor, we must have $a^\lambda = 1$. If $\lambda = 1$, then $a = 1$ and so $a$ is a unit trivially. Otherwise, since $\lambda > 1$, we get $a \cdot a^{\lambda - 1} = a^{\lambda - 1} \cdot a = 1$ and so $a$ is again a unit.
+\end{proof}
+
+\paragraph{Problem 7.} (p. 42, \#15a)
+
+Given $ax = b$ in $\mathbb Z_n$, let $d = \mathrm{gcd}(a,n)$ and assume $d \mid b$. Then let $b = d \cdot b_1$ and $a = d \cdot a_1$, and write $d = u \cdot a + v \cdot n$. Note that this means $d \equiv u \cdot a_1 d$. We can verify that $u b_1$ is a solution, as
+\[d a_1 u b_1 \equiv d b_1 = b \pmod{n}. \]
+
+\begin{enumerate}
+\item[a] {
+    We wish to solve $15x = 9$ in $\mathbb Z_{18}$. We can write this as $5 \cdot 3x = 3^2$, and notice that if $x_0$ is a solution, $x_0 + 6$ must also be a solution since $3\cdot (x_0 + 6) = 3x_0 + 3\cdot 6 \equiv 3x_0 \pmod{18}$. Additionally, $x_0 = -1 \cdot 3 \equiv 15$ is a solution, as $15\cdot 15 = 225 \equiv 9 \pmod{18}$. Thus, $x \in \{15, 3, 9\}$ are all solutions to $15x = 9$ in $\mathbb Z_{18}$.
+}
+\item[b] {
+    We wish to solve $25x = 10$ in $\mathbb Z_{65}$. We can write $5^2 x = 5\cdot 2$ and notice that if $x_0$ is a solution, then so is $x_0 + 13$ as $5^2 (x_0 + 13) = 5^2 x_0 + 5\cdot 65 \equiv 0 \pmod{65}$. Using the extended Euclidean algorithm we can also find $2 \cdot 65 - 5 \cdot 25 = 5$, and $-5 \equiv 60 \pmod{65}$. We can verify that $x_0 = 60 \cdot 2 = 120 \equiv 55$ is a solution as $25 \cdot 55 \equiv 10 \pmod{65}$. Thus, our solutions are $x \in \{55, 3, 16, 29, 42\}$.
+}
+\end{enumerate}
+
+\paragraph{Problem 8.} (p. 42, \#17) The product of two units in $\mathbb Z_n$ is also a unit. Let $a, b \in \mathbb Z_n^\times$ be any two units in $\mathbb Z_n$, and let $a^{-1}, b^{-1} \in \mathbb Z_n$ be such that $a \cdot a^{-1} = a^{-1} \cdot a = 1$ and $b \cdot b^{-1} = b^{-1} \cdot b = 1$. We can show that the product $ab$ is also a unit with inverse $b^{-1} a^{-1}$ by direct calculation:
+\begin{align*}
+    ab\cdot b^{-1}a^{-1} &= a(bb^{-1})a^{-1} = aa^{-1} = 1. \\
+    b^{-1}a^{-1}\cdot ab &= b^{-1}(a^{-1}a)b = b^{-1}b = 1.
+\end{align*}
+
+\paragraph{Problem 9.} Let $p$ and $q$ be distinct prime numbers. Then $\varphi(pq) = (p-1)(q-1)$. 
+ 
+We can first show that for any $1 \le n < pq$, $\mathrm{gcd}(n, pq) = 1$ if and only if $p \nmid n$ and $q \nmid n$. The forward direction ($\implies$) is trivial. % For the forward direction ($\implies$), if we assume for contradiction that $p \mid n$, then since $p \mid pq$, we must have $p \le \mathrm{gcd}(n, pq) = 1$. This contradicts the fact that $p$ is a prime and thus $p \ge 2$, and symmetric logic can be applied for $q$.
+For the backward direction ($\impliedby$), assume for contradiction that $\mathrm{gcd}(n, pq) > 1$. Then, it must have a prime factorization, so there must exist a prime $r > 1$ such that $r \mid \mathrm{gcd}(n, pq)$. Thus, $r \mid n$ and $r \mid pq$, so by Euclid's lemma, $r \mid p$ or $r \mid q$, and so $r \in \{1, p, q\}$. However, $r > 1$ so $r \neq 1$, and since we have that $p \nmid n$ and $q \nmid n$, we cannot have $r = p$ or $r = q$ either as $r \mid n$. Thus, we have a contradiction, and $\mathrm{gcd}(n, pq) = 1$.
+ 
+Define the following sets:
+\begin{align*}
+A &= \{n \in [pq - 1] : \mathrm{gcd}(n, pq) = 1\} \\
+P &= \{ n \in [pq - 1] : p \mid n \} = \{ k \cdot p : k \in [q - 1] \} \\
+Q &= \{ n \in [pq - 1] : q \mid n \} = \{  k \cdot q : k \in [p - 1] \}
+\end{align*}
+
+Then the Euler totient function $\varphi(pq) = \#A$, and by our previous result, we have that $A = [pq-1] \setminus (P \cup Q)$. Further, %note that $P \subseteq [pq - 1]$ and $Q \subseteq [pq - 1]$, and
+we can show that $P \cap Q = \varnothing$. (This feels related to Chinese Remainder Theorem?) Let $n \ge 1$ be an integer such that $p \mid n$ and $q \mid n$, and let $k \in \mathbb Z_{>0}$ be such that $n = p \cdot k$. Since $q \mid p \cdot k$ and $q \nmid p$ (distinct primes), we must have $q \mid k$ by Euclid's lemma. Thus, we can write $n = pq\ell$ for some $\ell \in \mathbb Z_{>0}$, and so $n \ge pq$. 
+
+Finally, note that $P, Q \subseteq [pq - 1]$, so we can compute \begin{align*}\varphi(pq) &= \# A = \#([pq - 1] \setminus (P \cup Q))  \\ &= (pq - 1) - \#P - \#Q \\ &= (pq - 1) - (q-1) - (p - 1) \\ &= pq - p - q + 1 = (p - 1)(q - 1).
+\end{align*}
+
+\paragraph{Problem 10.} For all nonnegative integers $n$, $10^{3n + 1}$ cannot be written as the sum of two cubes of integers.
+
+\begin{proof}
+Let us work in $\mathbb Z_7$. First, we can show that for all $i \ge 0$, $[10^{3i}]_{\mathrm{mod}\,7} \in \{1, 6\}$ by inducting on $i$. For our base case, $10^0 = 1$ directly. For the inductive step, let $i > 0$ and write $10^{3i} = 10^3 \cdot 10^{3(i-1)}$, and note that $10^3 \equiv 6 \pmod 7$. Then, using the inductive hypothesis, first consider the case that $10^{3(i-1)} \equiv 1 \pmod 7$. Here we would have $10^{3i} = 10^3 \cdot 10^{3(i-1)} \equiv 1 \cdot 6 = 6 \pmod 7$. On the other hand, consider the case that $10^{3(i-1)} \equiv 6 \pmod 7$. Then, $10^{3i} = 10^3 \cdot 10^{3(i-1)} \equiv 6 \cdot 6 = 36 \equiv 1 \pmod 7$.
+
+Because $10 \equiv 3 \pmod 7$, and because we can compute $6 \cdot 3 \equiv 4 \pmod 7$, we get that for all $i \ge0$, $[10^{3i+1}]_{\mathrm{mod}\,7} \in \{3, 4\}$.
+
+Now, we can directly compute all possible cubes in $\mathbb Z_7$:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+        \hline
+        $x$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+        \hline $x^3$ & 0 & 1 & 1 & 6 & 1 & 6 & 6  \\
+        \hline
+    \end{tabular}
+    \label{tab:my_table}
+\end{table}
+
+Then, we can compute the following addition table:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        + & \bf{0} & \bf 1 & \bf 6 \\ \hline
+        \bf 0 & 0 & 1 & 6 \\ \hline
+        \bf 1 & 1 & 2 & 0 \\ \hline
+        \bf 6 & 6 & 0 & 5 \\ \hline
+    \end{tabular}
+    \label{tab:my_table2}
+\end{table}
+
+Thus, we have shown that for all $x, y \in \mathbb Z$, $[x^3 + y^3]_{\mathrm{mod }\,7} \in \{0, 1, 2, 5, 6\}$. Because this set of residues mod 7 has no overlap with the set of possible residues for $10^{3i+1}$, the equation $10^{3i+1} = x^3 + y^3$ in $\mathbb Z_7$ cannot hold for any $i \in \mathbb Z_{\ge 0}$ and $x, y \in \mathbb Z_7$. Because $\mathbb Z$ is initial in the category of rings, no such equation can hold in the integers for any $x, y \in \mathbb Z$ either.
+\end{proof}
+
+\paragraph{Problem 11.} (p. 53, \#1ab)
+
+\begin{enumerate}
+    \item[a] The set $S$ of all odd integers and $0$ is not a ring. This set is not closed under addition, as $1, 3 \in S$ but $1+3 = 4 \not\in S$.
+    \item[b] The set of nonnegative integers is not a ring. This set fails to have additive inverses.
+\end{enumerate}
+
+\paragraph{Problem 12.} (p. 55, \#17)
+
+On $\mathbb Z$, define multiplication $\cdot : \mathbb Z \to \mathbb Z \to \mathbb Z$ such that $ab = 0$ for all $a,b \in \mathbb Z$. This structure $(\mathbb Z, +, \cdot)$ is a commutative rng (ring without identity). From the usual ring structure on $\mathbb Z$, we have that the addition $+$ is associative and commutative, and we have the additive identity $0 \in \mathbb Z$ and the existence of additive inverses $-a$ for all $a \in \mathbb Z$. Clearly, for all $a,b,c \in \mathbb Z$, we have $(ab)c = a(bc) = 0$, so this multiplication is associative. We can also check left and right distributivity:
+\begin{align*}a\cdot (b + c) &= a\cdot b + a \cdot c = 0 \\ (a + b) \cdot c &= a \cdot c + b \cdot c = 0.\end{align*}
+Thus, $(\mathbb Z, +, \cdot)$ satisfies the axioms to be an rng.
+
+\end{document}
