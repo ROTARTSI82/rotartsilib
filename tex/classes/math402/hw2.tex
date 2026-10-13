@@ -5,6 +5,7 @@
 \usepackage[hmargin=1in,vmargin=1in]{geometry}\usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
+\usepackage{soul}
 
 \begin{document}
 
@@ -53,7 +54,7 @@
 \paragraph{Problem 3.} (p. 37 \#14abc)
 \begin{enumerate}
 \item[a] {
-    Solutions to $x^2 + x = 0$ in $\mathbb Z_5$ are $x = 0$ and $x = 4$.
+    Solutions to $x^2 + x = 0$ in $\mathbb Z_5$ are $x = 0$ and $x = 4$, as $5$ is prime.
 }
 \item[b] {
     We can brute force solutions to $x^2 + x = 0$ in $\mathbb Z_6$:
@@ -64,7 +65,7 @@
     Thus, our solutions are $x \in \{0, 2, 3, 5\}$.
 }
 \item[c] {
-    If $p$ is prime, the only solutions of $x^2 + x = 0$ in $\mathbb Z_p$ are $0$ and $p-1$.
+    If $p$ is prime, the only solutions of $x^2 + x = 0$ in $\mathbb Z_p$ are $0$ and $p-1$. (Proof on next page)
 
     \begin{proof}
         We can directly verify that $x = 0$ is a solution. Now, consider the remaining possible solutions $0 < x < p$. We can factor as $x(x+1) = 0$, and note that a solution must satisfy $p \mid x(x+1)$. Because of our bounds on $x$, we must have $\mathrm{gcd}(p, x) = 1$ since $p$ is prime. By Euclid's lemma, this means $p \mid (x + 1)$, so our solution must be $x \equiv -1 \equiv p - 1$. Thus, the only possible solutions are $x = 0$ and $x = p-1$.
@@ -98,7 +99,7 @@
 \end{proof}
 \end{enumerate}
 
-\paragraph{Problem 6.} (p. 42, \#10) Every nonzero element of $\mathbb Z_n$ is either a unit or a zero divisor, but not both.
+\paragraph{Problem 6.} (p. 42, \#10) Every element of $\mathbb Z_n$ is either a unit or a zero divisor, but not both.
 \begin{proof}
     With Problem 5 above, it suffices to show that if any element $a \in \mathbb Z_n$ is not a zero divisor, then it is a unit. Let $a \in \mathbb Z_n$ be any nonzero element that is not a zero divisor.
     Consider the sequence of powers of $a$, namely $a^k$ for $k \in \mathbb Z_{> 0}$. By induction, we can show that $a^k$ is not a zero divisor for all $k$. The base case of $k = 1$ follows from our assumption on $a$. For the inductive case, let $b \in \mathbb Z_n$ be such that $a^k b = 0$. Then, $a^{k-1} (a b) = 0$, and by the inductive hypothesis that $a^{k-1}$ is not a zero divisor, we must have $ab = 0$. Since $a$ itself is not a zero divisor, we must have that $b = 0$ as desired.
@@ -110,7 +111,7 @@
 
 Given $ax = b$ in $\mathbb Z_n$, let $d = \mathrm{gcd}(a,n)$ and assume $d \mid b$. Then let $b = d \cdot b_1$ and $a = d \cdot a_1$, and write $d = u \cdot a + v \cdot n$. Note that this means $d \equiv u \cdot a_1 d$. We can verify that $u b_1$ is a solution, as
 \[d a_1 u b_1 \equiv d b_1 = b \pmod{n}. \]
-
+Additionally, we can show we cover every solution with the algorithm in \#13. Given any two solutions $x$ and $x'$, we know that $a(x - x') \equiv 0$, and in $\mathbb Z$ we get $n_1 d \mid a_1 d (x - x')$. Then $n_1 \mid a_1 (x-x')$, and since $\mathrm{gcd}(n_1, a_1) = 1$, we get $n_1 \mid (x - x')$, so we can just keep adding $n_1$ to our solution to generate everything.
 \begin{enumerate}
 \item[a] {
     We wish to solve $15x = 9$ in $\mathbb Z_{18}$. We can write this as $5 \cdot 3x = 3^2$, and notice that if $x_0$ is a solution, $x_0 + 6$ must also be a solution since $3\cdot (x_0 + 6) = 3x_0 + 3\cdot 6 \equiv 3x_0 \pmod{18}$. Additionally, $x_0 = -1 \cdot 3 \equiv 15$ is a solution, as $15\cdot 15 = 225 \equiv 9 \pmod{18}$. Thus, $x \in \{15, 3, 9\}$ are all solutions to $15x = 9$ in $\mathbb Z_{18}$.
@@ -178,19 +179,21 @@ Then, we can compute the following addition table:
     \label{tab:my_table2}
 \end{table}
 
-Thus, we have shown that for all $x, y \in \mathbb Z$, $[x^3 + y^3]_{\mathrm{mod }\,7} \in \{0, 1, 2, 5, 6\}$. Because this set of residues mod 7 has no overlap with the set of possible residues for $10^{3i+1}$, the equation $10^{3i+1} = x^3 + y^3$ in $\mathbb Z_7$ cannot hold for any $i \in \mathbb Z_{\ge 0}$ and $x, y \in \mathbb Z_7$. Because $\mathbb Z$ is initial in the category of rings, no such equation can hold in the integers for any $x, y \in \mathbb Z$ either.
-\end{proof}
+Thus, we have shown that for all $x, y \in \mathbb Z$, $[x^3 + y^3]_{\mathrm{mod }\,7} \in \{0, 1, 2, 5, 6\}$. Because this set of residues mod 7 has no overlap with the set of possible residues for $10^{3i+1}$, the equation $10^{3i+1} = x^3 + y^3$ in $\mathbb Z_7$ cannot hold for any $i \in \mathbb Z_{\ge 0}$ and $x, y \in \mathbb Z_7$. 
 
+Assume for contradiction that there exists some $x, y \in \mathbb Z$ and $i \in \mathbb Z_{\ge 0}$ such that $10^{3i+1} = x^3 + y^3$. Since \st{$\mathbb Z$ is initial in the category of rings} we have a ring homomorphism from $\mathbb Z \to \mathbb Z_7$ by $x \mapsto [x]$, the same equation will hold in $\mathbb Z_7$, contradicting what we have just shown. Thus, no such equation exists in $\mathbb Z$ either.
+\end{proof}
+\newpage{}
 \paragraph{Problem 11.} (p. 53, \#1ab)
 
 \begin{enumerate}
     \item[a] The set $S$ of all odd integers and $0$ is not a ring. This set is not closed under addition, as $1, 3 \in S$ but $1+3 = 4 \not\in S$.
-    \item[b] The set of nonnegative integers is not a ring. This set fails to have additive inverses.
+    \item[b] The set of nonnegative integers is not a ring. This set fails to have additive inverses. For example, $1 + x = 0$ has no solutions in $\mathbb Z_{\ge 0}$.
 \end{enumerate}
 
 \paragraph{Problem 12.} (p. 55, \#17)
 
-On $\mathbb Z$, define multiplication $\cdot : \mathbb Z \to \mathbb Z \to \mathbb Z$ such that $ab = 0$ for all $a,b \in \mathbb Z$. This structure $(\mathbb Z, +, \cdot)$ is a commutative rng (ring without identity). From the usual ring structure on $\mathbb Z$, we have that the addition $+$ is associative and commutative, and we have the additive identity $0 \in \mathbb Z$ and the existence of additive inverses $-a$ for all $a \in \mathbb Z$. Clearly, for all $a,b,c \in \mathbb Z$, we have $(ab)c = a(bc) = 0$, so this multiplication is associative. We can also check left and right distributivity:
+On $\mathbb Z$, define multiplication $\cdot : \mathbb Z \to \mathbb Z \to \mathbb Z$ such that $ab = 0$ for all $a,b \in \mathbb Z$. This structure $(\mathbb Z, +, \cdot)$ is a commutative rng (ring without identity). From the usual ring structure on $\mathbb Z$, we have that the addition $+$ is associative and commutative, and we have the additive identity $0 \in \mathbb Z$ and the existence of additive inverses $-a$ for all $a \in \mathbb Z$. Clearly, for all $a,b,c \in \mathbb Z$, we have $(ab)c = a(bc) = 0$, so this multiplication is associative. Additionally, $ab = ba = 0$, so multiplication is also commutative. We can also check left and right distributivity:
 \begin{align*}a\cdot (b + c) &= a\cdot b + a \cdot c = 0 \\ (a + b) \cdot c &= a \cdot c + b \cdot c = 0.\end{align*}
 Thus, $(\mathbb Z, +, \cdot)$ satisfies the axioms to be an rng.
 
