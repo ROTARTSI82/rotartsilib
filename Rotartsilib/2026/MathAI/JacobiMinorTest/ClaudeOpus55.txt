@@ -1,0 +1,324 @@
+ ▐▛███▛█   Claude Code v2.1.301
+▝▜██████▀  Opus 5.5 · Claude Team
+ ▝▝   ▝▝   ~/proj/lean/Determinantal-Polynomials
+
+  Get to finished work sooner with Opus 5.5. Switch anytime with /model.
+
+❯ /model 
+  ⎿  Kept model as Opus 5.5 (default)
+
+❯ Let I, J \subseteq [n]. If A is a n by n matrix over some ring, denote A[I,   
+  J] as the determinant of the submatrix by selecting rows I and columns J.     
+  Prove in lean4 in @DetPoly/Scratch.lean that det(A) A^{adj}[J^C, I^C] =       
+  det(A)^{n-k} A[I, J], where A^adj is the adjugate. Research mathlib apis, and 
+  focus on writing clean code.                                                  
+  ⎿  Read DetPoly/Scratch.lean (1 lines)
+
+  Ran 5 shell commands (ctrl+o to expand)
+
+● I'll check the Mathlib setup first. I noticed the stated identity is missing a
+  sign term—testing with n=2 shows it should include (−1)^(ΣI+ΣJ), so I'll
+  prove that corrected version instead.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Write(DetPoly/Scratch.lean)
+  ⎿  Wrote 23 lines to DetPoly/Scratch.lean
+      1 import Mathlib
+      2 
+      3 open Finset Matrix
+      4 
+      5 namespace DetPoly
+      6 
+      7 variable {R : Type*} [CommRing R] {n k m : ℕ}
+      8 
+      9 section Sign
+     … +14 lines (ctrl+o to expand)
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Proving the sign lemma for "shuffle" permutations, which Mathlib doesn't have.
+
+  Ran 6 shell commands (ctrl+o to expand)
+
+● Sign lemma nearly done; finishing the inversion count.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Sign lemma compiles. Now the main block-matrix argument.
+
+  Ran 6 shell commands (ctrl+o to expand)
+
+● Helpers compile; writing the main theorem now.
+
+  Ran 5 shell commands (ctrl+o to expand)
+
+● Assembling everything into the real file.
+
+● Write(DetPoly/Scratch.lean)
+  ⎿  Added 131 lines, removed 9 lines
+        1  import Mathlib
+        2  
+        3 -open Finset Matrix                                            
+        3 +/-!                                                           
+        4 +# Jacobi's complementary minor theorem                        
+        5  
+        5 -namespace DetPoly                                             
+        6 +For `I J : Finset (Fin n)` of size `k`, write `A[I, J]` for th
+          +e minor of `A` with rows `I` and                              
+        7 +columns `J` (both taken in increasing order). Jacobi's theorem
+          + relates the minors of the adjugate                           
+        8 +to the complementary minors of `A`:                           
+        9  
+        7 -variable {R : Type*} [CommRing R] {n k m : ℕ}                 
+       10 +  `det A * adj(A)[Jᶜ, Iᶜ] = (-1) ^ (∑ I + ∑ J) * (det A) ^ (n 
+          +- k) * A[I, J]`.                                              
+       11  
+        9 -section Sign                                                  
+       12 +## Proof sketch                                               
+       13  
+       11 -open Equiv                                                    
+       14 +Reorder rows as `I, Iᶜ` and columns as `J, Jᶜ` to get a block 
+          +matrix `B = A.submatrix P Q`, and                             
+       15 +let `C = (adj A).submatrix Q P` so that `B * C = det A • 1`. R
+          +eplacing the first block column of                            
+       16 +`C` with `(1, 0)` gives `M = !![1, C₁₂; 0, C₂₂]`, and `B * M =
+          + !![B₁₁, 0; B₂₁, det A • 1]` is block                         
+       17 +triangular. Taking determinants gives `det B * det C₂₂ = det B
+          +₁₁ * (det A) ^ (n - k)`, and                                  
+       18 +`det B = ± det A` where the sign is that of a shuffle permutat
+          +ion (`sign_shuffle`).                                         
+       19 +-/                                                            
+       20  
+       13 -/-- Sign of a permutation as a product over inverted pairs. -/
+       21 +open Equiv Finset Matrix                                      
+       22 +                                                              
+       23 +namespace DetPoly                                             
+       24 +                                                              
+       25 +variable {R : Type*} [CommRing R] {n k : ℕ}                   
+       26 +                                                              
+       27 +/-! ### Signs of shuffle permutations -/                      
+       28 +                                                              
+       29 +/-- The sign of a permutation of `Fin n` as a product over its
+          + inversions. -/                                               
+       30  theorem sign_eq_prod_ite (σ : Perm (Fin n)) :
+       31      Perm.sign σ = ∏ y, ∏ x, if x < y ∧ σ y < σ x then -1 else 
+           1 := by
+       32    rw [σ.sign_eq_prod_prod_Iio]
+       33    refine prod_congr rfl fun y _ ↦ ?_
+       18 -  rw [← prod_filter_mul_prod_filter_not univ (· < y)]         
+       19 -  sorry                                                       
+       34 +  rw [← filter_gt_eq_Iio, prod_filter]                        
+       35 +  refine prod_congr rfl fun x _ ↦ ?_                          
+       36 +  split_ifs <;> grind [EmbeddingLike.apply_eq_iff_eq]         
+       37  
+       21 -end Sign                                                      
+       38 +/-- The sign of a shuffle: the permutation of `Fin (k + m)` th
+          +at is increasing on `[0, k)` and on                           
+       39 +`[k, k + m)`. Its sign depends only on the image of `[0, k)`. 
+          +-/                                                            
+       40 +theorem sign_shuffle {m : ℕ} (h : k + m = n) (e : Fin k ⊕ Fin 
+          +m ≃ Fin n)                                                    
+       41 +    (hl : StrictMono (e ∘ Sum.inl)) (hr : StrictMono (e ∘ Sum.
+          +inr)) :                                                       
+       42 +    Perm.sign ((finSumFinEquiv.trans (finCongr h)).symm.trans 
+          +e) =                                                          
+       43 +      (-1) ^ (∑ a, (e (.inl a) : ℕ) + ∑ a : Fin k, (a : ℕ)) :=
+          + by                                                           
+       44 +  have hl' (a b) : e (.inl a) < e (.inl b) ↔ a < b := hl.lt_if
+          +f_lt                                                          
+       45 +  have hr' (a b) : e (.inr a) < e (.inr b) ↔ a < b := hr.lt_if
+          +f_lt                                                          
+       46 +  have h₁ (a b : Fin k) : Fin.castAdd m a < Fin.castAdd m b ↔ 
+          +a < b := Iff.rfl                                              
+       47 +  have h₂ (a : Fin k) (b : Fin m) : Fin.castAdd m a < Fin.natA
+          +dd k b := by                                                  
+       48 +    rw [Fin.lt_def]; simp; omega                              
+       49 +  have h₃ {α : Type} [Preorder α] (a b : α) : ¬(a < b ∧ b < a)
+          + := fun h ↦ lt_asymm h.1 h.2                                  
+       50 +  -- the only inversions are pairs `(inl a, inr b)` with `e (i
+          +nr b) < e (inl a)`                                            
+       51 +  have hcount (a : Fin k) : #{b | e (.inr b) < e (.inl a)} + a
+          + = (e (.inl a) : ℕ) := by                                     
+       52 +    rw [← Fin.card_Iio, ← Fin.card_Iio (e _), ← filter_gt_eq_I
+          +io, ← filter_gt_eq_Iio]                                       
+       53 +    simp only [card_filter, ← e.sum_comp (fun x ↦ ite _ _ _), 
+          +Fintype.sum_sum_type, hl']                                    
+       54 +    ring                                                      
+       55 +  set E := finSumFinEquiv.trans (finCongr h)                  
+       56 +  rw [sign_eq_prod_ite, ← E.prod_comp]                        
+       57 +  simp_rw [← E.prod_comp (fun x ↦ ite _ _ _)]                 
+       58 +  simp [Fintype.prod_sum_type, E, hl', hr', h₁, h₂, (h₂ _ _).n
+          +ot_gt, h₃]                                                    
+       59 +  rw [prod_comm, ← sum_congr rfl fun a _ ↦ hcount a, sum_add_d
+          +istrib, add_assoc, ← two_mul,                                 
+       60 +    pow_add, pow_mul]                                         
+       61 +  simp [prod_ite, prod_pow_eq_pow_sum]                        
+       62  
+       63 +/-! ### Splitting `Fin n` into a subset and its complement -/ 
+       64 +                                                              
+       65 +theorem card_compl_of_card {I : Finset (Fin n)} (hI : #I = k) 
+          +: #Iᶜ = n - k := by                                           
+       66 +  rw [card_compl, Fintype.card_fin, hI]                       
+       67 +                                                              
+       68 +/-- Enumerate `I` in increasing order, followed by `Iᶜ` in inc
+          +reasing order. -/                                             
+       69 +noncomputable def finSumComplEquiv (I : Finset (Fin n)) (hI : 
+          +#I = k) :                                                     
+       70 +    Fin k ⊕ Fin (n - k) ≃ Fin n :=                            
+       71 +  .ofBijective (Sum.elim (I.orderEmbOfFin hI) (Iᶜ.orderEmbOfFi
+          +n (card_compl_of_card hI))) <| by                             
+       72 +    refine (Fintype.bijective_iff_injective_and_card _).2 ⟨?_,
+          + ?_⟩                                                          
+       73 +    · refine (I.orderEmbOfFin hI).injective.sumElim (Iᶜ.orderE
+          +mbOfFin _).injective fun a b h ↦ ?_                           
+       74 +      have := Iᶜ.orderEmbOfFin_mem (card_compl_of_card hI) b  
+       75 +      rw [← h, mem_compl] at this                             
+       76 +      exact this (I.orderEmbOfFin_mem hI a)                   
+       77 +    · have := hI ▸ I.card_le_univ                             
+       78 +      simp at this ⊢                                          
+       79 +      omega                                                   
+       80 +                                                              
+       81 +theorem sign_finSumComplEquiv (I : Finset (Fin n)) (hI : #I = 
+          +k) (h : k + (n - k) = n) :                                    
+       82 +    Perm.sign ((finSumFinEquiv.trans (finCongr h)).symm.trans 
+          +(finSumComplEquiv I hI)) =                                    
+       83 +      (-1) ^ (∑ i ∈ I, (i : ℕ) + ∑ a : Fin k, (a : ℕ)) := by  
+       84 +  rw [sign_shuffle h (finSumComplEquiv I hI) (I.orderEmbOfFin 
+          +hI).strictMono                                                
+       85 +    (Iᶜ.orderEmbOfFin (card_compl_of_card hI)).strictMono]    
+       86 +  conv_rhs => rw [← I.map_orderEmbOfFin_univ hI, sum_map]     
+       87 +  rfl                                                         
+       88 +                                                              
+       89 +/-- Reindexing rows and columns by two different equivalences 
+          +multiplies the determinant by the                             
+       90 +sign of the permutation relating them. -/                     
+       91 +theorem det_submatrix_equiv {α : Type*} [Fintype α] [Decidable
+          +Eq α]                                                         
+       92 +    (A : Matrix (Fin n) (Fin n) R) (e f : α ≃ Fin n) :        
+       93 +    (A.submatrix e f).det = Perm.sign (f.symm.trans e) * A.det
+          + := by                                                        
+       94 +  rw [← det_permute, ← det_submatrix_equiv_self f]            
+       95 +  congr 1                                                     
+       96 +  ext                                                         
+       97 +  simp                                                        
+       98 +                                                              
+       99 +/-! ### Jacobi's theorem -/                                   
+      100 +                                                              
+      101 +/-- **Jacobi's complementary minor theorem**: for `#I = #J = k
+          +`,                                                            
+      102 +`det A * adj(A)[Jᶜ, Iᶜ] = (-1) ^ (∑ I + ∑ J) * (det A) ^ (n - 
+          +k) * A[I, J]`. -/                                             
+      103 +theorem det_mul_det_submatrix_adjugate (A : Matrix (Fin n) (Fi
+          +n n) R) {I J : Finset (Fin n)}                                
+      104 +    (hI : #I = k) (hJ : #J = k) :                             
+      105 +    A.det * ((adjugate A).submatrix (Jᶜ.orderEmbOfFin (card_co
+          +mpl_of_card hJ))                                              
+      106 +        (Iᶜ.orderEmbOfFin (card_compl_of_card hI))).det =     
+      107 +      (-1) ^ (∑ i ∈ I, (i : ℕ) + ∑ j ∈ J, (j : ℕ)) * A.det ^ (
+          +n - k) *                                                      
+      108 +        (A.submatrix (I.orderEmbOfFin hI) (J.orderEmbOfFin hJ)
+          +).det := by                                                   
+      109 +  set ε : R := (-1) ^ (∑ i ∈ I, (i : ℕ) + ∑ j ∈ J, (j : ℕ))   
+      110 +  set P := finSumComplEquiv I hI                              
+      111 +  set Q := finSumComplEquiv J hJ                              
+      112 +  set B := A.submatrix P Q                                    
+      113 +  set C := (adjugate A).submatrix Q P                         
+      114 +  -- `B * C = det A • 1`, read off blockwise                  
+      115 +  have hBC : B * C = fromBlocks (A.det • 1) 0 0 (A.det • 1) :=
+          + by                                                           
+      116 +    ext (i | i) (j | j) <;> simp [B, C, mul_adjugate, one_appl
+          +y]                                                            
+      117 +  rw [← fromBlocks_toBlocks B, ← fromBlocks_toBlocks C, fromBl
+          +ocks_multiply,                                                
+      118 +    fromBlocks_inj] at hBC                                    
+      119 +  -- replacing the first block column of `C` by `(1, 0)` gives
+          + a block triangular product                                   
+      120 +  have hBM : B * fromBlocks 1 C.toBlocks₁₂ 0 C.toBlocks₂₂ =   
+      121 +      fromBlocks B.toBlocks₁₁ 0 B.toBlocks₂₁ (A.det • 1) := by
+      122 +    rw [← fromBlocks_toBlocks B, fromBlocks_multiply]         
+      123 +    simp [hBC.2.1, hBC.2.2.2]                                 
+      124 +  have hsign : (Perm.sign (Q.symm.trans P) : R) = ε := by     
+      125 +    have h : k + (n - k) = n := by                            
+      126 +      have := hI ▸ I.card_le_univ                             
+      127 +      simp at this                                            
+      128 +      omega                                                   
+      129 +    set E := finSumFinEquiv.trans (finCongr h)                
+      130 +    rw [show Q.symm.trans P = (E.symm.trans Q).symm.trans (E.s
+          +ymm.trans P) by ext; simp,                                    
+      131 +      Perm.sign_trans, Perm.sign_symm, sign_finSumComplEquiv I
+          + hI h,                                                        
+      132 +      sign_finSumComplEquiv J hJ h, ← pow_add,                
+      133 +      show _ + _ + (_ + _) = ∑ i ∈ I, (i : ℕ) + ∑ j ∈ J, (j : 
+          +ℕ) + 2 * ∑ a : Fin k, (a : ℕ) by ring,                        
+      134 +      pow_add, pow_mul]                                       
+      135 +    simp [ε]                                                  
+      136 +  have hdet := congrArg det hBM                               
+      137 +  rw [det_mul, det_fromBlocks_zero₂₁, det_fromBlocks_zero₁₂, d
+          +et_smul, det_submatrix_equiv,                                 
+      138 +    hsign] at hdet                                            
+      139 +  simp only [det_one, one_mul, mul_one, Fintype.card_fin] at h
+          +det                                                           
+      140 +  have hε : ε ^ 2 = 1 := by rw [← pow_mul, pow_mul', neg_one_s
+          +q, one_pow]                                                   
+      141 +  -- `C₂₂ = adj(A)[Jᶜ, Iᶜ]` and `B₁₁ = A[I, J]` by definition 
+      142 +  change A.det * C.toBlocks₂₂.det = ε * A.det ^ (n - k) * B.to
+          +Blocks₁₁.det                                                  
+      143 +  linear_combination ε * hdet - A.det * C.toBlocks₂₂.det * hε 
+      144 +                                                              
+      145  end DetPoly
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Compiles with no errors or warnings. Checking axioms and line lengths:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● I proved the theorem in DetPoly/Scratch.lean, but with a sign the statement
+  you gave was missing. The file compiles with no errors, warnings or sorry, and
+  uses only the standard axioms (propext, Classical.choice, Quot.sound).
+
+  The sign: without it the identity is false. Take n = 2, I = {1}, J = {2}. Then
+  A[I,J] = a₁₂, but adj(A)[{1},{2}] = −a₁₂. The correct form of Jacobi's
+  theorem is
+
+    det(A) · adj(A)[Jᶜ, Iᶜ] = (−1)^(ΣI + ΣJ) · det(A)^(n−k) · A[I, J]
+
+  The sign is the same whether you index from 0 (Fin n) or from 1, so the
+  0-indexed version in Lean is fine. It holds over any commutative ring, and A
+  doesn't need to be invertible.
+
+  Main theorem: DetPoly.det_mul_det_submatrix_adjugate. The minor A[I, J] is
+  (A.submatrix (I.orderEmbOfFin hI) (J.orderEmbOfFin hJ)).det, with hI : #I = k
+  and hJ : #J = k.
+
+  How the proof works (outlined in the file's header docstring):
+  1. Reorder A's rows as I then Iᶜ, and its columns as J then Jᶜ. Call the
+     result B, and reorder adj(A) the opposite way to get C, so that B·C =
+     det(A)·1. Splitting B·C into blocks gives B₁₁C₁₂ + B₁₂C₂₂ = 0 and B₂₁C₁₂ + 
+     B₂₂C₂₂ = det A • 1.
+  2. Let M = fromBlocks 1 C₁₂ 0 C₂₂. Then B·M = fromBlocks B₁₁ 0 B₂₁ (det A • 
+     1), which is block-triangular. Taking determinants gives det B · det C₂₂ =
+     det B₁₁ · det(A)^(n−k).
+  3. det B = sign(σ) · det A for a permutation σ, and linear_combination (using
+     sign² = 1) finishes.
+
+  Helper lemmas:
+  - sign_shuffle: Mathlib has no lemma for the sign of a "shuffle" permutation
+    (one that lists I in order, then Iᶜ in order), so I proved it. It starts
+    from Mathlib's Perm.sign_eq_prod_prod_Iio and counts the inverted pairs.
+  - sign_eq_prod_ite: writes the sign of a permutation as a product over its
+    inverted pairs; sign_shuffle uses it.
+  - finSumComplEquiv I hI : Fin k ⊕ Fin (n - k) ≃ Fin n: the "I then Iᶜ"
+    enumeration.
+  - det_submatrix_equiv: det(A.submatrix e f) = sign(f⁻¹ ∘ e) · det A.
+
+  Mathlib lemmas it uses: fromBlocks_toBlocks, fromBlocks_multiply,
+  fromBlocks_inj, det_fromBlocks_zero₂₁/₁₂, det_permute,
+  det_submatrix_equiv_self, mul_adjugate and Finset.orderEmbOfFin.
+
+  Scratch.lean uses plain import Mathlib rather than the module header that
+  Basic.lean has, and DetPoly.lean doesn't import it. If you move this into the
+  library, it will need that header.
+
+✻ Worked for 9m 9s · done 10:54 AM

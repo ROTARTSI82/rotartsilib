@@ -1,7 +1,11 @@
 import Rotartsilib.Analysis.PeriodicOrbits
 import Rotartsilib.Logic.Functions
 import Rotartsilib.Logic.RelationSet
+import Rotartsilib.Scratch
 import Rotartsilib.Utils
 import Rotartsilib.«2026».Math402.BasicRings
 import Rotartsilib.«2026».Math402.Notes
 import Rotartsilib.«2026».MathAI.Explore
+import Rotartsilib.«2026».MathAI.JacobiMinorTest.ClaudeOpus55
+import Rotartsilib.«2026».MathAI.JacobiMinorTest.GeminiArgon
+import Rotartsilib.«2026».MathAI.JacobiMinorTest.PurpleGPT6Sol
