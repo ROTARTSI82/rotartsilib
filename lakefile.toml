@@ -1,6 +1,6 @@
 name = "rotartsilib"
 version = "0.1.0"
-defaultTargets = ["app1", "app2", "build_slides"]
+defaultTargets = ["app1", "app2", "build_slides", "Rotartsilib", "VersoContent"]
 
 
 [[require]]
@@ -29,7 +29,7 @@ scope = "leanprover-community"
 
 [[lean_lib]]
 name = "Rotartsilib"
-
+requiresModuleSystem = true
 
 [[lean_exe]]
 name = "app1"

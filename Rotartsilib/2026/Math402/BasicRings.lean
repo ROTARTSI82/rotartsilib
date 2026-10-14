@@ -244,7 +244,6 @@ variable {i j : ℤ}
 @[simp] theorem one_zsmul : (1 : ℤ) * a = a := by change (1 : ℕ) * a = a; simp
 @[simp] theorem neg_one_zsmul : (-1 : ℤ) * a = -a := by change -((1 : ℕ) * a) = -a; simp
 
-#check Int.negSucc_mul_ofNat
 
 @[simp] theorem ofNat_zsmul : (n : ℤ) * a = n * a := by rfl
 @[simp] theorem ofNat_zsmul' : (Int.ofNat n) * a = n * a := by rfl
@@ -340,7 +339,7 @@ theorem zsmul_mul_zsmul : (i * a) * (j * b) = (i * j) * (a * b) := by
 
 end HMul
 
-section Coe
+/- section Coe
 variable [Ring R]
 
 instance : Coe ℕ R where
@@ -349,7 +348,7 @@ instance : Coe ℕ R where
 instance : Coe ℤ R where
   coe z := z * (1 : R)
 
-end Coe
+end Coe -/
 
 section HPow 
 variable [Ring R]

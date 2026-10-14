@@ -2,6 +2,7 @@ module
 
 public import Mathlib
 
+/-
 #check Matrix.mul_adjugate
 
 #check Matrix.isUnit_iff_isUnit_det
@@ -11,6 +12,7 @@ public import Mathlib
 
 #check Matrix.fromBlocks
 #check Matrix.toBlocks₁₁
+-/
 
 namespace MathAI.Resultant
 
@@ -89,7 +91,7 @@ def setPartitionIso : n ≃ {x // x ∈ I} ⊕ {x // ¬ (x ∈ I)} where
     · simp
     · simp [r.property]
 
-#check Fintype.card
+-- #check Fintype.card
 
 variable [hn : Fintype n] 
   
@@ -124,7 +126,7 @@ variable (hI : I.card = k) (hJ : J.card = k)
 
 
 
-#check Set.toFinset
+-- #check Set.toFinset
 
 end
 

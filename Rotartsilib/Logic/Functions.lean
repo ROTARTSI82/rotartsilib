@@ -49,8 +49,9 @@ theorem injective_iff_left_inverse {f : X → Y} [hx : Nonempty X] :
     rwa [hg] at heq
 
 --- Does not depend on any axioms! Very constructive.
-theorem cantor {X : Type u} (f : X → Set X) : ¬f.Surjective := by
+theorem cantor {X : Type u} (f : X → X → Prop) : ¬f.Surjective := by
   intro hf
+  -- they changed the definition of Set?!
   let diag (x : X) := ¬f x x
   let ⟨x, hx⟩ := hf diag
   have h : ¬diag x := by

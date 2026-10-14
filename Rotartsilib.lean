@@ -1,5 +1,8 @@
+module
+
 import Rotartsilib.Analysis.PeriodicOrbits
 import Rotartsilib.Logic.Functions
+import Rotartsilib.Logic.Inductive
 import Rotartsilib.Logic.RelationSet
 import Rotartsilib.Scratch
 import Rotartsilib.Utils

@@ -65,6 +65,6 @@ theorem iso₂ {X Y} (s : RelationSet X Y) :
       intro x
       rfl
 
-#print axioms iso₂
+-- #print axioms iso₂
 
 end Rotartsilib.RelSet
