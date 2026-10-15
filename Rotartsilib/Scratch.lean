@@ -5,7 +5,7 @@ import Mathlib
 section
 variable {α β}
 
-/- 
+/-
 #check IsAddUnit
 
 #check α ⊕ β
@@ -17,20 +17,20 @@ variable {α β}
 
 end
 
-section 
+section
 variable {α : Type} {β : α → Type}
 
-/- 
+/-
 #check (a : α) → β a
 #check Σ(a : α), β a
 
 #check Π(a : α), β a
--/ 
+-/
 
 variable {P Q a b : Prop}
 variable {N : α → Prop}
 
-/- 
+/-
 #check ∀(a : α), P
 
 #check a ∧ b
@@ -39,14 +39,14 @@ variable {N : α → Prop}
 #check ∃(x : α), N x
 #check P ∧ Q
 
-#check Eq.rec 
+#check Eq.rec
 
 def test (x : List Type) : Nat :=
   match x with
   | [] => 0
   | x::xs => (if x = Nat then 1 else 0)
 
--/ 
+-/
 
 end
 
@@ -54,7 +54,7 @@ end
 theorem contrapos {P Q : Prop} (h : P → Q) : ¬Q → ¬P :=
   fun nq => nq ∘ h
 
-theorem not_p_and_not_p {P : Prop} : ¬(P ∧ ¬P) := 
+theorem not_p_and_not_p {P : Prop} : ¬(P ∧ ¬P) :=
   fun h => match h with
     | .intro left right => right left
 
@@ -73,7 +73,12 @@ theorem demorgans' {P Q : Prop} (h : ¬P ∧ ¬Q) : ¬(P ∨ Q) := by
   · apply h.right
     exact hq
 
-  
+theorem demorgan2 {P Q : Prop} (h : ¬P ∨ ¬Q) : ¬(P ∧ Q) := by
+  intro hc
+  rcases h with hp | hq
+  · exact hp hc.left
+  · exact hq hc.right
+
 /-
 #check Eq.rec
 
@@ -100,7 +105,7 @@ theorem does_two_equals_four : exists_even_v1.choose = exists_even_v2.choose := 
 inductive Nonpositive : Type
 | mk : (Nonpositive → False) → Nonpositive
 
-def selfApply (b : Nonpositive) : False := 
+def selfApply (b : Nonpositive) : False :=
   match b with
   | .mk f => f b
 
@@ -121,7 +126,7 @@ def fib (t : Nat) : Nat :=
 def fib₂ (t : Nat) : Nat × Nat :=
   Nat.rec ⟨1, 1⟩ (fun _ prev => ⟨prev.snd, prev.fst + prev.snd⟩) t
 
-/- 
+/-
 #check WellFounded.fix
 #check WellFounded.rec
 
@@ -155,8 +160,9 @@ inductive EqTest { α : Type u } (a : α) : α → Type where
 def Hom (X : Sort u) (Y : Sort v) : Sort (imax u v) :=
   X → Y
 
+
 /-
-  ∞ 
+  ∞
 
 #check Prod.rec
 
@@ -164,5 +170,3 @@ def Hom (X : Sort u) (Y : Sort v) : Sort (imax u v) :=
 #check ((fun x ↦ x + 1) : Hom.{0, 0} Nat Nat)
 #check ((fun X ↦ X → Type) : Hom.{1, 2} Type (Type 1))
 -/
-
-

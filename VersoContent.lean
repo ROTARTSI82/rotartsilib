@@ -1,5 +1,5 @@
-module
+module  -- shake: keep-all --deprecated_module: ignore
 
-import VersoContent.Old.IntroLeanVideo
-import VersoContent.Slides.IntroLeanVideo
-import VersoContent.SlidesMain
+public import VersoContent.Old.IntroLeanVideo
+public import VersoContent.Slides.IntroLeanVideo
+public import VersoContent.SlidesMain

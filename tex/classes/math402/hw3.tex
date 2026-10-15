@@ -1,0 +1,103 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage{float}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\begin{document}
+
+\begin{center} 
+    {\large \textbf{Math 402A -- Homework 3}}
+    \smallskip \\ 
+    Grant Yang \hspace{1em} AU26
+\end{center}
+
+\paragraph{Problem 1.} (p. 54, \#5bc)
+\begin{enumerate}
+    \item[b.] { 
+        The matrices of the form $\begin{bmatrix} a & b \\ 0 & c \end{bmatrix}$ with $a,b,c \in \mathbb Z$ are a subring of $M(\mathbb R)$ with identity.
+
+        % We can verify that we have a $0$ in this ring, as
+        % \[\begin{bmatrix} a & b \\ 0 & c \end{bmatrix} + \begin{bmatrix}0 & 0 \\ 0 & 0
+        % \end{bmatrix} = \begin{bmatrix}
+        %     a & b \\
+        %     0 & c 
+        % \end{bmatrix}.\] 
+
+        We can lift the properties of the trivial subrng $\{0\}$ and of the subring $\mathbb Z$ to this subring. We can verify $\{0\}$ and $\mathbb Z$ are closed under addition, have zeroes, and have additive inverses, so our matrix subring also satisfies those properties.
+
+        To verify that our subring is closed under multiplication, we can perform a direct calculation:
+        \[
+        \begin{bmatrix} a & b \\ 0 & c \end{bmatrix} \cdot \begin{bmatrix}a' & b' \\ 0 & c'
+        \end{bmatrix} = \begin{bmatrix}
+            a a' & a b' + b c' \\
+            0 & c c'
+        \end{bmatrix}.
+        \]
+
+        We also find a multiplicative identity $I_2 = \begin{bmatrix}1 & 0 \\ 0 & 1 \end{bmatrix}$ in our subring.
+    }
+    
+    \item[c.] {
+        The set of matrices of the form $\begin{bmatrix} a & b \\ c & 0\end{bmatrix}$ with $a,b,c \in \mathbb R$ do not form a subring of $M(\mathbb R)$. This set is not closed under multiplication, as we can calculate
+        \[
+            \begin{bmatrix}
+                0 & 1 \\ 1 & 0
+            \end{bmatrix} \cdot
+            \begin{bmatrix}
+                0 & 1 \\ 1 & 0
+            \end{bmatrix} =
+            \begin{bmatrix}
+                1 & 0 \\ 0 & 1
+            \end{bmatrix}.
+        \]
+    }
+\end{enumerate}
+
+\paragraph{Problem 2.} (p. 56, \#27)
+
+Let $S$ be the set of rational numbers that can be written with odd denominator. Then $S$ is a subring of $\mathbb Q$ but not a field.
+
+\begin{proof}
+    Let $(p_1 / q_1), (p_2 / q_2) \in S$ be any rationals with odd denominator, such that $2 \nmid q_1$ and $2 \nmid q_2$. We can verify that $S$ is closed under addition and multiplication by computing their sums and products:
+    \[ \frac{p_1}{q_1} + \frac{p_2}{q_2} = \frac{q_2 p_1 +  q_1 p_2}{q_1 q_2} \in S,
+    \qquad\;
+    \frac{p_1}{q_1} \cdot \frac{p_2}{q_2} = \frac{p_1 p_2}{q_1 q_2} \in S. 
+    \] 
+
+    Note that by Euclid's lemma, the product of two odd numbers is odd, so our denominators $q_1 q_2$ are odd, and our sums and products are in $S$. In $S$, we also find the additive and multiplicative identities:
+    \[1 = \frac{1}{1} \in S, \qquad \qquad 0 = \frac{0}{1} \in S.\]
+    Given any $p/q \in S$, the additive inverse $-p/q$ is also a member of $S$. Thus, $S$ is a subring of $\mathbb Q$ with identity. 
+    
+    However, $S$ is not a field. We can show that $2 \in S$ has no multiplicative inverse. Assume for contradiction that there exists some $p/q \in S$, with $2 \nmid q$, such that $2 \cdot p/q = 1$. Then, we would have that $q = 2p$, contradicting the fact that $2 \nmid q$.
+\end{proof}
+
+\paragraph{Problem 3.} (p. 57, \#31)
+
+\begin{enumerate}
+    \item[a.]
+    \item[b.]
+    \item[c.]  
+\end{enumerate}
+
+\paragraph{Problem 4.}
+
+\paragraph{Problem 7.} Let $R$ be a ring. Then for all $a \in R$, $a \cdot 0 = 0$.
+
+\begin{proof}
+    By the property of $0$ as the additive identity, we know $0 + 0 = 0$. Thus, $a \cdot (0 + 0) = a \cdot 0$, and by left distributivity we get $a \cdot 0 + a \cdot 0 = a \cdot 0$. By the existence of additive inverses and the associativity of addition, we have some $-(a \cdot 0)$ which we can use to directly compute
+    \begin{align*}
+        a \cdot 0 + a \cdot 0 + -(a \cdot 0) &= a \cdot 0 + -(a\cdot 0) \\
+        a \cdot 0 + 0 &= 0 \\ a \cdot 0 &= 0. &\qedhere
+    \end{align*}
+\end{proof}
+
+\paragraph{Problem 8.} (p. 68, \#17) If $u$ is a unit in a ring $R$ with identity, then $u$ is not a zero divisor.
+
+\begin{proof}
+    Let $u^{-1} \in R$ be the element such that $u \cdot u^{-1} = u^{-1} \cdot u = 1$. Let $b \in R$ be any element such that $ub = 0$. Then, we must have that $u^{-1} u b = u^{-1} \cdot 0$. Using the same idea as \textbf{Problem 7} above, one can replace left multiplication with right multiplication to show that $u^{-1} \cdot 0 = 0$. By the associativity of multiplication, we get $u^{-1} u b = 1 \cdot b = b = 0$. Similarly, if $a \in R$ is any element such that $a u = 0$, then $a u u^{-1} = 0 \cdot u^{-1}$ and so $a \cdot 1 = a = 0$. Thus, the unit $u$ is not a zero-divisor.
+\end{proof}
+
+\end{document}
