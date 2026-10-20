@@ -5,6 +5,7 @@
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
+\usepackage{hyperref}
 
 \begin{document}
 
@@ -26,17 +27,36 @@ We can now show that every $A_i$ is countable. Obviously, $A_0$ is finite, so we
 \[ f \mapsto (\text{coefficient of } x^0, \text{coefficient of } x^1, \dots, \text{coefficient of } x^{i - 1}).\]
 Note that every $f \in \mathbb A_{i}$ is nonzero and has $\mathrm{deg}(f) < i$, so every coefficient of $x^n$ for $n \ge i$ is zero. Thus, since two polynomials are equal precisely when their coefficients are equal, the map $\varphi$ is injective. Since $\mathbb Z^i$ is a finite product of countable sets, it is countable, and so $A_i$ is countable as we have injected it into a countable set.
 
-Because we have shown that $\mathbb Z[x]$ is the countable union of countable sets, it is countable. Now, define a map $\psi : \mathbb Z[x] \times \mathbb N \to \mathbb A$, where $\mathbb A$ denotes the set of algebraic numbers. Let $\psi(f, k)$ be the $k$th root of $f$ if it exists, and otherwise let $\psi(f, k) = 0$. 
+Because we have shown that $\mathbb Z[x]$ is the countable union of countable sets, it is countable. Now, define a map $\psi : (\mathbb Z[x] \setminus \{0\}) \times \mathbb N \to \mathbb A$, where $\mathbb A$ denotes the set of algebraic numbers. Let $\psi(f, k)$ be the $k$th smallest real root of $f$ if it exists, and otherwise let $\psi(f, k) = 0$. 
 
-Since every algebraic number $x \in \mathbb A$ is the root of some $f \in \mathbb Z[x]$ and all polynomials have finitely many roots, this map $\psi$ is surjective. Because  $\mathbb Z[x] \times \mathbb N$ is a product of nonempty countable sets, it is a nonempty countable set and so we have a surjection $h : \mathbb N \to \mathbb Z[x] \times \mathbb N$. Thus, we have a surjection $\psi \circ h : \mathbb N \to \mathbb A$, and $\mathbb A$ is countable.
+Since every algebraic number $x \in \mathbb A$ is the root of some $f \in \mathbb Z[x] \setminus \{0\}$ and all nonzero univariate polynomials have finitely many roots, this map $\psi$ is surjective. Because  $(\mathbb Z[x] \setminus \{0\}) \times \mathbb N$ is a product of nonempty countable sets, it is a nonempty countable set and so we have a surjection $h : \mathbb N \to (\mathbb Z[x] \setminus \{0\}) \times \mathbb N$. Thus, we have a surjection $\psi \circ h : \mathbb N \to \mathbb A$, and $\mathbb A$ is countable.
 \end{proof}
 
 Further, the transcendental numbers $\mathbb T = \mathbb R \setminus \mathbb A$ are uncountable. Assume for contradiction that $\mathbb T$ were countable. Then $\mathbb R = \mathbb T \cup \mathbb A$ would be the union of two countable sets, so it would be countable, contradicting the fact that the reals are uncountable (Cantor diagonalization).
 
-\paragraph{Problem 2.} Yes, $A \times B$ and $B \times A$ have the same cardinality. We can construct a bijection $\phi : A \times B \to B \times A$ by $(a, b) \mapsto (b, a)$.
-
+\paragraph{Problem 2.} Yes, $A \times B$ and $B \times A$ have the same cardinality. We can construct a bijection $\phi : A \times B \to B \times A$ by $(a, b) \mapsto (b, a)$. This is a bijection by looking at it. It is injective: 
+\[ (a, b) = (a', b') \iff a = a' \land b = b' \iff (b, a) = (b', a'),\]
+and it is surjective:
+\[ \forall (b, a) \in B \times A, \; (a, b) \in A \times B \land  \phi((a, b)) = (b, a). \]
+What do you want me to say, man? If you have any function into/out of either $A \times B$ or $B \times A$, you can swap one set for the other by composing the function with $\phi$ or $\phi^{-1}$. This composition also preserves the function's injectivity/surjectivity, so any injection/surjection into/out of $A \times B$ can be used to construct an injection/surjection into/out of $B \times A$, and vice versa. Thus, orderings by injections/surjections are the same for $A \times B$ and $B \times A$.
 
 \paragraph{Problem 3.} We can construct an injection $\mathbb R^2 \to \mathbb R$. First, we can construct a bijection $\phi : \mathbb R \to (0, 1)$ given by \[\phi(x) = \frac{1}{2} + \frac{1}{\pi}\arctan(x).\] 
-Then, we have a bijection $\phi \times \phi : \mathbb R^2 \to (0, 1) \times (0, 1)$. 
+Then, we have a bijection $\phi \times \phi : \mathbb R^2 \to (0, 1) \times (0, 1)$. Finally, we can construct an injection $\psi : (0, 1) \times (0, 1) \to (0, 1)$ by using decimal expansions of real numbers:
+\[\psi(0.a_1a_2a_3\dots, 0.b_1b_2b_3\dots) = 0.a_1b_1a_2b_2a_3b_3\dots.\]
+Here, we take decimal expansions of $a$ and $b$ by choosing the expansion that avoids $0.xyz\overline{9}$ so that our expansions are unique. Note that this means the decimal expansion of $\psi(a, b)$ is also given in a canonical form that does not end in repeating $9$s, and we can construct an explicit left-inverse for $\psi$, namely $0.r_1 r_2 r_3 \dots \mapsto (0.r_1r_3r_5\dots, 0.r_2r_4r_6\dots)$.
 
+Thus, $\psi$ is injective, and the function $\psi \circ (\phi \times \phi) : \mathbb R^2 \to (0, 1)$ is also injective as it is the composition of two injective functions. We have injected $\mathbb R^2$ into $\mathbb R$.
+
+\paragraph{Problem 4.}
+
+\href{https://share.gemini.google/AzmKuT1Kbsdf}{Gemini conversation}. The LLM names the following points:
+\begin{enumerate}
+    \item Countable unions of countable sets are countable.
+    \item (Nonempty) countable sets can be enumerated with a surjection $\mathbb N \to A$ (or injection $A \to \mathbb N$).
+    \item Subsets of countable sets are countable.
+    \item Cantor's theorem and diagonalization.
+    \item Countable pigeonhole: if an uncountable set can be expressed as a countable union, then one of the sets in the union is uncountable.
+\end{enumerate}
+
+Most interesting to me is Cantor's theorem, because diagonalization is such a general thing and because it can be proven constructively. It's more set theory than topology, but I think it's interesting because it forces you to question the very nature of the logical systems surrounding your mathematics. Questions like the continuum hypothesis, cardinal numbers, etc. The wikipedia pages for inaccessible cardinals are pretty funny even if I don't understand anything.
 \end{document}

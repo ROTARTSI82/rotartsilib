@@ -82,7 +82,79 @@ Let $S$ be the set of rational numbers that can be written with odd denominator.
     \item[c.]  
 \end{enumerate}
 
-\paragraph{Problem 4.}
+\paragraph{Problem 4.} (p. 57, \#33)
+
+\paragraph{Problem 5.} (p. 57, \#40)
+For all $d \in \mathbb Z$ that are not perfect squares, \[\mathbb Q[\sqrt{d}] = \left\{ a + b \sqrt{d} : a, b \in \mathbb Q \right\}\] is a subfield of $\mathbb C$.
+
+\begin{proof}
+    We consider $\mathbb Q[\sqrt{d}] \subseteq \mathbb C$, and note that it is obviously closed under addition and additive inverses as it is a rational vector subspace of $\mathbb C$. To show that it is closed under multiplication, consider any $x, x' \in \mathbb Q[\sqrt{d}]$ and write $x = a + b \sqrt{d}$ and $x' = a' + b' \sqrt{d}$. Then, \begin{align*} x\cdot x' &= a a' + a b' \sqrt{d} + b a' \sqrt{d} + b b' d \\ &= (a a' + b b' d) + (a b' + b a') \sqrt{d} \in \mathbb Q[\sqrt{d}].\end{align*}
+    Because multiplication in $\mathbb C$ is commutative, multiplication on $\mathbb Q[\sqrt{d}]$ is also commutative. Finally, we can show the existence of an additive inverse for all nonzero $x = a + b \sqrt{d}$, given explicitly by \[ x^{-1} = \frac{a}{a^2 - b^2 d} + \frac{-b}{a^2 - b^2 d} \sqrt{d}. \]
+    Since $d$ is not a perfect square, $b^2 d$ is also not a perfect square (unique prime factorization), and so $b^2 d \neq a^2$. Thus, since either $a$ or $b$ is nonzero, the denominator is nonzero, and we have $x^{-1} \in \mathbb Q[\sqrt{d}]$. Because multiplication is commutative, it suffices to compute $x \cdot x^{-1}$ as follows:
+    \begin{align*}
+        x \cdot x^{-1} = \frac{1}{a^2 - b^2d} \cdot (a^2 - ab \sqrt{d} + ba \sqrt{d} - b^2 d) = 1.
+    \end{align*}
+    $\mathbb Q[\sqrt{d}]$ is a subfield of $\mathbb C$.
+\end{proof}
+
+\paragraph{Problem 6.} (p. 58, \#43abc)
+
+% For part (c), use part (a); you can also use our computation from class that relied on (a).
+
+We define the set $\mathbb H$ of real quaternions as a real subspace of $M(\mathbb C)$ spanned by the Pauli matrices and the identity:
+\begin{align*}
+    \mathbf 1 = \begin{bmatrix}1 & 0 \\ 0 & 1 \end{bmatrix}, \qquad {\mathbf i} = i \sigma_z = \begin{bmatrix}i & 0 \\ 0 & -i\end{bmatrix}, &\qquad {\mathbf j} = i\sigma_y = \begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}, \qquad {\mathbf k} = i\sigma_x = \begin{bmatrix}0 & i \\ i & 0 \end{bmatrix} \\
+    w\mathbf 1 + x {\mathbf i} + y {\mathbf j} + z {\mathbf k} &= \begin{bmatrix}
+       w + x i & y + zi \\ -y + z i & w - xi 
+    \end{bmatrix}
+\end{align*}
+
+\begin{enumerate}
+\item[a.] {
+    We can verify the following identities:
+    \begin{align*}
+        {\mathbf i}^2 = \begin{bmatrix}
+            i^2 & 0 \\ 0 & (-i)^2
+        \end{bmatrix} = -\mathbf 1, &\qquad \mathbf{j}^2 = \begin{bmatrix}-1 & 0 \\ 0 & -1\end{bmatrix} = -\mathbf 1, \qquad
+        \mathbf{k}^2 = \begin{bmatrix}
+            i^2 & 0 \\ 0 & i^2
+        \end{bmatrix} = -\mathbf 1. \\
+        \mathbf{i}\mathbf{j} = \begin{bmatrix}
+            0 & i \\ i & 0
+        \end{bmatrix} = \mathbf{k}, &\qquad \mathbf{j}\mathbf{i} = \begin{bmatrix}
+            0 & -i \\ -i & 0
+        \end{bmatrix} = -\mathbf k. \\
+        \mathbf{j}\mathbf{k} = \begin{bmatrix}
+            i & 0 \\ 0 & -i
+        \end{bmatrix} = \mathbf{i}, &\qquad \mathbf{k}\mathbf{j} = \begin{bmatrix}
+            -i & 0 \\ 0 & i
+        \end{bmatrix} = -\mathbf i. \\
+        \mathbf{i}\mathbf{k} = \begin{bmatrix}
+            0 & i^2 \\ -i^2 & 0
+        \end{bmatrix} = -\mathbf{j}, &\qquad \mathbf{k}\mathbf{i} = \begin{bmatrix}
+            0 & -i^2 \\ i^2 & 0
+        \end{bmatrix} = \mathbf j.
+    \end{align*}
+}
+\item[b.] {
+    $\mathbb H$ is a noncommutative ring with identity. Because we have defined $\mathbb H$ as a subset of $M(\mathbb C)$, it suffices to show that $\mathbb H$ is a subring of $M(\mathbb C)$. We can verify that the quaternions have a multiplicative identity as $\mathbf{1} \in \mathbb H$ by definition. Being a vector subspace, $\mathbb H$ is closed under addition and additive inverses, i.e. $q \in \mathbb H \implies -1 \cdot q \in \mathbb H$ and $q, r \in \mathbb H \implies q + r \in \mathbb H$. Finally, we can verify that $\mathbb H$ is closed under multiplication by direct calculation. Let $q = w \mathbf{1} + x \mathbf{i} + y \mathbf{j} + z \mathbf{k}$ and $r = w' \mathbf{1} + x' \mathbf{i} + y' \mathbf{j} + z' \mathbf{k}$. Then, we can calculate
+    \begin{align*}
+        qr &= ww' \mathbf{1} + wx' \mathbf{i} + w y' \mathbf{j} + w z' \mathbf{k} + xw' \mathbf{i} - x x' \mathbf{1} + x y' \mathbf{k} - x z' \mathbf{j} \\ &\qquad\; + yw' \mathbf{j} - yx' \mathbf{k} - y y' \mathbf{1} + y z' \mathbf{i} + z w' \mathbf{k} + z x' \mathbf{j} - z y' \mathbf{i} - z z' \mathbf{1} \\
+        &= (ww' - xx' - yy' - zz') \mathbf{1} + (wx' + xw' + yz' - zy' \mathbf{i} \\ &\qquad\; + (wy' - xz' + yw' + zx')\mathbf{j} +  (wz' + xy' -yx' + zw') \mathbf{k} \in \mathbb H.
+    \end{align*}
+    
+}
+\item[c.] $\mathbb H$ is a division ring. Let $q = w \mathbf 1 + x \mathbf i + y \mathbf j + z \mathbf k$ be any nonzero quaternion. Define $t = (w^2 + x^2 + y^2 + z^2)^{-1}$, and note that $t > 0$ as $w,x,y,z \in \mathbb R$ and at least one of them is nonzero. Then, we may define $q^{-1} = t(w \mathbf 1 - x \mathbf i - y \mathbf j - z \mathbf k)$ and calculate that
+\begin{align*}
+    qq^{-1} &= t \cdot (w^2 \mathbf{1} - wx \mathbf{i} - wy \mathbf{j} - wz \mathbf{k} + xw \mathbf{i} + x^2 \mathbf{1} - xy \mathbf{k} + xz \mathbf{j} \\ &\qquad\; + yw \mathbf{j} + yx \mathbf{k} + y^2 \mathbf{1} - yz \mathbf{i} + zw \mathbf{k} -zx \mathbf{j} + zy\mathbf{i} + z^2 \mathbf{1}) \\ &= t \cdot (w^2 + x^2 + y^2 + z^2) \mathbf{1} = \mathbf{1}. \\
+    q^{-1} q &= t \cdot (w^2 \mathbf{1} + wx \mathbf{i} + wy \mathbf{j} + wz \mathbf{k} - xw \mathbf{i} + x^2 \mathbf{1} - xy \mathbf{k} + xz \mathbf{j} \\ &\qquad\; - yw \mathbf{j} + yx \mathbf{k} + y^2 \mathbf{1} - yz\mathbf{i} - zw \mathbf{k} - zx \mathbf{j} + zy\mathbf{i} + z^2 \mathbf{1})
+     \\ &= t \cdot (w^2 + x^2 + y^2 + z^2) \mathbf{1} = \mathbf{1}.
+\end{align*}
+
+
+Geometrically, it's reflecting across the north pole of the 4-sphere, the double cover of $SO(3) \cong \mathbb{R}P^3$?
+\end{enumerate}
+
 
 \paragraph{Problem 7.} Let $R$ be a ring. Then for all $a \in R$, $a \cdot 0 = 0$.
 
@@ -99,5 +171,87 @@ Let $S$ be the set of rational numbers that can be written with odd denominator.
 \begin{proof}
     Let $u^{-1} \in R$ be the element such that $u \cdot u^{-1} = u^{-1} \cdot u = 1$. Let $b \in R$ be any element such that $ub = 0$. Then, we must have that $u^{-1} u b = u^{-1} \cdot 0$. Using the same idea as \textbf{Problem 7} above, one can replace left multiplication with right multiplication to show that $u^{-1} \cdot 0 = 0$. By the associativity of multiplication, we get $u^{-1} u b = 1 \cdot b = b = 0$. Similarly, if $a \in R$ is any element such that $a u = 0$, then $a u u^{-1} = 0 \cdot u^{-1}$ and so $a \cdot 1 = a = 0$. Thus, the unit $u$ is not a zero-divisor.
 \end{proof}
+
+\paragraph{Problem 9.} (p. 69, \#34) Let $\mathbb F$ be any field, and let $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$ be any matrix in $M(\mathbb F)$.
+
+\begin{enumerate}
+\item[a.] {
+    $A$ is invertible if and only if $ad-bc \neq 0_{\mathbb F}$.
+
+    \begin{proof}
+        ($\implies$) Let $A^{-1} \in M(\mathbb F)$ be a matrix such that $A^{-1} A = A A^{-1} = \mathbf 1$. Assume for contradiction that $ad - bc = 0_{\mathbb F}$. Take $B = \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$, and we can verify $AB = \mathbf 0$:
+        \begin{align*}
+            \begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix} = \begin{bmatrix} ad - bc & -ab + ba \\ cd -dc & -cb + da \end{bmatrix} = \begin{bmatrix}
+                0 & 0 \\ 0 & 0
+            \end{bmatrix}.
+        \end{align*}
+        Thus, $A^{-1} A B = A^{-1} \mathbf 0$, and so $B = \mathbf 0$, implying that $a = b = c = d = 0_{\mathbb F}$ and $A = \mathbf 0$. Then, we get $A A^{-1} = \mathbf 0 = \mathbf 1$, a contradiction as $\mathbb F$ is nontrivial with $0_{\mathbb F} \neq 1_{\mathbb F}$.
+
+        ($\impliedby$) We have $ad - bc \neq 0_{\mathbb F}$, so define $A^{-1} = \frac{1}{ad - bc} \begin{bmatrix}d & -b \\ -c & a\end{bmatrix}$. We can verify that $A A^{-1} = A^{-1} A = \mathbf 1$.
+
+        \begin{align*}
+            \begin{bmatrix}
+                a & b \\ c & d
+            \end{bmatrix}
+            \left(
+            \frac{1}{ad - bc}
+            \begin{bmatrix}
+                d & -b \\ -c & a
+            \end{bmatrix}
+            \right) = \frac{1}{ad-bc} \begin{bmatrix}
+                ad - bc & -ab + ba \\ cd - dc & -cb + da
+            \end{bmatrix} = \begin{bmatrix}1 & 0 \\ 0 & 1 \end{bmatrix}, \\
+            \frac{1}{ad - bc}
+            \begin{bmatrix}
+                d & -b \\ -c & a
+            \end{bmatrix}
+            \begin{bmatrix}
+                a & b \\ c & d
+            \end{bmatrix}
+            =
+            \frac{1}{ad-bc}
+            \begin{bmatrix}
+                da -bc & db -bd \\ -ca + ac & -cb + ad
+            \end{bmatrix} = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}.
+        \end{align*}
+        Thus, $A$ is invertible.
+    \end{proof}
+}
+\item[b.] { $A$ is a zero divisor if and only if $ad - bc = 0_{\mathbb F}$.
+\begin{proof}
+    ($\implies$) Let $B = \begin{bmatrix}a' & b' \\ c' & d' \end{bmatrix}\in M(\mathbb F)$ be such that $AB = \mathbf 0$ and $B \neq \mathbf 0$. Assume for contradiction that $ad - bc \neq 0_{\mathbb F}$, and by part (a) above, let $A^{-1} \in M(\mathbb F)$ be such that $A A^{-1} = A^{-1} A = \mathbf 1$. Then, $A^{-1} A B = A^{-1} \mathbf 0 = \mathbf 0$, so $B = \mathbf 0$, a contradiction.
+
+    ($\impliedby$) We can explicitly construct $B = \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$ and show that $AB = \mathbf 0$. This is identical to the proof of $(\implies)$ for part (a) above.
+\end{proof}
+
+}
+\end{enumerate}
+
+\paragraph{Problem 10.} (p. 80, \#7)
+$\mathbb R$ is isomorphic to the ring $S$ of all $2 \times 2$ matrices of the form $\begin{bmatrix} a & 0 \\ 0 & a \end{bmatrix}$ for $a \in \mathbb R$.
+
+\begin{proof}
+    Define $\varphi : \mathbb R \to S$ by $a \mapsto \begin{bmatrix} a & 0 \\ 0 & a \end{bmatrix}$. We wish to show that this is a bijective ring homomorphism. First, we can verify that $\varphi$ respects addition, as 
+    \[ \varphi(a + b) = \begin{bmatrix} a + b & 0 \\ 0 & a + b \end{bmatrix} = \begin{bmatrix} a & 0 \\ 0 & a \end{bmatrix} + \begin{bmatrix} b & 0 \\ 0 & b \end{bmatrix} = \varphi(a) + \varphi(b). \]
+    Additionally, $\varphi$ also respects multiplication, as
+    \[ \varphi(a \cdot b) = \begin{bmatrix} a \cdot b & 0 \\ 0 & a \cdot b \end{bmatrix} = \begin{bmatrix} a & 0 \\ 0 & a \end{bmatrix} \begin{bmatrix} b & 0 \\ 0 & b \end{bmatrix} = \varphi(a) \cdot \varphi(b). \]
+    We can also verify that $\varphi$ is injective and surjective. Injectivity follows from the fact that \[\begin{bmatrix} a & 0 \\ 0 & a \end{bmatrix} = \begin{bmatrix} a' & 0 \\ 0 & a' \end{bmatrix} \iff a = a', \]
+    and surjectivity follows from the definition of $S$, as it corresponds exactly to the image of $\varphi$. Thus, $\mathbb R$ and $S$ are isomorphic as rings.
+\end{proof}
+
+\paragraph{Problem 11.} (p. 80, \#8)
+
+The function $ f : \mathbb Q[\sqrt{2}] \to \mathbb Q[\sqrt{2}]$ given by $f(a + b\sqrt{2}) = a - b\sqrt{2}$ is a ring isomorphism.
+
+\begin{proof}
+    First, we can verify that $f$ respects addition and multiplication:
+    \begin{align*}
+     f\left(\left(a + b\sqrt{2}\right)+ \left(c + d\sqrt{2}\right)\right) &= (a + c) - (b + d)\sqrt{2} \\ &= \left(a - b\sqrt{2}\right) + \left(c - d\sqrt{2}\right) = f\left(a + b \sqrt{2}\right) + f\left(c + d\sqrt{2}\right). \\
+    f\left(\left(a + b\sqrt{2}\right)\left(c + d \sqrt{2}\right)\right) &= (ac + 2bd) - (ad + bc)\sqrt{2} \\ &= \left(a - b \sqrt{2}\right) \left(c - d\sqrt{2}\right) = f\left(a + b\sqrt{2}\right)f\left(c + d\sqrt{2}\right). 
+    \end{align*}
+    Additionally, $f$ is surjective as for any $a + b\sqrt{2} \in \mathbb Q[\sqrt{2}]$, we have $f\left(a - b\sqrt{2}\right) = a + b\sqrt{2}$. Injectivity also follows from the fact that
+    \[a + b\sqrt{2} = a' + b' \sqrt{2} \iff a = a' \land b = b' \iff a - b\sqrt{2} = a' - b'\sqrt{2}. \qedhere\]
+\end{proof}
+
 
 \end{document}
