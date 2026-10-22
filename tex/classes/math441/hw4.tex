@@ -1,0 +1,24 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\usepackage{hyperref}
+
+\begin{document}
+
+\begin{center} {\large \textbf{Math 441A -- Homework 2}} \smallskip \\ 
+    Grant Yang \hspace{1em} AU26
+ \end{center}
+
+\paragraph{Problem 2.} $\mathbb R$ with the co-finite or co-countable topology is not Hausdorff.
+
+\begin{proof}
+    TODO: Explain more. \\
+
+    We can show that all open sets have nonempty intersection. Let $F_1$, $F_2$ be closed (i.e. countable) sets, and assume for contradiction that $F_1^C \cap F_2^C = \varnothing$. Then, we can compute $\varnothing = (\mathbb R \setminus F_1) \cap (\mathbb R \setminus F_2) = \mathbb R \setminus (F_1 \cup F_2)$. This would imply that $F_1 \cup F_2 \supseteq \mathbb R$, but note that $F_1 \cup F_2$ is a countable set while $\mathbb R$ is uncountable. Thus, we have a contradiction.
+\end{proof}
+
+\end{document}

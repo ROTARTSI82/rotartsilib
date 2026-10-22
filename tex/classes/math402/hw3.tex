@@ -75,22 +75,113 @@ Let $S$ be the set of rational numbers that can be written with odd denominator.
 \end{proof}
 
 \paragraph{Problem 3.} (p. 57, \#31)
-
+In $M(\mathbb R)$, consider the set $S$ of scalar matrices of the form $\begin{bmatrix}k & 0 \\ 0 & k\end{bmatrix}$ for some $k \in \mathbb R$.
 \begin{enumerate}
-    \item[a.]
-    \item[b.]
-    \item[c.]  
+    \item[a.] This is a subring of $M(\mathbb R)$. We can verify that it is closed under addition and multiplication: {
+        \begin{align*}
+            \begin{bmatrix}
+                k & 0 \\ 0 & k
+            \end{bmatrix} +
+            \begin{bmatrix}
+                k' & 0 \\ 0 & k'
+            \end{bmatrix} &= 
+            \begin{bmatrix}
+                k + k' & 0 \\ 0 & k + k'
+            \end{bmatrix} \in S \\
+            \begin{bmatrix}
+                k & 0 \\ 0 & k
+            \end{bmatrix}
+            \cdot \begin{bmatrix}
+                k' & 0 \\ 0 & k'
+            \end{bmatrix} &=
+            \begin{bmatrix}
+                k \cdot k' & 0 \\
+                0 & k \cdot k'
+            \end{bmatrix} \in S
+        \end{align*}
+        
+        Additionally, we have an additive identity $\begin{bmatrix}
+            0 & 0 \\ 0 & 0
+        \end{bmatrix} \in S$ and additive inverses: \[\begin{bmatrix}
+            k & 0 \\ 0 & k
+        \end{bmatrix}, \begin{bmatrix}
+            -k & 0 \\ 0 & -k
+        \end{bmatrix} \in S.\]
+    } 
+    \item[b.] {
+        The matrices in $S$ commute with every matrix in $M(\mathbb R)$. Consider any $K = \begin{bmatrix}k & 0 \\ 0 & k \end{bmatrix} \in S$ and $A = \begin{bmatrix}
+            a & b \\ c & d
+        \end{bmatrix} \in M(\mathbb R)$. Then we can directly compute 
+        \begin{align*}
+            K A &= \begin{bmatrix}
+                k & 0 \\ 0 & k
+            \end{bmatrix} \cdot \begin{bmatrix}
+                a & b \\ c & d
+            \end{bmatrix} = \begin{bmatrix}
+                k a & k b \\ k c & k d
+            \end{bmatrix}, \\
+            A K &= \begin{bmatrix}
+                a & b \\ c & d
+            \end{bmatrix} \cdot \begin{bmatrix}
+                k & 0 \\ 0 & k
+            \end{bmatrix} = \begin{bmatrix}
+               a k & b k \\ c k & d k 
+            \end{bmatrix} = K A.
+        \end{align*}
+    }
+    \item[c.] {
+        Let $K \in M(\mathbb R)$ be any matrix such that for any $A \in M(\mathbb R)$, we have $K A = A K$. Then $K$ is a scalar matrix.
+
+        \begin{proof}
+            Write $K = \begin{bmatrix}K_{11} & K_{12} \\ K_{21} & K_{22}\end{bmatrix}$. Then, we can compute 
+            \[K \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}= \begin{bmatrix}
+                K_{11} & 0 \\
+                K_{21} & 0
+            \end{bmatrix}, \qquad \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix} K = \begin{bmatrix}
+                K_{11} & K_{12} \\
+                0 & 0
+            \end{bmatrix}.\]
+            Thus, $K_{21} = K_{12} = 0$. Similarly, we can compute
+            \[
+            K \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix}0 & K_{11} \\ 0 & K_{21} \end{bmatrix}, \qquad \begin{bmatrix}0 & 1 \\ 0 & 0 \end{bmatrix} K = \begin{bmatrix} K_{21} & K_{22} \\ 0 & 0 \end{bmatrix}.
+            \]
+            Thus, $K_{22} = K_{11}$, so $K = \begin{bmatrix} k & 0 \\ 0 & k \end{bmatrix}$ for some $k \in \mathbb R$, i.e. $K \in S$.
+        \end{proof}
+    }
 \end{enumerate}
 
-\paragraph{Problem 4.} (p. 57, \#33)
+\paragraph{Problem 4.} (p. 57, \#33) Let $R$ and $S$ be rings, and consider the Cartesian product $R \times S$ with multiplication and addition defined componentwise. 
+
+\begin{enumerate}
+    \item[a.] This is a ring. By definition, $R\times S$ is closed under addition and multiplication. We can verify that \[(a, b) + (0, 0) = (a + 0, b + 0) = (a, b),\] so $\mathbf 0 \in R \times S$. We can see that \[(a, b) + (-a, -b) = (a + -a, b + -b) = (0, 0),\] so we have additive inverses with $-(a, b) = (-a, -b)$. Additionally, addition is commutative: \[(a, b) + (a', b') = (a + a', b+ b') = (a' + a, b' + b) = (a', b') + (a, b).\]
+    Next, we can check associativity for addition:
+    \begin{align*}
+        [(a,b) + (a',b')] + (a^\ast, b^\ast) &= ([a + a'] + a^\ast, [b + b'] + b^\ast) \\
+        &= (a + [a' + a^\ast], b + [b' + b^\ast]) \\
+        &= (a, b) + [(a', b') + (a^\ast, b^\ast)].
+    \end{align*}
+    Associativity for multiplication follows from a similar argument, and finally, we can check distributivity:
+    \begin{align*}
+        (a, b) \cdot ((a', b') + (a^\ast, b^\ast)) &= (a, b) \cdot (a' + a^\ast, b' + b^\ast) \\ &= (a \cdot a' + a \cdot a^\ast, b \cdot b' + b \cdot b^\ast) \\ &= (a, b) \cdot (a', b') + (a, b) \cdot (a^\ast, b^\ast). 
+    \end{align*}
+    This shows left distributivity, and right distributivity follows from a similar argument.
+\item[b.] If $R$ and $S$ are both commutative, then so is $R \times S$. This follows the same argument for the commutativity of addition:
+\[(a, b) \cdot (a', b') = (a \cdot a', b \cdot b') = (a' \cdot a, b' \cdot b) = (a', b') \cdot (a, b).\]
+\item[c.] If both $R$ and $S$ have an identity, then so does $R \times S$. We can verify that
+\begin{align*}(a, b) \cdot (1_R, 1_S) &= (a \cdot 1_R, b\cdot 1_S) = (a, b) \\
+(1_R, 1_S) \cdot (a, b) &= (1_R \cdot a, 1_S \cdot b) = (a, b).\end{align*}
+Thus, $\mathbf 1_{R \times S} = (1_R, 1_S)$.
+\end{enumerate}
 
 \paragraph{Problem 5.} (p. 57, \#40)
 For all $d \in \mathbb Z$ that are not perfect squares, \[\mathbb Q[\sqrt{d}] = \left\{ a + b \sqrt{d} : a, b \in \mathbb Q \right\}\] is a subfield of $\mathbb C$.
 
 \begin{proof}
     We consider $\mathbb Q[\sqrt{d}] \subseteq \mathbb C$, and note that it is obviously closed under addition and additive inverses as it is a rational vector subspace of $\mathbb C$. To show that it is closed under multiplication, consider any $x, x' \in \mathbb Q[\sqrt{d}]$ and write $x = a + b \sqrt{d}$ and $x' = a' + b' \sqrt{d}$. Then, \begin{align*} x\cdot x' &= a a' + a b' \sqrt{d} + b a' \sqrt{d} + b b' d \\ &= (a a' + b b' d) + (a b' + b a') \sqrt{d} \in \mathbb Q[\sqrt{d}].\end{align*}
-    Because multiplication in $\mathbb C$ is commutative, multiplication on $\mathbb Q[\sqrt{d}]$ is also commutative. Finally, we can show the existence of an additive inverse for all nonzero $x = a + b \sqrt{d}$, given explicitly by \[ x^{-1} = \frac{a}{a^2 - b^2 d} + \frac{-b}{a^2 - b^2 d} \sqrt{d}. \]
-    Since $d$ is not a perfect square, $b^2 d$ is also not a perfect square (unique prime factorization), and so $b^2 d \neq a^2$. Thus, since either $a$ or $b$ is nonzero, the denominator is nonzero, and we have $x^{-1} \in \mathbb Q[\sqrt{d}]$. Because multiplication is commutative, it suffices to compute $x \cdot x^{-1}$ as follows:
+    Because multiplication in $\mathbb C$ is commutative, multiplication on $\mathbb Q[\sqrt{d}]$ is also commutative. We also have that $0 \in \mathbb Q[\sqrt{d}]$, and it is closed under additive inverses as $-(a + b \sqrt{d}) = -a + -b \sqrt{d} \in \mathbb Q[\sqrt{d}]$. Finally, we can show the existence of a multiplicative inverse for all nonzero $x = a + b \sqrt{d}$. If $b = 0$ or if $d = 0$, then $x = a \in \mathbb C^\times$, so we trivially have that $x^{-1} = a^{-1}$. Thus, we can consider the remaining case where $b \neq 0$ and $d \neq 0$, and we explicitly define \[ x^{-1} = \frac{a}{a^2 - b^2 d} + \frac{-b}{a^2 - b^2 d} \sqrt{d}. \]
+    Taking $a = p_a / q_a$ and $b = p_b / q_b$ for $p_a, p_b \in \mathbb Z$ and $q_a, q_b \in \mathbb Z_{>0}$, we can write this as
+    \[ x^{-1} = \frac{a q_a^2 q_b^2}{p_a^2 q_b^2 - p_b^2 q_a^2 d} + \frac{-b q_a^2 q_b^2}{p_a^2 q_b^2 - p_b^2 q_a^2 d}. \]
+    Since $d$ is not a perfect square, $p_b^2 q_a^2 d$ is also not a perfect square, and furthermore it is nonzero as denominators and the values $d$ and $b$ are nonzero. However, note that $p_a^2 q_b^2$ is either zero or a nonzero perfect square, so $p_b^2 q_a^2 d \neq p_a^2 q_b^2$. Thus, the denominator is nonzero, and we have $x^{-1} \in \mathbb Q[\sqrt{d}]$. Because multiplication is commutative, it suffices to compute $x \cdot x^{-1}$ as follows:
     \begin{align*}
         x \cdot x^{-1} = \frac{1}{a^2 - b^2d} \cdot (a^2 - ab \sqrt{d} + ba \sqrt{d} - b^2 d) = 1.
     \end{align*}
@@ -137,14 +228,14 @@ We define the set $\mathbb H$ of real quaternions as a real subspace of $M(\math
     \end{align*}
 }
 \item[b.] {
-    $\mathbb H$ is a noncommutative ring with identity. Because we have defined $\mathbb H$ as a subset of $M(\mathbb C)$, it suffices to show that $\mathbb H$ is a subring of $M(\mathbb C)$. We can verify that the quaternions have a multiplicative identity as $\mathbf{1} \in \mathbb H$ by definition. Being a vector subspace, $\mathbb H$ is closed under addition and additive inverses, i.e. $q \in \mathbb H \implies -1 \cdot q \in \mathbb H$ and $q, r \in \mathbb H \implies q + r \in \mathbb H$. Finally, we can verify that $\mathbb H$ is closed under multiplication by direct calculation. Let $q = w \mathbf{1} + x \mathbf{i} + y \mathbf{j} + z \mathbf{k}$ and $r = w' \mathbf{1} + x' \mathbf{i} + y' \mathbf{j} + z' \mathbf{k}$. Then, we can calculate
+    $\mathbb H$ is a noncommutative ring with identity. Clearly, multiplication is not commutative from part (a) above, as $\mathbf{i}\mathbf{j} = -\mathbf{j}\mathbf{i}$ and $1 \neq -1$ in $\mathbb R$. Because we have defined $\mathbb H$ as a subset of $M(\mathbb C)$, it suffices to show that $\mathbb H$ is a subring of $M(\mathbb C)$. We can verify that the quaternions have a multiplicative identity as $\mathbf{1} \in \mathbb H$ by definition. Being a vector subspace, $\mathbb H$ is closed under addition and additive inverses, i.e. $q \in \mathbb H \implies -1 \cdot q \in \mathbb H$ and $q, r \in \mathbb H \implies q + r \in \mathbb H$. Finally, we can verify that $\mathbb H$ is closed under multiplication by direct calculation. Let $q = w \mathbf{1} + x \mathbf{i} + y \mathbf{j} + z \mathbf{k}$ and $r = w' \mathbf{1} + x' \mathbf{i} + y' \mathbf{j} + z' \mathbf{k}$. Then, we can calculate
     \begin{align*}
         qr &= ww' \mathbf{1} + wx' \mathbf{i} + w y' \mathbf{j} + w z' \mathbf{k} + xw' \mathbf{i} - x x' \mathbf{1} + x y' \mathbf{k} - x z' \mathbf{j} \\ &\qquad\; + yw' \mathbf{j} - yx' \mathbf{k} - y y' \mathbf{1} + y z' \mathbf{i} + z w' \mathbf{k} + z x' \mathbf{j} - z y' \mathbf{i} - z z' \mathbf{1} \\
-        &= (ww' - xx' - yy' - zz') \mathbf{1} + (wx' + xw' + yz' - zy' \mathbf{i} \\ &\qquad\; + (wy' - xz' + yw' + zx')\mathbf{j} +  (wz' + xy' -yx' + zw') \mathbf{k} \in \mathbb H.
+        &= (ww' - xx' - yy' - zz') \mathbf{1} + (wx' + xw' + yz' - zy') \mathbf{i} \\ &\qquad\; + (wy' - xz' + yw' + zx')\mathbf{j} +  (wz' + xy' -yx' + zw') \mathbf{k} \in \mathbb H.
     \end{align*}
     
 }
-\item[c.] $\mathbb H$ is a division ring. Let $q = w \mathbf 1 + x \mathbf i + y \mathbf j + z \mathbf k$ be any nonzero quaternion. Define $t = (w^2 + x^2 + y^2 + z^2)^{-1}$, and note that $t > 0$ as $w,x,y,z \in \mathbb R$ and at least one of them is nonzero. Then, we may define $q^{-1} = t(w \mathbf 1 - x \mathbf i - y \mathbf j - z \mathbf k)$ and calculate that
+\item[c.] $\mathbb H$ is a division ring. Let $q = w \mathbf 1 + x \mathbf i + y \mathbf j + z \mathbf k$ be any nonzero quaternion. Define $t = (w^2 + x^2 + y^2 + z^2)^{-1}$, and note that $t > 0$ as $w,x,y,z \in \mathbb R$ and at least one of them is nonzero. Then, we may define $q^{-1} = t(w \mathbf 1 - x \mathbf i - y \mathbf j - z \mathbf k) \in \mathbb H$ and calculate that
 \begin{align*}
     qq^{-1} &= t \cdot (w^2 \mathbf{1} - wx \mathbf{i} - wy \mathbf{j} - wz \mathbf{k} + xw \mathbf{i} + x^2 \mathbf{1} - xy \mathbf{k} + xz \mathbf{j} \\ &\qquad\; + yw \mathbf{j} + yx \mathbf{k} + y^2 \mathbf{1} - yz \mathbf{i} + zw \mathbf{k} -zx \mathbf{j} + zy\mathbf{i} + z^2 \mathbf{1}) \\ &= t \cdot (w^2 + x^2 + y^2 + z^2) \mathbf{1} = \mathbf{1}. \\
     q^{-1} q &= t \cdot (w^2 \mathbf{1} + wx \mathbf{i} + wy \mathbf{j} + wz \mathbf{k} - xw \mathbf{i} + x^2 \mathbf{1} - xy \mathbf{k} + xz \mathbf{j} \\ &\qquad\; - yw \mathbf{j} + yx \mathbf{k} + y^2 \mathbf{1} - yz\mathbf{i} - zw \mathbf{k} - zx \mathbf{j} + zy\mathbf{i} + z^2 \mathbf{1})
@@ -152,7 +243,7 @@ We define the set $\mathbb H$ of real quaternions as a real subspace of $M(\math
 \end{align*}
 
 
-Geometrically, it's reflecting across the north pole of the 4-sphere, the double cover of $SO(3) \cong \mathbb{R}P^3$?
+Geometrically, it's reflecting across the north pole of the 3-sphere, the double cover of $SO(3) \cong \mathbb{R}P^3$?
 \end{enumerate}
 
 
@@ -169,7 +260,7 @@ Geometrically, it's reflecting across the north pole of the 4-sphere, the double
 \paragraph{Problem 8.} (p. 68, \#17) If $u$ is a unit in a ring $R$ with identity, then $u$ is not a zero divisor.
 
 \begin{proof}
-    Let $u^{-1} \in R$ be the element such that $u \cdot u^{-1} = u^{-1} \cdot u = 1$. Let $b \in R$ be any element such that $ub = 0$. Then, we must have that $u^{-1} u b = u^{-1} \cdot 0$. Using the same idea as \textbf{Problem 7} above, one can replace left multiplication with right multiplication to show that $u^{-1} \cdot 0 = 0$. By the associativity of multiplication, we get $u^{-1} u b = 1 \cdot b = b = 0$. Similarly, if $a \in R$ is any element such that $a u = 0$, then $a u u^{-1} = 0 \cdot u^{-1}$ and so $a \cdot 1 = a = 0$. Thus, the unit $u$ is not a zero-divisor.
+    Let $u^{-1} \in R$ be the element such that $u \cdot u^{-1} = u^{-1} \cdot u = 1$. Let $b \in R$ be any element such that $ub = 0$. Then, we must have that $u^{-1} u b = u^{-1} \cdot 0 = 0$ (by \textbf{Problem 7} above). By the associativity of multiplication, we get $u^{-1} u b = 1 \cdot b = b = 0$. Similarly, in the proof of \textbf{Problem 7} we can replace left-multiplication with right-multiplication to show that $0 \cdot u^{-1} = 0$ too. Then, if $a \in R$ is any element such that $a u = 0$, we get $a u u^{-1} = 0 \cdot u^{-1}$ and so $a \cdot 1 = a = 0$. Thus, the unit $u$ is not a zero-divisor.
 \end{proof}
 
 \paragraph{Problem 9.} (p. 69, \#34) Let $\mathbb F$ be any field, and let $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$ be any matrix in $M(\mathbb F)$.
@@ -249,7 +340,7 @@ The function $ f : \mathbb Q[\sqrt{2}] \to \mathbb Q[\sqrt{2}]$ given by $f(a + 
      f\left(\left(a + b\sqrt{2}\right)+ \left(c + d\sqrt{2}\right)\right) &= (a + c) - (b + d)\sqrt{2} \\ &= \left(a - b\sqrt{2}\right) + \left(c - d\sqrt{2}\right) = f\left(a + b \sqrt{2}\right) + f\left(c + d\sqrt{2}\right). \\
     f\left(\left(a + b\sqrt{2}\right)\left(c + d \sqrt{2}\right)\right) &= (ac + 2bd) - (ad + bc)\sqrt{2} \\ &= \left(a - b \sqrt{2}\right) \left(c - d\sqrt{2}\right) = f\left(a + b\sqrt{2}\right)f\left(c + d\sqrt{2}\right). 
     \end{align*}
-    Additionally, $f$ is surjective as for any $a + b\sqrt{2} \in \mathbb Q[\sqrt{2}]$, we have $f\left(a - b\sqrt{2}\right) = a + b\sqrt{2}$. Injectivity also follows from the fact that
+    Additionally, $f$ is surjective as for any $a + b\sqrt{2} \in \mathbb Q[\sqrt{2}]$, we have $f\left(a - b\sqrt{2}\right) = a + b\sqrt{2}$. Because $\sqrt{2} \not\in \mathbb Q$, injectivity also follows from the fact that
     \[a + b\sqrt{2} = a' + b' \sqrt{2} \iff a = a' \land b = b' \iff a - b\sqrt{2} = a' - b'\sqrt{2}. \qedhere\]
 \end{proof}
 

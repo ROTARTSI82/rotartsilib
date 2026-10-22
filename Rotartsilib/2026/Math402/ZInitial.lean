@@ -268,7 +268,7 @@ theorem zsmul_pow {i : ℤ} : (i * a) ^ m = (i ^ m) * a ^ m := by
 end HPow
 
 section HPowComm
-variable [CommRing R]
+variable {R : Type u} [CommRing R]
 
 variable {a b : R} {n m : ℕ}
 
