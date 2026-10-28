@@ -25,26 +25,58 @@
     \begin{align*}
         |P-Q|^2 + |Q - R|^2 + 2|P-Q| |Q - R| = |P-Q|^2 + |R-Q|^2 + 2 \langle P - Q, Q - R \rangle.
     \end{align*}
-    Thus, we must have that $|P - Q||Q - R| = \langle P - Q, Q - R \rangle$, implying that there exists some $\lambda$ such that $P - Q = \lambda (Q - R)$ as we have achieved equality in Cauchy Schwartz. Rearranging, we get \[Q = \frac{P + \lambda R}{\lambda + 1} = \frac{1}{\lambda + 1} P + \left(1 - \frac{1}{\lambda + 1}\right)R.\]
-    Now, it suffices to show that $0 \le \frac{1}{\lambda + 1} \le 1$. We can compute \[|P - R| = |(P - Q) - (R - Q)| = |\lambda (Q - R) + (Q - R)| = |\lambda + 1| \cdot |Q - R|.\]
-    From the positivity of the distance function and our equation (\ref{p1}), we know that \\ $|P - Q| \le |P - R|$. Thus, we get 
-    \[ |\lambda| \cdot |Q - R| \le |\lambda + 1| \cdot |Q - R|, \]
-    so $\lambda \ge -\frac{1}{2}$, and $0 \le \frac{1}{\lambda + 1} \le 1$ as desired.
+    Thus, we must have that $|P - Q||Q - R| = \langle P - Q, Q - R \rangle$, implying that there exists some $\lambda$ such that $P - Q = \lambda (Q - R)$ as we have achieved equality in Cauchy Schwarz. Rearranging, we get \[Q = \frac{P + \lambda R}{\lambda + 1} = \frac{1}{\lambda + 1} P + \left(1 - \frac{1}{\lambda + 1}\right)R.\]
+    Now, it suffices to show that $0 \le \frac{1}{\lambda + 1} \le 1$. We can substitute $P - Q = \lambda (Q - R)$ into our Cauchy Schwarz equality, and get that
+    \[\lambda \langle Q - R, Q - R\rangle = |\lambda (Q - R)| |Q - R|.\]
+    If $|Q-R| = 0$, we are done as $Q = R$. If $|Q-R|\neq 0$, this implies that $|\lambda| = \lambda$ and so $0 \le \frac{1}{\lambda + 1} \le 1$ as desired.
 \end{proof}
 
 \paragraph{Problem 2.}
+Let $(X_1, d_1)$ and $(X_2, d_2)$ be metric spaces. Then $(X_1 \times X_2, d)$ is a metric space, where 
+\[ d((x_1, x_2), (y_1, y_2)) = d_1(x_1, y_1) + d_2(x_2, y_2).\]
+Note that since $d_1$ and $d_2$ are symmetric and nonnegative, $d$ is also symmetric and nonnegative. We can also directly compute $d((x_1, x_2), (x_1, x_2)) = d_1(x_1, x_1) + d_2(x_2, x_2) = 0$ as desired. On the other hand, consider the case if $d((x_1, x_2), (y_1, y_2)) = 0$. Then, we get $0 = d_1(x_1, y_1) + d_2(x_2, y_2)$, and since $d_1$ and $d_2$ are nonnegative, we must have $d_1(x_1, y_1) = d_2(x_2, y_2) = 0$. Thus, $x_1 = y_1$ and $x_2 = y_2$, so $(x_1, x_2) = (y_1, y_2)$. 
 
+Finally, we can also verify the triangle inequality by computing
+\begin{align*}
+    d((x_1, x_2), (z_1, z_2)) &= d_1(x_1, z_1) + d_2(x_2, z_2) \\
+    &\le d_1(x_1, y_1) + d_1(y_1, z_1) + d_2(x_2, y_2) + d_2(y_2, z_2) \\
+    &= d((x_1, x_2), (y_1, y_2)) + d((y_1, y_2), (z_1, z_2)).
+\end{align*}
+
+The projection maps $\pi_1 : X_1 \times X_2 \to X_1$ and $\pi_2 : X_1 \times X_2 \to X_2$ are continuous. Let $(x_1, x_2) \in X_1 \times X_2$, and let $\varepsilon > 0$. Consider any point $(y_1, y_2)$ in the open ball $B((x_1, x_2), \varepsilon) \subseteq X_1 \times X_2$. This means that \[d((x_1, x_2), (y_1, y_2)) = d_1(x_1, y_1) + d_2(x_2, y_2) < \varepsilon. \]
+Since $d_1$ and $d_2$ are nonnegative, we get $d_1(x_1, y_1) < \varepsilon$ so $\pi_1(B((x_1, x_2), \varepsilon)) \subseteq B(x_1, \varepsilon)$, and similarly $d_2(x_2, y_2) < \varepsilon$ so $\pi_2(B((x_1, x_2), \varepsilon)) \subseteq B(x_2, \varepsilon)$.
+
+Suppose we had a countable collection of metric spaces $(X_i, d_i)$. Let $X$ be the space of sequences $(x_n)$ such that $x_i \in X_i$ for all $i \in \mathbb N$. We can define a metric on $X$ by
+\[
+\tilde{d}((x_n), (y_n)) = \sum_{i=1}^\infty \frac{1}{2^i} \frac{d_i(x_i, y_i)}{1 + d_i(x_i, y_i)}.
+\]
+This sum always converges as each $d_i$ is nonnegative, so each term is nonnegative and less than the convergent series $\sum_{i=1}^\infty 2^{-i}$. Symmetry and nonnegativity follow easily, and clearly $\tilde{d}((x_n), (x_n)) = 0$. If we have $\tilde{d}((x_n), (y_n)) = 0$, we must have that every term of the sum is in fact $0$, so $d_i(x_i, y_i) = 0$ and thus $x_i = y_i$ for all $i$. Then, $(x_n) = (y_n)$ as desired. 
+
+We can again verify the triangle inequality. Consider any $a > -1$ and $b \ge a$. Then, we can compute \begin{align*}
+a + ab \le b + ab, \quad&\;\quad a(1 + b) \le b(1 + a), \\
+\frac{a}{1+ a} &\le \frac{b}{1+b}.
+\end{align*}
+Thus, we get that
+\begin{align*}
+    \tilde{d}((x_n), (z_n)) &= \sum_{i=1}^\infty \frac{1}{2^i} \frac{d_i(x_i, z_i)}{1 + d_i(x_i, z_i)} \\ 
+    &\le \sum_{i=1}^\infty \frac{1}{2^i} \frac{d_i(x_i, y_i) + d_i(y_i, z_i)}{1 + d_i(x_i, y_i) + d_i(y_i, z_i)} \\
+    &\le \sum_{i=1}^\infty \frac{1}{2^i} \frac{d_i(x_i, y_i) + d_i(y_i, z_i) + 2\cdot d_i(y_i, z_i) d_i(x_i, y_i)}{1 + d_i(x_i, y_i) + d_i(y_i, z_i)+ d_i(y_i, z_i) d_i(x_i, y_i)} \\
+    &= \sum_{i=1}^\infty \frac{1}{2^i} \left( \frac{d_i(x_i, y_i)}{1 + d_i(x_i, y_i)} +  \frac{d_i(y_i, z_i)}{1 + d_i(y_i, z_i)} \right) \\
+    &= \tilde{d}((x_n), (y_n)) + \tilde{d}((y_n), (z_n)).
+\end{align*}
+
+Product topology vs. Box topology?
 
 \paragraph{Problem 3.}
 As subsets of $\mathbb R^2$ with the usual topology:
 \begin{enumerate}
-    \item[(1)] $A = \{(x, y) : x < 0\} \cup \{(x, y): x > 0, y > 1/x \}$ is open, as it is the union of two open sets. Let $(x, y) \in A$. If $x < 0$, then $B((x, y), |x|/2) \subseteq A$. Otherwise, $x > 0$, and you can find a ball too but I dont want to do the math.
-    \item[(2)] Topologist's sine curve, $A = \{(x, \sin(1/x)) : x > 0\}  \cup \{(0, y) : -1 \le y \le 1\}$. I think this is closed?
+    \item[(1)] $A = \{(x, y) : x < 0\} \cup \{(x, y): x > 0, y > 1/x \}$ is open, as it is the union of two open sets. Can you do like $f(x, y) = y-\frac{1}{x}$ is continuous on the subspace $\{(x, y) : x > 0\}$, and since it is an open set the subspace topology's open sets correspond to open sets of $\mathbb R^2$. Then the second set in the union is $f^{-1}((0, \infty))$, which must be open.
+    \item[(2)] Topologist's sine curve, $A = \{(x, \sin(1/x)) : x > 0\}  \cup \{(0, y) : -1 \le y \le 1\}$. This thing is closed. Let $(x_n, y_n) : \mathbb N \to A$ be any convergent sequence, converging to $(x, y)$. If $x > 0$, then we have some $N$ such that for all $n > N$, we get $x_n > 0$. Then, we can write $y_n = \sin(1/x_n)$ for $n > N$, and because $\sin(1/t)$ is continuous on $(0, \infty)$, we get $\lim\limits_{n\to \infty} y_n = \sin\left(1/\lim\limits_{n\to\infty} x_n\right) = \sin(1/x)$. Thus, $(x, y) \in A$. In the other case that $x = 0$, we know that $y_n \in [-1, 1]$ for all $n$ so $y \in [-1, 1]$ as that is a closed interval. We still get that $(x, y) \in A$, so $A$ contains all its limit points and is closed.
     \item[(3)] $A = \{(x, y) : y \in \mathbb Q, \exists n \in \mathbb Z_{>0}, y = x^n\}$. This set is neither open nor closed. Clearly this thing is not open: note $(0, 0) \in A$, and for any $\varepsilon > 0$, the open ball $B((0, 0), \varepsilon)$ will contain points with irrational $y$ coordinates, meaning $B((0, 0), \varepsilon) \not\subseteq A$. Alternatively, this set is also countable, so it cannot be the superset of any uncountable open ball. This thing is not closed either: if we take $(\sqrt{2}, \sqrt{2}) \not\in A$ and any open ball $B((\sqrt{2}, \sqrt{2}), \varepsilon)$, we can find a rational point $(q, q)$ in that ball and in $A$. We can also define a sequence like $x_n = (2^{1/n}, 2)$ that approaches $(1, 2) \not\in A$.
 \end{enumerate}
 
 \paragraph{Problem 4.}
-Let $F \subseteq X$ be any subset of a metric space $(X, d)$. Define \[\rho(x, F) = \inf_{y\in F} d(x, y).\] 
+Let $F \subseteq X$ be any nonempty subset of a metric space $(X, d)$. Define \[\rho(x, F) = \inf_{y\in F} d(x, y).\]
 \begin{enumerate}
 \item This function is continuous.
 \begin{proof}
@@ -65,12 +97,12 @@ Let $F \subseteq X$ be any subset of a metric space $(X, d)$. Define \[\rho(x, F
     \[\varepsilon \le d(q, x) < \rho(x, F) + \varepsilon / 2, \]
     so $\rho(x, F) > \varepsilon / 2 > 0$ as desired.
 
-    ($\impliedby$) Let $x \not\in F$, and let $\varepsilon$ be such that $0 < \varepsilon < \rho(x, F)$. Consider any point $y \in B(x, \varepsilon)$, and assume for contradiction that $y \in F$. Then, $\rho(x, F) \le d(y, x) < \varepsilon$, contradicting $\varepsilon < \rho(x, F)$. Thus, we get $B(x, \varepsilon) \cap F = \varnothing$.
+    ($\impliedby$) Let $x \not\in F$, and let $\varepsilon$ be such that $0 < \varepsilon < \rho(x, F)$. Consider any point $y \in B(x, \varepsilon)$, and assume for contradiction that $y \in F$. Then, $\rho(x, F) \le d(y, x) < \varepsilon$, contradicting $\varepsilon < \rho(x, F)$. Thus, we get $B(x, \varepsilon) \cap F = \varnothing$, so $F^C$ is open and $F$ is closed.
 \end{proof}
 
 \item Let $F_1, F_2 \subseteq X$ be disjoint closed sets. There exist open sets $U_1, U_2 \subseteq X$ such that $U_1 \cap U_2 = \varnothing$ and $F_1 \subseteq U_1$ and $F_2 \subseteq U_2$. (Metric spaces are normal).
 \begin{proof}
-    Consider the function $\chi : X \to \mathbb R$ defined by $\chi(x) = \rho(x, F_1) - \rho(x, F_2)$. By the continuity of $\rho$, $\chi$ is continuous too. Thus, we can take $U_1 = \chi^{-1}((-\infty, 0))$ and $U_2 = \chi^{-1}((0, -\infty))$. These sets are disjoint open sets as they are the continuous preimages of disjoint open sets. Note that for any $x \in F_1$, we get that $x \not\in F_2$ so $\rho(x, F_1) = 0$ while $\rho(x, F_2) > 0$ by part 2 above. Thus, $\chi(x) < 0$, so $x \in U_1$ and $F_1 \subseteq U_1$ as desired. By a symmetric argument, $F_2 \subseteq U_2$. 
+    Consider the function $\chi : X \to \mathbb R$ defined by $\chi(x) = \rho(x, F_1) - \rho(x, F_2)$. By the continuity of $\rho$, $\chi$ is continuous too. Thus, we can take $U_1 = \chi^{-1}((-\infty, 0))$ and $U_2 = \chi^{-1}((0, \infty))$. These sets are disjoint open sets as they are the continuous preimages of disjoint open sets. Note that for any $x \in F_1$, we get that $x \not\in F_2$ so $\rho(x, F_1) = 0$ while $\rho(x, F_2) > 0$ by part 2 above. Thus, $\chi(x) < 0$, so $x \in U_1$ and $F_1 \subseteq U_1$ as desired. By a symmetric argument, $F_2 \subseteq U_2$. 
 \end{proof}
 
 \end{enumerate}

@@ -153,7 +153,7 @@ In $M(\mathbb R)$, consider the set $S$ of scalar matrices of the form $\begin{b
 \paragraph{Problem 4.} (p. 57, \#33) Let $R$ and $S$ be rings, and consider the Cartesian product $R \times S$ with multiplication and addition defined componentwise. 
 
 \begin{enumerate}
-    \item[a.] This is a ring. By definition, $R\times S$ is closed under addition and multiplication. We can verify that \[(a, b) + (0, 0) = (a + 0, b + 0) = (a, b),\] so $\mathbf 0 \in R \times S$. We can see that \[(a, b) + (-a, -b) = (a + -a, b + -b) = (0, 0),\] so we have additive inverses with $-(a, b) = (-a, -b)$. Additionally, addition is commutative: \[(a, b) + (a', b') = (a + a', b+ b') = (a' + a, b' + b) = (a', b') + (a, b).\]
+    \item[a.] This is a ring. By definition, $R\times S$ is closed under addition and multiplication. We can verify that \[(a, b) + (0, 0) = (a + 0, b + 0) = (a, b),\] so we have an additive identity $\mathbf 0 \in R \times S$. We can see that \[(a, b) + (-a, -b) = (a + -a, b + -b) = (0, 0),\] so we have additive inverses with $-(a, b) = (-a, -b)$. Additionally, addition is commutative: \[(a, b) + (a', b') = (a + a', b+ b') = (a' + a, b' + b) = (a', b') + (a, b).\]
     Next, we can check associativity for addition:
     \begin{align*}
         [(a,b) + (a',b')] + (a^\ast, b^\ast) &= ([a + a'] + a^\ast, [b + b'] + b^\ast) \\
@@ -178,9 +178,9 @@ For all $d \in \mathbb Z$ that are not perfect squares, \[\mathbb Q[\sqrt{d}] = 
 
 \begin{proof}
     We consider $\mathbb Q[\sqrt{d}] \subseteq \mathbb C$, and note that it is obviously closed under addition and additive inverses as it is a rational vector subspace of $\mathbb C$. To show that it is closed under multiplication, consider any $x, x' \in \mathbb Q[\sqrt{d}]$ and write $x = a + b \sqrt{d}$ and $x' = a' + b' \sqrt{d}$. Then, \begin{align*} x\cdot x' &= a a' + a b' \sqrt{d} + b a' \sqrt{d} + b b' d \\ &= (a a' + b b' d) + (a b' + b a') \sqrt{d} \in \mathbb Q[\sqrt{d}].\end{align*}
-    Because multiplication in $\mathbb C$ is commutative, multiplication on $\mathbb Q[\sqrt{d}]$ is also commutative. We also have that $0 \in \mathbb Q[\sqrt{d}]$, and it is closed under additive inverses as $-(a + b \sqrt{d}) = -a + -b \sqrt{d} \in \mathbb Q[\sqrt{d}]$. Finally, we can show the existence of a multiplicative inverse for all nonzero $x = a + b \sqrt{d}$. If $b = 0$ or if $d = 0$, then $x = a \in \mathbb C^\times$, so we trivially have that $x^{-1} = a^{-1}$. Thus, we can consider the remaining case where $b \neq 0$ and $d \neq 0$, and we explicitly define \[ x^{-1} = \frac{a}{a^2 - b^2 d} + \frac{-b}{a^2 - b^2 d} \sqrt{d}. \]
+    Because multiplication in $\mathbb C$ is commutative, multiplication on $\mathbb Q[\sqrt{d}]$ is also commutative. We also have that $0 \in \mathbb Q[\sqrt{d}]$, and it is closed under additive inverses as $-(a + b \sqrt{d}) = -a + -b \sqrt{d} \in \mathbb Q[\sqrt{d}]$. Finally, we can show the existence of a multiplicative inverse for all nonzero $x = a + b \sqrt{d}$. If $b = 0$ or if $d = 0$, then $x = a \in \mathbb Q^\times$, so we trivially have that $x^{-1} = a^{-1}$. Thus, we can consider the remaining case where $b \neq 0$ and $d \neq 0$, and we explicitly define \[ x^{-1} = \frac{a}{a^2 - b^2 d} + \frac{-b}{a^2 - b^2 d} \sqrt{d}. \]
     Taking $a = p_a / q_a$ and $b = p_b / q_b$ for $p_a, p_b \in \mathbb Z$ and $q_a, q_b \in \mathbb Z_{>0}$, we can write this as
-    \[ x^{-1} = \frac{a q_a^2 q_b^2}{p_a^2 q_b^2 - p_b^2 q_a^2 d} + \frac{-b q_a^2 q_b^2}{p_a^2 q_b^2 - p_b^2 q_a^2 d}. \]
+    \[ x^{-1} = \frac{a q_a^2 q_b^2}{p_a^2 q_b^2 - p_b^2 q_a^2 d} + \frac{-b q_a^2 q_b^2}{p_a^2 q_b^2 - p_b^2 q_a^2 d} \sqrt{d}. \]
     Since $d$ is not a perfect square, $p_b^2 q_a^2 d$ is also not a perfect square, and furthermore it is nonzero as denominators and the values $d$ and $b$ are nonzero. However, note that $p_a^2 q_b^2$ is either zero or a nonzero perfect square, so $p_b^2 q_a^2 d \neq p_a^2 q_b^2$. Thus, the denominator is nonzero, and we have $x^{-1} \in \mathbb Q[\sqrt{d}]$. Because multiplication is commutative, it suffices to compute $x \cdot x^{-1}$ as follows:
     \begin{align*}
         x \cdot x^{-1} = \frac{1}{a^2 - b^2d} \cdot (a^2 - ab \sqrt{d} + ba \sqrt{d} - b^2 d) = 1.
@@ -192,7 +192,7 @@ For all $d \in \mathbb Z$ that are not perfect squares, \[\mathbb Q[\sqrt{d}] = 
 
 % For part (c), use part (a); you can also use our computation from class that relied on (a).
 
-We define the set $\mathbb H$ of real quaternions as a real subspace of $M(\mathbb C)$ spanned by the Pauli matrices and the identity:
+We define the set $\mathbb H$ of real quaternions as a real subspace of $M(\mathbb C)$ spanned by $i$ times the Pauli matrices and the identity:
 \begin{align*}
     \mathbf 1 = \begin{bmatrix}1 & 0 \\ 0 & 1 \end{bmatrix}, \qquad {\mathbf i} = i \sigma_z = \begin{bmatrix}i & 0 \\ 0 & -i\end{bmatrix}, &\qquad {\mathbf j} = i\sigma_y = \begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}, \qquad {\mathbf k} = i\sigma_x = \begin{bmatrix}0 & i \\ i & 0 \end{bmatrix} \\
     w\mathbf 1 + x {\mathbf i} + y {\mathbf j} + z {\mathbf k} &= \begin{bmatrix}
@@ -242,8 +242,7 @@ We define the set $\mathbb H$ of real quaternions as a real subspace of $M(\math
      \\ &= t \cdot (w^2 + x^2 + y^2 + z^2) \mathbf{1} = \mathbf{1}.
 \end{align*}
 
-
-Geometrically, it's reflecting across the north pole of the 3-sphere, the double cover of $SO(3) \cong \mathbb{R}P^3$?
+% Geometrically, it's reflecting across the north pole of the 3-sphere, the double cover of $SO(3) \cong \mathbb{R}P^3$?
 \end{enumerate}
 
 
@@ -310,9 +309,9 @@ Geometrically, it's reflecting across the north pole of the 3-sphere, the double
 }
 \item[b.] { $A$ is a zero divisor if and only if $ad - bc = 0_{\mathbb F}$.
 \begin{proof}
-    ($\implies$) Let $B = \begin{bmatrix}a' & b' \\ c' & d' \end{bmatrix}\in M(\mathbb F)$ be such that $AB = \mathbf 0$ and $B \neq \mathbf 0$. Assume for contradiction that $ad - bc \neq 0_{\mathbb F}$, and by part (a) above, let $A^{-1} \in M(\mathbb F)$ be such that $A A^{-1} = A^{-1} A = \mathbf 1$. Then, $A^{-1} A B = A^{-1} \mathbf 0 = \mathbf 0$, so $B = \mathbf 0$, a contradiction.
+    ($\implies$) Let $B \in M(\mathbb F)$ be such that $AB = \mathbf 0$ or $BA = \mathbf 0$ and $B \neq \mathbf 0$. Assume for contradiction that $ad - bc \neq 0_{\mathbb F}$, and by part (a) above, let $A^{-1} \in M(\mathbb F)$ be such that $A A^{-1} = A^{-1} A = \mathbf 1$. Then, either we have $A^{-1} A B = A^{-1} \mathbf 0 = \mathbf 0$, or we have $B A A^{-1} = \mathbf 0 A^{-1} = \mathbf 0$. In either case, $B = \mathbf 0$, a contradiction.
 
-    ($\impliedby$) We can explicitly construct $B = \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$ and show that $AB = \mathbf 0$. This is identical to the proof of $(\implies)$ for part (a) above.
+    ($\impliedby$) If $A = \mathbf 0$, we have nothing to prove. Otherwise, we can explicitly construct $B = \begin{bmatrix} d & -b \\ -c & a \end{bmatrix} \neq \mathbf 0$ and show that $AB = \mathbf 0$. This is identical to the proof of $(\implies)$ for part (a) above.
 \end{proof}
 
 }
