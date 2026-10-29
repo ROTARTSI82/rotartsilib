@@ -1,0 +1,66 @@
+
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage{float}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\begin{document}
+
+\begin{center} 
+    {\large \textbf{Math 402A -- Homework 4i}}
+    \smallskip \\ 
+    Grant Yang \hspace{1em} AU26
+\end{center}
+
+\paragraph{Problem 1.} (p. 80, \#9)
+If $f : \mathbb Z \to \mathbb Z$ is a ring isomorphism, then it is the identity map.
+
+\begin{proof}
+    Since $f$ is a surjective morphism on rings with identity, we must have $f(1) = 1$, implying also that $f(-1) = -1$. Note that $f(0) = 0$ also. We can perform integer induction to show that $f(x) = x$ for all $x \in \mathbb Z$. Let $a \in \mathbb Z$ be any integer such that $f(a) = a$. Then $f(a - 1) = f(a) + -1 = a - 1$, and similarly $f(a + 1) = f(a) + 1 = a + 1$. 
+\end{proof}
+
+\paragraph{Problem 2.} (p. 80, \#10)
+If $f : R \to S$ is a ring homomorphism where $R$ is a ring with identity $1_R \in R$, then $f(1_R)$ is an idempotent in $S$, i.e. $f(1_R)^2 = f(1_R)$.
+
+\begin{proof}
+    \begin{align*}
+        f(1_R \cdot 1_R) &= f(1_R) \\
+            &= f(1_R) \cdot f(1_R) = f(1_R)^2
+    \end{align*}
+\end{proof}
+
+\paragraph{Problem 3.} (p. 81, \#13abc) For all rings $R$ and $S$:
+\begin{enumerate}
+\item[a.] {
+    The function $f : R \times S \to R$ given by $(r, s) \mapsto r$ is a surjective ring hom.
+    \begin{proof}
+    \end{proof}
+}
+\item[b.] {
+    The function $g : R \times S \to S$ given by $(r, s) \mapsto s$ is a surjective ring hom.
+    \begin{proof}
+    \end{proof}
+}
+\item[c.] {
+    If $R$ and $S$ are both nontrivial rings, then $f$ and $g$ are not injective.
+    \begin{proof}
+        Choose some $a, b \in R$ and $x, y \in S$ such that $a \neq b$ and $x \neq y$. Then we can verify that $(a, x) \neq (a, y)$, but $f((a, x)) = f((a, y)) = a$. Similarly, $(a, x) \neq (b, x)$, but $g((a, x)) = g((b, x)) = x$.
+    \end{proof}
+}
+\end{enumerate}
+
+\paragraph{Problem 4.} (p. 82, \#27ab)
+\paragraph{Problem 5.} (p. 82, \#34abc)
+\paragraph{Problem 6.} (p. 83, \#35bef)
+\paragraph{Problem 7.} (p. 94, \#5cd)
+\paragraph{Problem 8.} (p. 94, \#10)
+\paragraph{Problem 9.} (p. 95, \#18)
+\paragraph{Problem 10.} (p. 95, \#19)
+\paragraph{Problem 11.} (p. 99, \#5cdf)
+
+
+\end{document}
+

@@ -33,7 +33,7 @@ inductive BinTree₂ where
   | leaf : BinTree₂
   | node (children : Bool → BinTree₂) : BinTree₂
 
-/- 
+/-
 #print BinTree₂.rec
 #print BinTree.rec
 -/

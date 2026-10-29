@@ -31,6 +31,7 @@
     If $|Q-R| = 0$, we are done as $Q = R$. If $|Q-R|\neq 0$, this implies that $|\lambda| = \lambda$ and so $0 \le \frac{1}{\lambda + 1} \le 1$ as desired.
 \end{proof}
 
+\newpage{}
 \paragraph{Problem 2.}
 Let $(X_1, d_1)$ and $(X_2, d_2)$ be metric spaces. Then $(X_1 \times X_2, d)$ is a metric space, where 
 \[ d((x_1, x_2), (y_1, y_2)) = d_1(x_1, y_1) + d_2(x_2, y_2).\]
@@ -65,16 +66,18 @@ Thus, we get that
     &= \tilde{d}((x_n), (y_n)) + \tilde{d}((y_n), (z_n)).
 \end{align*}
 
-Product topology vs. Box topology?
+Is this some hack to get the product topology without doing categories?
 
+\newpage{}
 \paragraph{Problem 3.}
 As subsets of $\mathbb R^2$ with the usual topology:
 \begin{enumerate}
-    \item[(1)] $A = \{(x, y) : x < 0\} \cup \{(x, y): x > 0, y > 1/x \}$ is open, as it is the union of two open sets. Can you do like $f(x, y) = y-\frac{1}{x}$ is continuous on the subspace $\{(x, y) : x > 0\}$, and since it is an open set the subspace topology's open sets correspond to open sets of $\mathbb R^2$. Then the second set in the union is $f^{-1}((0, \infty))$, which must be open.
+    \item[(1)] $A = \{(x, y) : x < 0\} \cup \{(x, y): x > 0, y > 1/x \}$ is open, as it is the union of two open sets. Note that $f(x, y) = y-\frac{1}{x}$ is continuous on the subspace $W=\{(x, y) : x > 0\}$, and since $W$ is an open set, the subspace topology's open sets correspond to open sets of $\mathbb R^2$. Then the second set in the union is $f^{-1}((0, \infty))$, which must be open.
     \item[(2)] Topologist's sine curve, $A = \{(x, \sin(1/x)) : x > 0\}  \cup \{(0, y) : -1 \le y \le 1\}$. This thing is closed. Let $(x_n, y_n) : \mathbb N \to A$ be any convergent sequence, converging to $(x, y)$. If $x > 0$, then we have some $N$ such that for all $n > N$, we get $x_n > 0$. Then, we can write $y_n = \sin(1/x_n)$ for $n > N$, and because $\sin(1/t)$ is continuous on $(0, \infty)$, we get $\lim\limits_{n\to \infty} y_n = \sin\left(1/\lim\limits_{n\to\infty} x_n\right) = \sin(1/x)$. Thus, $(x, y) \in A$. In the other case that $x = 0$, we know that $y_n \in [-1, 1]$ for all $n$ so $y \in [-1, 1]$ as that is a closed interval. We still get that $(x, y) \in A$, so $A$ contains all its limit points and is closed.
     \item[(3)] $A = \{(x, y) : y \in \mathbb Q, \exists n \in \mathbb Z_{>0}, y = x^n\}$. This set is neither open nor closed. Clearly this thing is not open: note $(0, 0) \in A$, and for any $\varepsilon > 0$, the open ball $B((0, 0), \varepsilon)$ will contain points with irrational $y$ coordinates, meaning $B((0, 0), \varepsilon) \not\subseteq A$. Alternatively, this set is also countable, so it cannot be the superset of any uncountable open ball. This thing is not closed either: if we take $(\sqrt{2}, \sqrt{2}) \not\in A$ and any open ball $B((\sqrt{2}, \sqrt{2}), \varepsilon)$, we can find a rational point $(q, q)$ in that ball and in $A$. We can also define a sequence like $x_n = (2^{1/n}, 2)$ that approaches $(1, 2) \not\in A$.
 \end{enumerate}
 
+\newpage{}
 \paragraph{Problem 4.}
 Let $F \subseteq X$ be any nonempty subset of a metric space $(X, d)$. Define \[\rho(x, F) = \inf_{y\in F} d(x, y).\]
 \begin{enumerate}
@@ -100,7 +103,7 @@ Let $F \subseteq X$ be any nonempty subset of a metric space $(X, d)$. Define \[
     ($\impliedby$) Let $x \not\in F$, and let $\varepsilon$ be such that $0 < \varepsilon < \rho(x, F)$. Consider any point $y \in B(x, \varepsilon)$, and assume for contradiction that $y \in F$. Then, $\rho(x, F) \le d(y, x) < \varepsilon$, contradicting $\varepsilon < \rho(x, F)$. Thus, we get $B(x, \varepsilon) \cap F = \varnothing$, so $F^C$ is open and $F$ is closed.
 \end{proof}
 
-\item Let $F_1, F_2 \subseteq X$ be disjoint closed sets. There exist open sets $U_1, U_2 \subseteq X$ such that $U_1 \cap U_2 = \varnothing$ and $F_1 \subseteq U_1$ and $F_2 \subseteq U_2$. (Metric spaces are normal).
+\item Let $F_1, F_2 \subseteq X$ be nonempty disjoint closed sets. There exist open sets $U_1, U_2 \subseteq X$ such that $U_1 \cap U_2 = \varnothing$ and $F_1 \subseteq U_1$ and $F_2 \subseteq U_2$. (Metric spaces are normal).
 \begin{proof}
     Consider the function $\chi : X \to \mathbb R$ defined by $\chi(x) = \rho(x, F_1) - \rho(x, F_2)$. By the continuity of $\rho$, $\chi$ is continuous too. Thus, we can take $U_1 = \chi^{-1}((-\infty, 0))$ and $U_2 = \chi^{-1}((0, \infty))$. These sets are disjoint open sets as they are the continuous preimages of disjoint open sets. Note that for any $x \in F_1$, we get that $x \not\in F_2$ so $\rho(x, F_1) = 0$ while $\rho(x, F_2) > 0$ by part 2 above. Thus, $\chi(x) < 0$, so $x \in U_1$ and $F_1 \subseteq U_1$ as desired. By a symmetric argument, $F_2 \subseteq U_2$. 
 \end{proof}
