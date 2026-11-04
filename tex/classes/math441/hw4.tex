@@ -6,36 +6,78 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \usepackage{hyperref}
+\usepackage{multicol}
 
 \begin{document}
 
-\begin{center} {\large \textbf{Math 441A -- Homework 2}} \smallskip \\ 
+\begin{center} {\large \textbf{Math 441A -- Homework 4}} \smallskip \\ 
     Grant Yang \hspace{1em} AU26
  \end{center}
 
-\paragraph{Problem 1.} 
+\paragraph{Problem 1.} There are 29 topologies on $X = \{0, 1, 2\}$, 9 up to homeomorphism.
+\begin{multicols}{2}
+\begin{enumerate}
+    \item A. $\tau = \{\varnothing, X\}$.
+    \item B. $\tau = \mathcal{P}(X)$.
+    \item C. $\tau = \{\varnothing, X, \{0\}\}$.
+    \item C. $\tau = \{\varnothing, X, \{1\}\}$.
+    \item C. $\tau = \{\varnothing, X, \{2\}\}$.
+    \item D. $\tau = \{\varnothing, X, \{0\}, \{1\}, \{0, 1\}\}$.
+    \item D. $\tau = \{\varnothing, X, \{1\}, \{2\}, \{1,2\}\}$.
+    \item D. $\tau = \{\varnothing, X, \{2\}, \{0\}, \{0, 2\}\}$.
+    \item E. $\tau = \{\varnothing, X, \{0, 1\}\}$.
+    \item E. $\tau = \{\varnothing, X, \{1, 2\}\}$.
+    \item E. $\tau = \{\varnothing, X, \{0, 2\}\}$.
+    \item F. $\tau = \{\varnothing, X, \{0\}, \{0, 1\}, \{0, 2\}\}$.
+    \item F. $\tau = \{\varnothing, X, \{1\}, \{0, 1\}, \{1, 2\}\}$.
+    \item F. $\tau = \{\varnothing, X, \{2\}, \{1, 2\}, \{0, 2\}\}$.
+    \item G. $\tau = \{\varnothing, X, \{0\}, \{1, 2\}\}$.
+    \item G. $\tau = \{\varnothing, X, \{1\}, \{0, 2\}\}$.
+    \item G. $\tau = \{\varnothing, X, \{2\}, \{0, 1\}\}$.
+    \item H. $\tau = \{\varnothing, X, \{2\}, \{1, 2\}\}$.
+    \item H. $\tau = \{\varnothing, X, \{2\}, \{0, 2\}\}$.
+    \item H. $\tau = \{\varnothing, X, \{1\}, \{0, 1\}\}$.
 
+    \item H. $\tau = \{\varnothing, X, \{1\}, \{1, 2\}\}$.
+    \item H. $\tau = \{\varnothing, X, \{0\}, \{0, 2\}\}$.
+    \item H. $\tau = \{\varnothing, X, \{0\}, \{0, 1\}\}$.
+    \item I. $\tau = \{\varnothing, X, \{0\}, \{1\}, \{0, 1\}, \{1, 2\} \}$.
+    \item I. $\tau = \{\varnothing, X, \{1\}, \{2\}, \{1, 2\}, \{0, 2\}\}$.
+    \item I. $\tau = \{\varnothing, X, \{0\}, \{1\}, \{0, 1\}, \{0, 2\}\}$.
+    \item I. $\tau = \{\varnothing, X, \{1\}, \{2\}, \{0, 1\}, \{1, 2\} \}$.
+    \item I. $\tau = \{\varnothing, X, \{0\}, \{2\}, \{1, 2\}, \{0, 2\}\}$.
+    \item I. $\tau = \{\varnothing, X, \{0\}, \{2\}, \{0, 1\}, \{0, 2\}\}$.
+\end{enumerate}
+\end{multicols}
+
+\newpage{}
 \paragraph{Problem 2.} $\mathbb R$ with the co-finite or co-countable topology is not Hausdorff.
 
 \begin{proof}
-    TODO: Explain more. \\
+    By the definition of Hausdorff, for any two distinct points we require two disjoint, nonempty open sets. However, we can show that in both of these topologies, all nonempty open sets have nonempty intersection. All open sets in the co-finite topology are also open in the co-countable topology, as finite sets are countable. Thus, it suffices to show this result for nonempty open sets in the co-countable topology.
 
-    We can show that all open sets have nonempty intersection. Let $F_1$, $F_2$ be closed (i.e. countable) sets, and assume for contradiction that $F_1^C \cap F_2^C = \varnothing$. Then, we can compute $\varnothing = (\mathbb R \setminus F_1) \cap (\mathbb R \setminus F_2) = \mathbb R \setminus (F_1 \cup F_2)$. This would imply that $F_1 \cup F_2 \supseteq \mathbb R$, but note that $F_1 \cup F_2$ is a countable set while $\mathbb R$ is uncountable. Thus, we have a contradiction.
+    Let $U_1$, $U_2$ be nonempty open sets, and let $F_1 = U_1^C$ and $F_2 = U_2^C$. Note that since $F_1 \neq \mathbb R$ and $F_2 \neq \mathbb R$, both $F_1$ and $F_2$ are countable. Assume for contradiction that $U_1 \cap U_2 = \varnothing$. Then, we can compute $\varnothing = F_1^C \cap F_2^C = (\mathbb R \setminus F_1) \cap (\mathbb R \setminus F_2) = \mathbb R \setminus (F_1 \cup F_2)$. This would imply that $F_1 \cup F_2 \supseteq \mathbb R$, but note that $F_1 \cup F_2$ is a countable set while $\mathbb R$ is uncountable. Thus, we have a contradiction, as every subset of a countable set is countable.
 \end{proof}
 
 \paragraph{Problem 3.} Let $f, g : X \to Y$ be continuous maps, and let $Y$ be Hausdorff. Then the following set is closed:
 \[W = \{ x \in X : f(x) = g(x) \}. \]
 
 \begin{proof}
-Consider the map $\psi : X \to Y \times Y$ given by $x \mapsto (f(x), g(x))$. With the product topology on $Y \times Y$, this map is continuous, as for any open sets $U_1, U_2 \subseteq Y$, we get \[\psi^{-1}(U_1 \times U_2) = f^{-1}(U_1) \cap g^{-1}(U_2),\] which is open. Since this is a base that generates the box topology on $Y \times Y$, we know that $\psi$ is continuous.
+    Let $x \in W^C$, and since $Y$ is Hausdorff and $f(x) \neq g(x)$, choose disjoint open sets $V_1, V_2 \subseteq Y$ such that $V_1 \ni f(x)$ and $V_2 \ni g(x)$. Consider $U = f^{-1}(V_1) \cap g^{-1}(V_2)$, and note that $U\subseteq X$ is open by the continuity of $f$ and $g$ and $x \in U$. Also note that for any $p \in U$, $f(p) \neq g(p)$ since $f(p) \in V_1$ while $g(p) \in V_2$ and $V_1 \cap V_2 = \varnothing$. Thus, $U \subseteq W^C$.
 
-We can show that the set $D = \{(y, y) : y \in Y\}$ is closed in $Y \times Y$. Let $(y_1, y_2) \in D^C$, and since $Y$ is Hausdorff, find two disjoint open sets $U_1 \ni y_1$ and $U_2 \ni y_2$. Then, the set $U_1 \times U_2$ must be open in $Y \times Y$, and $D \cap (U_1 \times U_2) = \varnothing$ as the two sets are disjoint. Thus, we can write
-\[
-D^C = \bigcup_{(y_1, y_2) \in D^C} U_1(y_1,y_2) \times U_2(y_1,y_2).
-\]
-We have written $D^C$ as a union of open sets, so it must be open and $D$ must be closed. Finally, $W = \phi^{-1}(D)$, and since $\phi$ is continuous, $W$ must also be closed.
+    We have shown that for all $x \in W^C$, there exists an open set $U \ni x$ such that $U \subseteq W^C$. Thus, $W^C$ can be expressed as a union of open sets, so $W$ is closed as desired.
 \end{proof}
 
-If we take $f = g$ and $X = Y$, this shows that the set of fixed points of a continuous map on a Hausdorff space is closed.
+% \begin{proof}
+% Consider the map $\psi : X \to Y \times Y$ given by $x \mapsto (f(x), g(x))$. With the product topology on $Y \times Y$, this map is continuous, as for any open sets $U_1, U_2 \subseteq Y$, we get \[\psi^{-1}(U_1 \times U_2) = f^{-1}(U_1) \cap g^{-1}(U_2),\] which is open. Since this is a base that generates the box topology on $Y \times Y$, we know that $\psi$ is continuous.
+
+% We can show that the set $D = \{(y, y) : y \in Y\}$ is closed in $Y \times Y$. Let $(y_1, y_2) \in D^C$, and since $Y$ is Hausdorff, find two disjoint open sets $U_1 \ni y_1$ and $U_2 \ni y_2$. Then, the set $U_1 \times U_2$ must be open in $Y \times Y$, and $D \cap (U_1 \times U_2) = \varnothing$ as the two sets are disjoint. Thus, we can write
+% \[
+% D^C = \bigcup_{(y_1, y_2) \in D^C} U_1(y_1,y_2) \times U_2(y_1,y_2).
+% \]
+% We have written $D^C$ as a union of open sets, so it must be open and $D$ must be closed. Finally, $W = \phi^{-1}(D)$, and since $\phi$ is continuous, $W$ must also be closed.
+% \end{proof}
+
+If we take $g = \mathrm{id}_X$ and $X = Y$ in the above theorem, this shows that the set of fixed points of a continuous map on a Hausdorff space is closed. That is, $W = \{x \in X : f(x) = x \}$ is closed.
 
 \end{document}

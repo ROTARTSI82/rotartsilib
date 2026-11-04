@@ -10,7 +10,7 @@
 \begin{document}
 
 \begin{center} 
-    {\large \textbf{Math 402A -- Homework 4i}}
+    {\large \textbf{Math 402A -- Homework 4}}
     \smallskip \\ 
     Grant Yang \hspace{1em} AU26
 \end{center}
@@ -19,16 +19,17 @@
 If $f : \mathbb Z \to \mathbb Z$ is a ring isomorphism, then it is the identity map.
 
 \begin{proof}
-    Since $f$ is a surjective morphism on rings with identity, we must have $f(1) = 1$, implying also that $f(-1) = -1$. Note that $f(0) = 0$ also. We can perform integer induction to show that $f(x) = x$ for all $x \in \mathbb Z$. Let $a \in \mathbb Z$ be any integer such that $f(a) = a$. Then $f(a - 1) = f(a) + -1 = a - 1$, and similarly $f(a + 1) = f(a) + 1 = a + 1$. 
+    Since $f$ is a surjective morphism on rings with identity, we must have $f(1) = 1$, implying also that $f(-1) = -1$. Note that $f(0) = 0$ also. We can perform integer induction to show that $f(x) = x$ for all $x \in \mathbb Z$. Let $a \in \mathbb Z$ be any integer such that $f(a) = a$. Then $f(a - 1) = f(a) + f(-1) = a - 1$, and similarly $f(a + 1) = f(a) + f(1) = a + 1$. 
 \end{proof}
 
 \paragraph{Problem 2.} (p. 80, \#10)
 If $f : R \to S$ is a ring homomorphism where $R$ is a ring with identity $1_R \in R$, then $f(1_R)$ is an idempotent in $S$, i.e. $f(1_R)^2 = f(1_R)$.
 
 \begin{proof}
+    \leavevmode\vadjust{\kern-\dimexpr\abovedisplayskip+\baselineskip\relax}
     \begin{align*}
-        f(1_R \cdot 1_R) &= f(1_R) \\
-            &= f(1_R) \cdot f(1_R) = f(1_R)^2
+        f(1_R) = f(1_R \cdot 1_R) = f(1_R) \cdot f(1_R) = f(1_R)^2. &
+        \qedhere
     \end{align*}
 \end{proof}
 
@@ -37,11 +38,21 @@ If $f : R \to S$ is a ring homomorphism where $R$ is a ring with identity $1_R \
 \item[a.] {
     The function $f : R \times S \to R$ given by $(r, s) \mapsto r$ is a surjective ring hom.
     \begin{proof}
+        This is a surjective function, as for any $r \in R$, we have $(r, 0) \in R \times S$ and $f((r, 0)) = r$. Further, $f$ is a ring hom, as it respects multiplication and addition:
+        \begin{align*}
+            f((r, s) + (r', s')) &= f((r + r', s + s')) \\ &= r + r' = f((r, s)) + f((r', s')). \\
+            f((r, s) \cdot (r', s')) &= f((r \cdot r', s \cdot s')) \\ &= r \cdot r' = f((r, s)) \cdot f((r', s')). \qedhere
+        \end{align*}
     \end{proof}
 }
 \item[b.] {
     The function $g : R \times S \to S$ given by $(r, s) \mapsto s$ is a surjective ring hom.
     \begin{proof}
+        For any $s \in S$, we have $(0, s) \in R \times S$ and $g((0, s)) = s$. Additionally,
+        \begin{align*}
+             g((r, s) + (r', s')) &= g((r + r', s + s')) \\ &= s + s' = g((r, s)) + g((r', s')). \\
+            g((r, s) \cdot (r', s')) &= g((r \cdot r', s \cdot s')) \\ &= s \cdot s' = g((r, s)) \cdot g((r', s')). \qedhere
+        \end{align*}
     \end{proof}
 }
 \item[c.] {
@@ -53,13 +64,161 @@ If $f : R \to S$ is a ring homomorphism where $R$ is a ring with identity $1_R \
 \end{enumerate}
 
 \paragraph{Problem 4.} (p. 82, \#27ab)
+
+\begin{enumerate}
+\item[a.] Let $g : R \to S$ and $f : S \to T$ be ring homomorphisms. Then $f\circ g : R \to T$ is also a ring hom. \begin{proof}
+    Let $a, b \in R$, and calculate
+    \begin{align*}
+        [f\circ g](a + b) &= f(g(a+b)) = f(g(a) + g(b)) \\ &= f(g(a)) + f(g(b)) = [f\circ g](a) + [f\circ g](b). \\
+        [f\circ g](ab) &= f(g(ab)) = f(g(a)g(b)) \\ &= f(g(a)) f(g(b)) = [f\circ g](a)\cdot [f\circ g](b).\qedhere
+    \end{align*}
+\end{proof}
+\item[b.] If $f$ and $g$ are isomorphisms, then $f\circ g$ is also an isomorphism.
+\begin{proof}
+    By part (a) above, $f \circ g$ is a ring homomorphism. Since the composition of bijective functions is bijective, $f \circ g$ is also bijective and thus a ring isomorphism.
+\end{proof}
+\end{enumerate}
+
 \paragraph{Problem 5.} (p. 82, \#34abc)
-\paragraph{Problem 6.} (p. 83, \#35bef)
+Let $f : R \to S$ be an isomorphism of rings.
+\begin{enumerate}
+\item[a.] {
+    If $a \in R$ is a zero divisor, then so is $f(a) \in S$. Let $b \in R$ be such that $b \neq 0$ and $ab = 0$ or $ba = 0$. Then since $f(0) = 0$, we get $f(a)f(b) = 0$ or $f(b)f(a) = 0$. Since $f$ is injective and $f(0) = 0$ but $b \neq 0$, we must have that $f(b) \neq 0$. Thus, $f(a)$ is a zero divisor in $S$. Also, if $a \neq 0_R$, we must have $f(a) \neq 0_S$ by injectivity also. (Merely injective suffices).
+}
+\item[b.] {
+    If $a \in R$ is idempotent, then so is $f(a) \in S$. Since $a\cdot a = a$ and ring homomorphisms respect multiplication, we get $f(a) \cdot f(a) = f(a)$ in $S$. (Merely ring hom suffices).
+}
+\item[c.] {
+    If $R$ is an integral domain and we have the isomorphism $f : R \to S$, then $S$ is also an integral domain.
+    Let $s \in S$ be any nonzero element, and let $t \in S$ be such that $s t = 0_S$ or $ts = 0_S$. By surjectivity, choose some $a,b \in R$ such that $f(a) = s$ and $f(b) = t$. Then, we either have that $f(ab) = f(0_R)$ or $f(ba) = f(0_R)$, so by the injectivity of $f$, we get $ab = 0_R$ or $ba = 0_R$. Since $f(a)=s$ is nonzero but $f(0_R) = 0_S$, we must have that $a \neq 0$. Thus, since $R$ is an integral domain, we must have that $b = 0$, and so $t = f(b) = 0$. Additionally, since $R$ is a commutative ring with identity and $f$ is surjective, $S$ must also be a commutative ring with multiplicative identity. Thus, $S$ is also an integral domain.
+}
+\end{enumerate}
+
+\paragraph{Problem 6.} (p. 83, \#35bef) The following rings are not isomorphic.
+
+\begin{enumerate}
+\item[b.] {
+    $\mathbb R \times \mathbb R \times \mathbb R \times \mathbb R$ and $M(\mathbb R)$ (i.e. $2 \times 2$ real matrices $\mathbb R^{2\times 2}$). 
+
+    Note that $M(\mathbb R)$ is not commutative, but $\mathbb R^4$ is. For example, let $A = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}$ and $B = \begin{bmatrix} 0 & 0 \\ 1 & 0 \end{bmatrix}$. We can verify that $AB = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$ but $BA = \begin{bmatrix}0 & 0 \\ 0 & 1\end{bmatrix}$. If we had a surjective ring hom $f : \mathbb R^4 \to M(\mathbb R)$, we can choose $a, b \in \mathbb R^4$ such that $f(a) = A$ and $f(b) = B$. Then $ab = ba$, but $f(a)f(b) \neq f(b)f(a)$, a contradiction.
+}
+\item[e.] {
+    $\mathbb Z \times \mathbb Z_2$ and $\mathbb Z$.
+
+    Assume for contradiction that there existed some bijective ring hom $f : \mathbb Z \to \mathbb Z \times \mathbb Z_2$. Note that the multiplicative identity in $\mathbb Z \times \mathbb Z_2$ is $(1, 1)$, and by surjectivity we must have that $f(1) = (1,1)$. Then, since $f$ must respect addition, we must have that for all $n \in \mathbb Z$, $f(n) = (n, \sigma(n))$, where $\sigma(n) = 1$ for odd $n$ and $\sigma(n) = 0$ for even $n$. However, this is a contradiction as it means that $f$ is not surjective! For any $m \in \mathbb Z$, there does not exist any $n$ such that $f(n) = (m, 1- \sigma(m))$.
+}
+\item[f.] {
+    $\mathbb Z_4 \times \mathbb Z_4$ and $\mathbb Z_{16}$. 
+    
+    Assume for contradiction that there exists ring isomorphism $f : \mathbb Z_4 \times \mathbb Z_4 \to \mathbb Z_{16}$. Since $f$ must map the additive and multiplicative identities, we must have $f((0, 0)) = 0$ and $f((1, 1)) = 1$. However, this means that $f((2, 2)) = f((1, 1) + (1, 1)) = 1 + 1 = 2$, but $f((0, 0)) = f((2, 2) + (2, 2)) = 2 + 2 = 4$. Since $0 \neq 4$ in $\mathbb Z_{16}$, we have a contradiction. There exists no surjective ring hom $\mathbb Z_4 \times \mathbb Z_4 \to \mathbb Z_{16}$.
+}
+\end{enumerate}
+
 \paragraph{Problem 7.} (p. 94, \#5cd)
-\paragraph{Problem 8.} (p. 94, \#10)
+
+\begin{enumerate}
+\item[c.] Division of $2x^4 + x^2 - x + 1$ by $2x-1$ in $\mathbb Z_5[x]$. {
+    \begin{tabular}{|c|c|}
+        \hline
+        $q(x)$ & $r(x)$ \\\hline
+        0 & $2x^4 + x^2 - x + 1$ \\\hline
+        $x^3$ & $x^3 + x^2 - x + 1$ \\\hline
+        $x^3 + 3 x^2$ & $4 x^2 - x + 1$ \\\hline
+        $x^3 + 3 x^2 + 2 x$ & $ x + 1$ \\\hline
+        $x^3 + 3 x^2 + 2x + 3$ & $4$ \\\hline
+    \end{tabular}
+    \[2x^4 + x^2 - x + 1 = (2x - 1) \cdot \left(x^3 + 3x^2 + 2x + 3\right) + 4 \pmod 5.\]
+}
+\item[d.] Division of $4x^4+2x^3+6x^2+4x+5$ by $3x^2+2$ in $\mathbb Z_7[x]$. {
+    \\
+    \begin{tabular}{|c|c|}
+        \hline
+        $q(x)$ & $r(x)$ \\\hline
+        0 & $4x^4 + 2x^3 + 6x^2 + 4x + 5$ \\\hline
+        $6x^2$ & $2x^3 -6 x^2 + 4x + 5$ \\ \hline
+        $6x^2 + 3 x$ & $- 6 x^2 - 2 x + 5$ \\ \hline
+        $6x^2 + 3x - 2$ & $-2x + 2$ \\ \hline
+    \end{tabular}
+    \[4x^4 + 2x^3+6x^2+4x+5 = (3x^2 + 2)\cdot (6x^2+3x-2) + (5x+2) \pmod 7.\]
+} 
+\end{enumerate}
+
+\paragraph{Problem 8.} (p. 94, \#10) Over any field $\mathbb F$, the polynomial ring $\mathbb F[x]$ is not a field.
+
+\begin{proof}
+    Consider $x \in \mathbb F[x]$, and let $f \in \mathbb F[x]$ be any polynomial. Note that the ring $\mathbb F[x]$ is commutative, so it suffices to show that $f \cdot x \neq 1$. Clearly, $f = 0$ does not work, so we can consider the remaining case where $\deg(f) \ge 0$. Since $\mathbb F$ is a field and thus an integral domain, we must have that $\deg(fx) = \deg(f) + \deg(x) = \deg(f) + 1$. Thus, $\deg(fx) \ge 1$, but we have that $\deg(1) = 0$. Thus, $f\cdot x \neq 1$, and $x$ is a nonzero element that is not a unit, so $\mathbb F[x]$ is not a field.
+\end{proof}
+
 \paragraph{Problem 9.} (p. 95, \#18)
-\paragraph{Problem 10.} (p. 95, \#19)
+Let $\varphi : R[x] \to R$ be defined by evaluation at $x = 0$, mapping each polynomial to its constant term. Then $\varphi$ is a surjective homomorphism of rings.
+
+\begin{proof}
+    For any $r \in R$, we can verify that $r \in R[x]$ when considered as a constant polynomial, and $\varphi(r) = r$. Thus, $\varphi$ is surjective, and we can also show that it respects addition and multiplication. Let $f, g \in R[x]$, and write $f = a_0 + \dots + a_n x^n$ and $g = b_0 + \dots + b_k x^k$. Then, we can verify that
+    \begin{align*} \varphi(f + g) &=  \varphi\left( \sum_{i=0}^{\max(n,k)} (a_i + b_i) x^i\right) = \varphi(\dots + a_0 + b_0) \\ &= a_0 + b_0 = \varphi(\dots + a_0) + \varphi(\dots + b_0) = \varphi(f) + \varphi(g). \\
+    \varphi(fg) &= \varphi\left(\sum_{i = 0}^n \sum_{j=0}^k a_i b_j x^{i + j}\right) = \varphi(\dots + a_0b_0) \\ &= a_0 b_0 = \varphi(\dots + a_0) \varphi(\dots + b_0) = \varphi(f)\varphi(g). \qedhere \end{align*}
+\end{proof}
+
+\paragraph{Problem 10.} (p. 95, \#19) Let $\varphi : \mathbb Z[x] \to \mathbb Z_n[x]$ be a function that maps $a_0 + a_1x^1 + \dots + a_k x^k$ to $[a_0] + [a_1]x^1 + \dots + [a_k]x^k$. Then $\varphi$ is a surjective homomorphism of rings.
+
+\begin{proof}
+    Note that for any $f \in \mathbb Z_n[x]$, we can write $f = [a_0] + \dots + [a_k] x^k$ and $f = \varphi(a_0 + \dots + a_k x^k)$, so $\varphi$ is surjective. Let $\rho : \mathbb Z \to \mathbb Z_n$ be the ring homomorphism $m \mapsto [m]$. We can verify that $\varphi$ respects multiplication and addition. Write $f,g \in \mathbb Z[x]$ as $f = a_0 + \dots + a_k x^k$ and $g = b_0 + \dots + b_\ell x^\ell$:
+    \begin{align*}
+        \varphi(f +g) &= \varphi\left(\sum_{i=0}^{\max(\ell, k)} (a_i + b_i) x^i \right) =\sum_{i=0}^{\max(\ell, k)} \rho(a_i + b_i) x^i \\ &= \sum_{i=0}^k \rho(a_i) x^i + \sum_{i=0}^\ell \rho(b_i) x^i = \varphi(f) + \varphi(g). \\
+        \varphi(fg) &= \varphi\left( \sum_{i = 0}^k \sum_{j=0}^\ell a_i b_j x^{i + j}\right) = \sum_{i = 0}^k \sum_{j=0}^\ell \rho(a_i b_j) x^{i + j} \\ &= \sum_{i = 0}^k \sum_{j=0}^\ell \rho(a_i) \rho(b_j) x^{i + j} = \varphi(f)\varphi(g). \qedhere
+    \end{align*}
+\end{proof}
+
+\newpage{}
 \paragraph{Problem 11.} (p. 99, \#5cdf)
+\begin{enumerate}
+\item[c.] GCD of $x^4 + 3x^3 + 2x+4$ and $x^2 - 1$ in $\mathbb Z_5[x]$. {
+    By plugging in, we see that both $+1$ and $-1$ are roots of $x^4 + 3x^3 + 2x + 4$, and since $x-1$ and $x+1$ are coprime irreducibles, we must have that $(x-1)(x+1) \mid x^4 + 3x^3 + 2x+4$. Thus, $x^2 - 1 \mid x^4 + 3x^3 + 2x + 4$ in $\mathbb Z_5[x]$, so the GCD is simply $x^2 - 1$.
+}
+\item[d.] GCD of $4x^4 + 2x^3 + 6x^2 + 4x + 5$ and $3x^3 + 5x^2 + 6x$ in $\mathbb Z_7[x]$. {
+    Just for fun,\footnote{Yes, this reduction is kinda useless in this case but I was curious about the lemma.} we will use the following useful lemma:
+
+    \begin{lemma}
+    Let $f,g,h \in \mathbb F[x]$. If $1 \in \langle h, f \rangle$, then $\langle f, g \rangle = \langle f, g h \rangle$.
+    \begin{proof} 
+        \[\langle f, g \rangle = \langle f, g \rangle \cdot \mathbb F[x] = \langle f, g \rangle \cdot \langle f, h \rangle = \langle f^2, f g, f h, g h \rangle = \langle f, gh\rangle. \qedhere \]
+    \end{proof}
+
+    The hypothesis for this lemma is satisfied if $h \nmid f$ and $h$ is irreducible: the only divisors of $h$ are associates and units, and by Bezout's identity, $\mathrm{gcd}(f, h) = 1 \in \langle f, h\rangle$.
+\end{lemma}
+
+    Applying the lemma above, $\mathrm{gcd}(4x^4 + 2x^3 + 6x^2 + 4x+5, 3x^3 + 5x^2 + 6x) = \mathrm{gcd}(4x^4 + 2x^3 + 6x^2 + 4x + 5, 3x^2+ 5x + 6)$, which we directly compute using the Euclidean algorithm. First dividing $4x^4 + 2x^3 +6x^2 + 4x + 5$ by $3x^2 + 5x + 6$:
+    
+    {\centering \noindent
+    \begin{tabular}{|c|c|}
+        \hline $q(x)$ & $r(x)$ \\\hline
+        0 & $4x^4 + 2x^3 + 6x^2 + 4x + 5$ \\ \hline
+        $6x^2$ & $-2x^2 + 4x + 5$ \\ \hline
+        $6x^2 - 3$ & $5x + 2$ \\ \hline
+    \end{tabular} \par}
+
+    Divide $3x^2 + 5x + 6$ by $5x + 2$:
+    
+    {\centering \noindent \begin{tabular}{|c|c|}
+        \hline $q(x)$ & $r(x)$ \\\hline
+        0 & $3x^2 + 5x + 6$ \\ \hline
+        $9x$ & $x + 6$ \\ \hline
+        $9x + 3$ & 0 \\ \hline
+    \end{tabular} \par}
+
+    Thus, the GCD must be associate with $5x + 2$, and $5^{-1} = 3$, so $x + 6$ is our GCD.
+}
+\item[f.] GCD of $x^4+x+1$ and $x^2 + x + 1$ in $\mathbb Z_2[x]$. {
+    Step 1 of Euclidean Algo: \\
+    \begin{tabular}{|c|c|}
+        \hline
+        $q(x)$ & $r(x)$ \\ \hline
+        0 & $x^4 + x + 1$ \\ \hline
+        $x^2$ & $x^3 + x^2 + x + 1$ \\ \hline
+        $x^2 + x$ & $1$ \\ \hline
+    \end{tabular} \\
+    Thus, $\mathrm{gcd}(x^4+x+1, x^2+x+1) = \mathrm{gcd}(x^2 + x + 1, 1) = 1$ in $\mathbb Z_2[x]$.
+}
+\end{enumerate}
 
 
 \end{document}
